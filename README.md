@@ -1,4 +1,4 @@
-# unity-extensions
+# unity-tools
 This repo is a Unity package for C# code I'd like to reuse across projects. It contains:
 - Extension methods for various classes.
 - A MultiKeyDictionary class.
