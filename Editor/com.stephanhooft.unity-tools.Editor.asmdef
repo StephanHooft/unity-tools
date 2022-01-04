@@ -1,5 +1,5 @@
 {
-    "name": "Editor",
+    "name": "com.stephanhooft.unity-tools.Editor",
     "rootNamespace": "",
     "references": [],
     "includePlatforms": [
