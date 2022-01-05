@@ -18,6 +18,15 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
+        /// Returns true if the <see cref="System.Array"/> is empty.
+        /// </summary>
+        /// <returns>True if the <see cref="System.Array"/> is empty.</returns>
+        public static bool IsEmpty<T>(this T[] array)
+        {
+            return array.Length == 0;
+        }
+
+        /// <summary>
         /// Returns true if the <see cref="System.Array"/> is null or empty.
         /// </summary>
         /// <returns>True if the <see cref="System.Array"/> is null or empty.</returns>

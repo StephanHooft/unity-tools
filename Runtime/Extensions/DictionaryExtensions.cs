@@ -25,12 +25,21 @@ namespace StephanHooft.Extensions
         /// </summary>
         /// <param name="key">The given key.</param>
         /// <param name="value">The given value.</param>
-        public static void AddOrReplace<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, TValue value)
+        public static void AddOrReplace<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue value)
         {
-            if (dict.ContainsKey(key))
-                dict[key] = value;
+            if (dictionary.ContainsKey(key))
+                dictionary[key] = value;
             else
-                dict.Add(key, value);
+                dictionary.Add(key, value);
+        }
+
+        /// <summary>
+        /// Returns true if the <see cref="Dictionary{TKey, TValue}"/> is empty.
+        /// </summary>
+        /// <returns>True if the <see cref="Dictionary{TKey, TValue}"/> is empty.</returns>
+        public static bool IsEmpty<TKey, TValue>(this Dictionary<TKey, TValue> dictionary)
+        {
+            return dictionary.Count == 0;
         }
 
         /// <summary>

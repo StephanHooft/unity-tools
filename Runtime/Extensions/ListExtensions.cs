@@ -6,6 +6,15 @@ namespace StephanHooft.Extensions
     public static class ListExtensions
     {
         /// <summary>
+        /// Returns true if the <see cref="List{T}"/> is empty.
+        /// </summary>
+        /// <returns>True if the <see cref="List{T}"/> is empty.</returns>
+        public static bool IsEmpty<T>(this List<T> list)
+        {
+            return list.Count == 0;
+        }
+
+        /// <summary>
         /// Returns true if the <see cref="List{T}"/> is null or empty.
         /// </summary>
         /// <returns>True if the <see cref="List{T}"/> is null or empty.</returns>
