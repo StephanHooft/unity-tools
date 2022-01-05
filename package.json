@@ -1,6 +1,6 @@
 {
   "name": "com.stephanhooft.unity-tools",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "displayName": "Unity Tools",
   "description": "A Unity package for code I'd like to reuse across projects.",
   "unity": "2020.3",
