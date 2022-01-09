@@ -6,6 +6,18 @@ namespace StephanHooft.Extensions
     public static class GameObjectExtensions
     {
         /// <summary>
+        /// Adds a <typeparamref name="T"/> to the <see cref="GameObject"/>, and replaces an existing one if found.
+        /// </summary>
+        /// <returns>A <typeparamref name="T"/>.</returns>
+        public static T AddOrReplaceComponent<T>(this GameObject gameObject) where T : Component
+        {
+            if (gameObject.TryGetComponent(out T component))
+                UnityEngine.Object.Destroy(component);
+            component = gameObject.AddComponent<T>();
+            return component;
+        }
+
+        /// <summary>
         /// Returns the normalised direction <see cref="Vector3"/> from this <see cref="GameObject"/> to another.
         /// </summary>
         /// <param name="destination">The destination <see cref="GameObject"/>.</param>
@@ -36,7 +48,7 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// Gets a <typeparamref name="T"/> from the <see cref="GameObject"/>, and throws an <see cref="Exception"/> it none can be found.
+        /// Gets a <typeparamref name="T"/> from the <see cref="GameObject"/>, and throws an <see cref="Exception"/> if none are found.
         /// </summary>
         /// <param name="destroyGameObjectOnFailure">Set to true to destroy the <see cref="GameObject"/> if no <typeparamref name="T"/> is found.</param>
         /// <returns>A <typeparamref name="T"/>.</returns>
@@ -53,7 +65,7 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// Gets a <typeparamref name="T"/> from the <see cref="GameObject"/> or its children, and throws an <see cref="Exception"/> it none can be found.
+        /// Gets a <typeparamref name="T"/> from the <see cref="GameObject"/> or its children, and throws an <see cref="Exception"/> if none are found.
         /// </summary>
         /// <param name="destroyGameObjectOnFailure">Set to true to destroy the <see cref="GameObject"/> if no <typeparamref name="T"/> is found.</param>
         /// <returns>A <typeparamref name="T"/>.</returns>
@@ -71,7 +83,7 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// Gets a <typeparamref name="T"/> from the <see cref="GameObject"/> or its parents, and throws an <see cref="Exception"/> it none can be found.
+        /// Gets a <typeparamref name="T"/> from the <see cref="GameObject"/> or its parents, and throws an <see cref="Exception"/> if none are found.
         /// </summary>
         /// <param name="destroyGameObjectOnFailure">Set to true to destroy the <see cref="GameObject"/> if no <typeparamref name="T"/> is found.</param>
         /// <returns>A <typeparamref name="T"/>.</returns>
@@ -86,6 +98,17 @@ namespace StephanHooft.Extensions
                     UnityEngine.Object.Destroy(gameObject);
                 throw new Exception("Cannot find a " + typeof(T) + ".");
             }
+        }
+
+        /// <summary>
+        /// Gets a <typeparamref name="T"/> from the <see cref="GameObject"/>, and adds one if none are found.
+        /// </summary>
+        /// <returns>A <typeparamref name="T"/>.</returns>
+        public static T GetOrAddComponent<T>(this GameObject gameObject) where T: Component
+        {
+            if (!gameObject.TryGetComponent(out T component))
+                component = gameObject.AddComponent<T>();
+            return component;
         }
 
         /// <summary>
