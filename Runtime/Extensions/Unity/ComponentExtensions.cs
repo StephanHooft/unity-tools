@@ -86,7 +86,7 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// Gets a <typeparamref name="T"/> from the <see cref="GameObject"/>, and adds one if none are found.
+        /// Gets a <typeparamref name="T"/> from the <see cref="Component"/>'s <see cref="GameObject"/>, and adds one if none are found.
         /// </summary>
         /// <returns>A <typeparamref name="T"/>.</returns>
         public static T GetOrAddComponent<T>(this Component component) where T : Component
@@ -97,9 +97,9 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// Returns true if the <see cref="GameObject"/> has a <typeparamref name="T"/>.
+        /// Returns true if the <see cref="Component"/>'s <see cref="GameObject"/> has a <typeparamref name="T"/>.
         /// </summary>
-        /// <returns>True if the <see cref="Component"/>-s <see cref="GameObject"/> has a <see cref="Component"/> of <see cref="Type"/> 
+        /// <returns>True if the <see cref="Component"/>'s <see cref="GameObject"/> has a <see cref="Component"/> of <see cref="Type"/> 
         /// <typeparamref name="T"/>.</returns>
         public static bool HasComponent<T>(this Component component) where T : Component
         {
