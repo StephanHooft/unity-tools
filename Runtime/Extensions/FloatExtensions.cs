@@ -10,25 +10,8 @@ namespace StephanHooft.Extensions
         /// <returns>The absolute value of the <see cref="float"/>.</returns>
         public static float Abs(this float a)
         {
-            return Mathf.Abs(a);
-        }
-
-        /// <summary>
-        /// Returns the largest of two <see cref="float"/>s.
-        /// </summary>
-        /// <returns>The largest value between <paramref name="value"/> and <paramref name="otherValue"/>.</returns>
-        public static float Max(this float value, float otherValue)
-        {
-            return Mathf.Max(value, otherValue);
-        }
-
-        /// <summary>
-        /// Returns the smallest of two <see cref="float"/>s.
-        /// </summary>
-        /// <returns>The largest value between <paramref name="value"/> and <paramref name="otherValue"/>.</returns>
-        public static float Min(this float value, float otherValue)
-        {
-            return Mathf.Min(value, otherValue);
+            return 
+                Mathf.Abs(a);
         }
 
         /// <summary>
@@ -40,13 +23,55 @@ namespace StephanHooft.Extensions
         /// <returns>The <see cref="float"/> result between the <paramref name="min"/> and <paramref name="max"/> values. </returns>
         public static float Clamp(this float value, float min, float max)
         {
-            return Mathf.Clamp(value, min, max);
+            return 
+                Mathf.Clamp(value, min, max);
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="float"/> has a positive value.
+        /// </summary>
+        /// <returns>True if the <see cref="float"/> value is greater than 0.</returns>
+        public static bool IsPositive(this float value)
+        {
+            if (value > 0)
+                return 
+                    true;
+            else
+                return 
+                    false;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="float"/> has a negative value.
+        /// </summary>
+        /// <returns>True if the <see cref="float"/> value is smaller than 0.</returns>
+        public static bool IsNegative(this float value)
+        {
+            if (value < 0)
+                return 
+                    true;
+            else
+                return 
+                    false;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="float"/> has a value of 0.
+        /// </summary>
+        /// <returns>True if the <see cref="float"/> value is 0.</returns>
+        public static bool IsZero(this float value)
+        {
+            if (value == 0)
+                return 
+                    true;
+            else
+                return 
+                    false;
         }
 
         /// <summary>
         /// <para>Re-maps a <see cref="float"/> from one range to another.</para>
-        /// <para>Does not constrain values to within the range by default, because out-of-range values are sometimes intended and useful.
-        /// Set <paramref name="clampValue"/> to true to clamp the value.</para>
+        /// <para>Does not clamp values within the range by default, because out-of-range values are sometimes intended and useful.
         /// </summary>
         /// <param name="inMin">The lower bound of the <see cref="float"/>'s current range.</param>
         /// <param name="inMax">The upper bound of the <see cref="float"/>'s current range.</param>
@@ -58,7 +83,116 @@ namespace StephanHooft.Extensions
         {
             if (clampValue)
                 value = value.Clamp(inMin, inMax);
-            return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+            return 
+                (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+        }
+
+        /// <summary>
+        /// Returns the largest of two <see cref="float"/>s.
+        /// </summary>
+        /// <returns>The largest value between <paramref name="value"/> and <paramref name="otherValue"/>.</returns>
+        public static float Max(this float value, float otherValue)
+        {
+            return 
+                Mathf.Max(value, otherValue);
+        }
+
+        /// <summary>
+        /// Returns the smallest of two <see cref="float"/>s.
+        /// </summary>
+        /// <returns>The largest value between <paramref name="value"/> and <paramref name="otherValue"/>.</returns>
+        public static float Min(this float value, float otherValue)
+        {
+            return 
+                Mathf.Min(value, otherValue);
+        }
+
+        /// <summary>
+        /// Ensures that the <see cref="float"/> value is above a set <paramref name="lower"/> <see cref="float"/> value.
+        /// <para>A <see cref="System.ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown otherwise.</para>
+        /// </summary>
+        /// <param name="lower">The value that the <see cref="float"/> must remain above.</param>
+        /// <param name="paramName">The parameter name to use if an <see cref="System.ArgumentOutOfRangeException"/> is thrown.</param>
+        /// <returns>The original <see cref="float"/> value, assuming no <see cref="System.ArgumentOutOfRangeException"/> was thrown.</returns>
+        public static float MustBeAbove(this float value, float lower, string paramName)
+        {
+            if (value > lower)
+                return
+                    value;
+            else
+                throw
+                    new System.ArgumentOutOfRangeException(paramName);
+        }
+
+        /// <summary>
+        /// Ensures that the <see cref="float"/> value is above or equal to a set <paramref name="lower"/> <see cref="float"/> value.
+        /// <para>A <see cref="System.ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown otherwise.</para>
+        /// </summary>
+        /// <param name="lower">The value that the <see cref="float"/> must remain above or equal to.</param>
+        /// <param name="paramName">The parameter name to use if an <see cref="System.ArgumentOutOfRangeException"/> is thrown.</param>
+        /// <returns>The original <see cref="float"/> value, assuming no <see cref="System.ArgumentOutOfRangeException"/> was thrown.</returns>
+        public static float MustBeAboveOrEqualTo(this float value, float lower, string paramName)
+        {
+            if (value >= lower)
+                return
+                    value;
+            else
+                throw
+                    new System.ArgumentOutOfRangeException(paramName);
+        }
+
+        /// <summary>
+        /// Ensures that the <see cref="float"/> value is below a set <paramref name="upper"/> <see cref="float"/> value.
+        /// <para>A <see cref="System.ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown otherwise.</para>
+        /// </summary>
+        /// <param name="upper">The value that the <see cref="float"/> must remain below.</param>
+        /// <param name="paramName">The parameter name to use if an <see cref="System.ArgumentOutOfRangeException"/> is thrown.</param>
+        /// <returns>The original <see cref="float"/> value, assuming no <see cref="System.ArgumentOutOfRangeException"/> was thrown.</returns>
+        public static float MustBeLowerThan(this float value, float upper, string paramName)
+        {
+            if (value < upper)
+                return
+                    value;
+            else
+                throw
+                    new System.ArgumentOutOfRangeException(paramName);
+        }
+
+        /// <summary>
+        /// Ensures that the <see cref="float"/> value is below or equal to a set <paramref name="upper"/> <see cref="float"/> value.
+        /// <para>A <see cref="System.ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown otherwise.</para>
+        /// </summary>
+        /// <param name="upper">The value that the <see cref="float"/> must remain below or equal to.</param>
+        /// <param name="paramName">The parameter name to use if an <see cref="System.ArgumentOutOfRangeException"/> is thrown.</param>
+        /// <returns>The original <see cref="float"/> value, assuming no <see cref="System.ArgumentOutOfRangeException"/> was thrown.</returns>
+        public static float MustBeLowerThanOrEqualTo(this float value, float upper, string paramName)
+        {
+            if (value <= upper)
+                return
+                    value;
+            else
+                throw
+                    new System.ArgumentOutOfRangeException(paramName);
+        }
+
+        /// <summary>
+        /// Ensures that the <see cref="float"/> value is within a range determined by a <paramref name="lower"/> 
+        /// and an <paramref name="upper"/> <see cref="float"/> value.
+        /// <para>A <see cref="System.ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown if the <see cref="float"/>
+        /// goes outside of this range.</para>
+        /// </summary>
+        /// <param name="lower">The value that the <see cref="float"/> must remain above or equal to.</param>
+        /// <param name="upper">The value that the <see cref="float"/> must remain below or equal to.</param>
+        /// <param name="paramName">The parameter name to use if an <see cref="System.ArgumentOutOfRangeException"/> is thrown.</param>
+        /// <returns>The original <see cref="float"/> value, assuming no <see cref="System.ArgumentOutOfRangeException"/> was thrown.</returns>
+        public static float MustBeWithinRange(this float value, float lower, float upper, string paramName)
+        {
+            if (value >= lower && value <= upper)
+                return
+                    value;
+            else
+                throw
+                    new System.ArgumentOutOfRangeException(paramName);
         }
 
         /// <summary>
@@ -68,7 +202,8 @@ namespace StephanHooft.Extensions
         /// <returns>The <see cref="float"/> raised to power <paramref name="p"/>.</returns>
         public static float Pow(this float value, float p)
         {
-            return Mathf.Pow(value, p);
+            return 
+                Mathf.Pow(value, p);
         }
 
         /// <summary>
@@ -77,7 +212,8 @@ namespace StephanHooft.Extensions
         /// <returns>The <see cref="float"/> to the nearest integer.</returns>
         public static float Round(this float value)
         {
-            return Mathf.Round(value);
+            return 
+                Mathf.Round(value);
         }
 
         /// <summary>
@@ -86,7 +222,8 @@ namespace StephanHooft.Extensions
         /// <returns>The <see cref="float"/> to the nearest integer.</returns>
         public static int RoundToInt(this float value)
         {
-            return Mathf.RoundToInt(value);
+            return 
+                Mathf.RoundToInt(value);
         }
 
         /// <summary>
@@ -95,43 +232,8 @@ namespace StephanHooft.Extensions
         /// <returns>The <see cref="float"/>'s square root.</returns>
         public static float Sqrt(this float value)
         {
-            return Mathf.Sqrt(value);
-        }
-
-        /// <summary>
-        /// Checks if the <see cref="float"/> has a positive value.
-        /// </summary>
-        /// <returns>True if the <see cref="float"/> value is greater than 0.</returns>
-        public static bool IsPositive(this float value)
-        {
-            if (value > 0)
-                return true;
-            else
-                return false;
-        }
-
-        /// <summary>
-        /// Checks if the <see cref="float"/> has a negative value.
-        /// </summary>
-        /// <returns>True if the <see cref="float"/> value is smaller than 0.</returns>
-        public static bool IsNegative(this float value)
-        {
-            if (value < 0)
-                return true;
-            else
-                return false;
-        }
-
-        /// <summary>
-        /// Checks if the <see cref="float"/> has a value of 0.
-        /// </summary>
-        /// <returns>True if the <see cref="float"/> value is 0.</returns>
-        public static bool IsZero(this float value)
-        {
-            if (value == 0)
-                return true;
-            else
-                return false;
+            return 
+                Mathf.Sqrt(value);
         }
     }
 }

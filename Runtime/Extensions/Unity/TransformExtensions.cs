@@ -45,5 +45,16 @@ namespace StephanHooft.Extensions
         {
             return Vector3.Distance(source.position, destination);
         }
+
+        /// <summary>
+        /// Sets the local position and rotation of the <see cref="Transform"/> component.
+        /// </summary>
+        /// <param name="position">The target <see cref="Vector3"/> position.</param>
+        /// <param name="rotation">The target <see cref="Quaternion"/> rotation.</param>
+        public static void SetLocalPositionAndRotation(this Transform transform, Vector3 position, Quaternion rotation)
+        {
+            transform.localPosition = position;
+            transform.localRotation = rotation;
+        }
     }
 }

@@ -1,5 +1,5 @@
 # unity-tools
-This repo is a Unity package for C# code I'd like to reuse across projects. It contains:
+This repo is a Unity package for C# code to reuse across projects. It contains:
 - Extension methods for various classes.
 - A MultiKeyDictionary class.
 - Classes to set up (finite) state machines.
