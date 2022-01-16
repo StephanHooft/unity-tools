@@ -5,17 +5,6 @@ namespace StephanHooft.Extensions
     public static class Vector2Extensions
     {
         /// <summary>
-        /// Return the <see cref="Vector2"/> with one or more components set to a specific value.
-        /// </summary>
-        /// <param name="x">Value for the modified X-component.</param>
-        /// <param name="y">Value for the modified Y-component.</param>
-        /// <returns>A <see cref="Vector2"/> with the modified component values.</returns>
-        public static Vector2 With(this Vector2 original, float? x = null, float? y = null)
-        {
-            return new Vector2(x ?? original.x, y ?? original.y);
-        }
-
-        /// <summary>
         /// Returns direction toward another <see cref="Vector2"/> destination.
         /// </summary>
         /// <param name="destination">The <see cref="Vector2"/> destination to calculate direction to.</param>
@@ -33,6 +22,26 @@ namespace StephanHooft.Extensions
         public static float DistanceTo(this Vector2 source, Vector2 destination)
         {
             return Vector2.Distance(source, destination);
+        }
+
+        /// <summary>
+        /// Converts a <see cref="Vector2"/>[] into a <see cref="Vector3"/>[].
+        /// </summary>
+        /// <returns>A <see cref="Vector3"/>[].</returns>
+        public static Vector3[] ToVector3Array(this Vector2[] array)
+        {
+            return System.Array.ConvertAll(array, (Vector2 v2) => new Vector3(v2.x, v2.y));
+        }
+
+        /// <summary>
+        /// Return the <see cref="Vector2"/> with one or more components set to a specific value.
+        /// </summary>
+        /// <param name="x">Value for the modified X-component.</param>
+        /// <param name="y">Value for the modified Y-component.</param>
+        /// <returns>A <see cref="Vector2"/> with the modified component values.</returns>
+        public static Vector2 With(this Vector2 original, float? x = null, float? y = null)
+        {
+            return new Vector2(x ?? original.x, y ?? original.y);
         }
     }
 }
