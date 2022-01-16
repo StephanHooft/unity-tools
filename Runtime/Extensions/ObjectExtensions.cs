@@ -27,7 +27,7 @@ namespace StephanHooft.Extensions
         /// Throws an <see cref="ArgumentNullException"/> if the <typeparamref name="T"/> is null. Returns the <typeparamref name="T"/> otherwise.
         /// </summary>
         /// <returns>The <typeparamref name="T"/>.</returns>
-        public static T MayNotBeNull<T>(this T obj)
+        public static T MustNotBeNull<T>(this T obj)
         {
             if (obj == null) 
                 throw new ArgumentNullException(obj.GetType().ToString());
@@ -40,7 +40,7 @@ namespace StephanHooft.Extensions
         /// </summary>
         /// <param name="objectToDestroyIfNull">The <see cref="GameObject"/> to destroy if the <typeparamref name="T"/> reference is null.</param>
         /// <returns>The <typeparamref name="T"/>.</returns>
-        public static T MayNotBeNull<T>(this T obj, GameObject objectToDestroyIfNull)
+        public static T MustNotBeNull<T>(this T obj, GameObject objectToDestroyIfNull)
         {
             if (objectToDestroyIfNull == null) 
                 throw new ArgumentNullException("objectToDestroyIfNull");

@@ -22,10 +22,52 @@ namespace StephanHooft.Extensions
         /// <param name="min">The minimum value of the range to clamp to.</param>
         /// <param name="max">The maximum value of the range to clamp to.</param>
         /// <returns>The <see cref="int"/> result between the <paramref name="min"/> and <paramref name="max"/> values. </returns>
-        public static int Clamp(this int value, int min, int max)
+        public static int Clamp(this int original, int min, int max)
         {
             return 
-                Mathf.Clamp(value, min, max);
+                Mathf.Clamp(original, min, max);
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="int"/> has a positive value.
+        /// </summary>
+        /// <returns>True if the <see cref="int"/> value is greater than 0.</returns>
+        public static bool IsPositive(this int original)
+        {
+            if (original > 0)
+                return
+                    true;
+            else
+                return
+                    false;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="int"/> has a negative value.
+        /// </summary>
+        /// <returns>True if the <see cref="int"/> value is smaller than 0.</returns>
+        public static bool IsNegative(this int original)
+        {
+            if (original < 0)
+                return
+                    true;
+            else
+                return
+                    false;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="int"/> has a value of 0.
+        /// </summary>
+        /// <returns>True if the <see cref="int"/> value is 0.</returns>
+        public static bool IsZero(this int original)
+        {
+            if (original == 0)
+                return
+                    true;
+            else
+                return
+                    false;
         }
 
         /// <summary>
@@ -36,48 +78,48 @@ namespace StephanHooft.Extensions
         /// <param name="inMax">The upper bound of the <see cref="int"/>'s current range.</param>
         /// <param name="outMin">The lower bound of the <see cref="int"/>'s target range.</param>
         /// <param name="outMax">The upper bound of the <see cref="int"/>'s target range </param>
-        /// <param name="clampValue">Set to true to clamp <paramref name="value"/>.</param>
+        /// <param name="clampValue">Set to true to clamp <paramref name="original"/>.</param>
         /// <returns>The mapped <see cref="int"/> value.</returns>
-        public static int Map(this int value, int inMin, int inMax, int outMin, int outMax, bool clampValue = false)
+        public static int Map(this int original, int inMin, int inMax, int outMin, int outMax, bool clampValue = false)
         {
             if (clampValue)
-                value = value.Clamp(inMin, inMax);
+                original = original.Clamp(inMin, inMax);
             return 
-                (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+                (original - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
         }
 
         /// <summary>
         /// Returns the largest of two <see cref="int"/>s.
         /// </summary>
-        /// <returns>The largest <see cref="int"/> value between <paramref name="value"/> and <paramref name="otherValue"/>.</returns>
-        public static int Max(this int value, int otherValue)
+        /// <returns>The largest <see cref="int"/> value between <paramref name="original"/> and <paramref name="otherValue"/>.</returns>
+        public static int Max(this int original, int otherValue)
         {
             return 
-                Math.Max(value, otherValue);
+                Math.Max(original, otherValue);
         }
 
         /// <summary>
         /// Returns the smallest of two <see cref="int"/>s.
         /// </summary>
-        /// <returns>The smallest <see cref="int"/> value between <paramref name="value"/> and <paramref name="otherValue"/>.</returns>
-        public static int Min(this int value, int otherValue)
+        /// <returns>The smallest <see cref="int"/> value between <paramref name="original"/> and <paramref name="otherValue"/>.</returns>
+        public static int Min(this int original, int otherValue)
         {
             return 
-                Math.Min(value, otherValue);
+                Math.Min(original, otherValue);
         }
 
         /// <summary>
         /// Ensures that the <see cref="int"/> value is above a set <paramref name="lower"/> <see cref="int"/> value.
-        /// <para>A <see cref="ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown otherwise.</para>
+        /// <para>An <see cref="ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown otherwise.</para>
         /// </summary>
         /// <param name="lower">The value that the <see cref="int"/> must remain above.</param>
         /// <param name="paramName">The parameter name to use if an <see cref="ArgumentOutOfRangeException"/> is thrown.</param>
         /// <returns>The original <see cref="int"/> value, assuming no <see cref="ArgumentOutOfRangeException"/> was thrown.</returns>
-        public static int MustBeAbove(this int value, int lower, string paramName)
+        public static int MustBeAbove(this int original, int lower, string paramName)
         {
-            if (value > lower)
+            if (original > lower)
                 return
-                    value;
+                    original;
             else
                 throw
                     new ArgumentOutOfRangeException(paramName);
@@ -85,16 +127,16 @@ namespace StephanHooft.Extensions
 
         /// <summary>
         /// Ensures that the <see cref="int"/> value is above or equal to a set <paramref name="lower"/> <see cref="int"/> value.
-        /// <para>A <see cref="ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown otherwise.</para>
+        /// <para>An <see cref="ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown otherwise.</para>
         /// </summary>
         /// <param name="lower">The value that the <see cref="int"/> must remain above or equal to.</param>
         /// <param name="paramName">The parameter name to use if an <see cref="ArgumentOutOfRangeException"/> is thrown.</param>
         /// <returns>The original <see cref="int"/> value, assuming no <see cref="ArgumentOutOfRangeException"/> was thrown.</returns>
-        public static int MustBeAboveOrEqualTo(this int value, int lower, string paramName)
+        public static int MustBeAboveOrEqualTo(this int original, int lower, string paramName)
         {
-            if (value >= lower)
+            if (original >= lower)
                 return
-                    value;
+                    original;
             else
                 throw
                     new ArgumentOutOfRangeException(paramName);
@@ -102,16 +144,16 @@ namespace StephanHooft.Extensions
 
         /// <summary>
         /// Ensures that the <see cref="int"/> value is below a set <paramref name="upper"/> <see cref="int"/> value.
-        /// <para>A <see cref="ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown otherwise.</para>
+        /// <para>An <see cref="ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown otherwise.</para>
         /// </summary>
         /// <param name="upper">The value that the <see cref="int"/> must remain below.</param>
         /// <param name="paramName">The parameter name to use if an <see cref="ArgumentOutOfRangeException"/> is thrown.</param>
         /// <returns>The original <see cref="int"/> value, assuming no <see cref="ArgumentOutOfRangeException"/> was thrown.</returns>
-        public static int MustBeLowerThan(this int value, int upper, string paramName)
+        public static int MustBeLowerThan(this int original, int upper, string paramName)
         {
-            if (value < upper)
+            if (original < upper)
                 return
-                    value;
+                    original;
             else
                 throw
                     new ArgumentOutOfRangeException(paramName);
@@ -119,16 +161,16 @@ namespace StephanHooft.Extensions
 
         /// <summary>
         /// Ensures that the <see cref="int"/> value is below or equal to a set <paramref name="upper"/> <see cref="int"/> value.
-        /// <para>A <see cref="ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown otherwise.</para>
+        /// <para>An <see cref="ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown otherwise.</para>
         /// </summary>
         /// <param name="upper">The value that the <see cref="int"/> must remain below or equal to.</param>
         /// <param name="paramName">The parameter name to use if an <see cref="ArgumentOutOfRangeException"/> is thrown.</param>
         /// <returns>The original <see cref="int"/> value, assuming no <see cref="ArgumentOutOfRangeException"/> was thrown.</returns>
-        public static int MustBeLowerThanOrEqualTo(this int value, int upper, string paramName)
+        public static int MustBeLowerThanOrEqualTo(this int original, int upper, string paramName)
         {
-            if (value <= upper)
+            if (original <= upper)
                 return
-                    value;
+                    original;
             else
                 throw
                     new ArgumentOutOfRangeException(paramName);
@@ -137,18 +179,35 @@ namespace StephanHooft.Extensions
         /// <summary>
         /// Ensures that the <see cref="int"/> value is within a range determined by a <paramref name="lower"/> 
         /// and an <paramref name="upper"/> <see cref="int"/> value.
-        /// <para>A <see cref="ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown if the <see cref="int"/>
+        /// <para>An <see cref="ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown if the <see cref="int"/>
         /// goes outside of this range.</para>
         /// </summary>
         /// <param name="lower">The value that the <see cref="int"/> must remain above or equal to.</param>
         /// <param name="upper">The value that the <see cref="int"/> must remain below or equal to.</param>
         /// <param name="paramName">The parameter name to use if an <see cref="ArgumentOutOfRangeException"/> is thrown.</param>
         /// <returns>The original <see cref="int"/> value, assuming no <see cref="ArgumentOutOfRangeException"/> was thrown.</returns>
-        public static int MustBeWithinRange(this int value, int lower, int upper, string paramName)
+        public static int MustBeWithinRange(this int original, int lower, int upper, string paramName)
         {
-            if (value >= lower && value <= upper)
+            if (original >= lower && original <= upper)
                 return
-                    value;
+                    original;
+            else
+                throw
+                    new ArgumentOutOfRangeException(paramName);
+        }
+
+        /// <summary>
+        /// Ensures that the <see cref="int"/> value is not equal to a certain <paramref name="value"/>.
+        /// <para>An <see cref="ArgumentOutOfRangeException"/> will be thrown if the <see cref="int"/> equals the <paramref name="value"/>.</para>
+        /// </summary>
+        /// <param name="value">The <see cref="int"/> value to check against.</param>
+        /// <param name="paramName">The parameter name to use if an <see cref="ArgumentOutOfRangeException"/> is thrown.</param>
+        /// <returns>The original <see cref="int"/> value, assuming no <see cref="ArgumentOutOfRangeException"/> was thrown.</returns>
+        public static int MustNotBeEqualTo(this int original, int value, string paramName)
+        {
+            if (original != value)
+                return
+                    original;
             else
                 throw
                     new ArgumentOutOfRangeException(paramName);
@@ -159,63 +218,21 @@ namespace StephanHooft.Extensions
         /// </summary>
         /// <param name="min">The minimum value of the range to wrap to.</param>
         /// <param name="max">The maximum value of the range to wrap to.</param>
-        public static int Wrap(this int value, int min, int max)
+        public static int Wrap(this int original, int min, int max)
         {
             if (max <= min)
                 throw 
                     new ArgumentException("Value of max must be greater than min.", "max");
             int radix = max - min + 1;
-            if (value < min)
+            if (original < min)
                 return 
-                    value + ((max - value) / radix) * radix;
-            else if (value > max)
+                    original + ((max - original) / radix) * radix;
+            else if (original > max)
                 return 
-                    value - ((value - min) / radix) * radix;
+                    original - ((original - min) / radix) * radix;
             else
                 return 
-                    value;
-        }
-
-        /// <summary>
-        /// Checks if the <see cref="int"/> has a positive value.
-        /// </summary>
-        /// <returns>True if the <see cref="int"/> value is greater than 0.</returns>
-        public static bool IsPositive(this int value)
-        {
-            if (value > 0)
-                return 
-                    true;
-            else
-                return 
-                    false;
-        }
-
-        /// <summary>
-        /// Checks if the <see cref="int"/> has a negative value.
-        /// </summary>
-        /// <returns>True if the <see cref="int"/> value is smaller than 0.</returns>
-        public static bool IsNegative(this int value)
-        {
-            if (value < 0)
-                return 
-                    true;
-            else
-                return 
-                    false;
-        }
-
-        /// <summary>
-        /// Checks if the <see cref="int"/> has a value of 0.
-        /// </summary>
-        /// <returns>True if the <see cref="int"/> value is 0.</returns>
-        public static bool IsZero(this int value)
-        {
-            if (value == 0)
-                return 
-                    true;
-            else
-                return 
-                    false;
+                    original;
         }
     }
 }
