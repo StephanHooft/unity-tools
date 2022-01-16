@@ -18,14 +18,19 @@ namespace StephanHooft.HybridUpdate
     {
         private bool SkippedFixedUpdate => !fixedLast;
         private bool TimeStolen => totalStolenTime > 0f;
-        private float HybridDeltaTime => TimeStolen ? Mathf.Max(Time.fixedDeltaTime - totalStolenTime, 0f) : Time.fixedDeltaTime;
+        private float HybridDeltaTime => TimeStolen ? 
+            Mathf.Max(Time.fixedDeltaTime - totalStolenTime, 0f) : Time.fixedDeltaTime;
         private static HybridUpdateManager LazyInstance
         {
             get
             {
                 if(instance == null)
+                {
                     instance = new GameObject("[HybridUpdater]").AddComponent<HybridUpdateManager>();
-                return instance;
+                    instance.transform.SetAsFirstSibling();
+                }
+                return 
+                    instance;
             }
         }
         private bool fixedLast;
@@ -59,10 +64,12 @@ namespace StephanHooft.HybridUpdate
         public static void RegisterUpdateCallback(Action<float> callback, int priority = 0)
         {
             if (callback == null) 
-                throw new ArgumentNullException("callback");
+                throw 
+                    new ArgumentNullException("callback");
             PriorityCallbackPair existing = LazyInstance.callbacks.Find(pair => pair.Callback == callback);
             if (existing != null) 
-                throw new InvalidOperationException("Cannot add the same item twice.");
+                throw 
+                    new InvalidOperationException("Cannot register the same item twice.");
             LazyInstance.callbacks.Add(new PriorityCallbackPair(callback, priority));
             LazyInstance.callbacks.Sort();
         }
@@ -74,7 +81,8 @@ namespace StephanHooft.HybridUpdate
         public static void UnregisterUpdateCallback(Action<float> callback)
         {
             if (callback == null) 
-                throw new ArgumentNullException("callback");
+                throw 
+                    new ArgumentNullException("callback");
             if (instance == null) 
                 return;
             var existing = instance.callbacks.Find(pair => pair.Callback == callback);
@@ -119,9 +127,11 @@ namespace StephanHooft.HybridUpdate
             public int CompareTo(object obj)
             {
                 if (obj is PriorityCallbackPair p)
-                    return Priority.CompareTo(p.Priority);
+                    return 
+                        Priority.CompareTo(p.Priority);
                 else 
-                    throw new NotImplementedException();
+                    throw 
+                        new NotImplementedException();
             }
         }
     }
