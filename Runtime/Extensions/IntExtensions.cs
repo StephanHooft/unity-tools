@@ -78,34 +78,49 @@ namespace StephanHooft.Extensions
         /// <param name="inMax">The upper bound of the <see cref="int"/>'s current range.</param>
         /// <param name="outMin">The lower bound of the <see cref="int"/>'s target range.</param>
         /// <param name="outMax">The upper bound of the <see cref="int"/>'s target range </param>
-        /// <param name="clampValue">Set to true to clamp the <see cref="int"/>.</param>
+        /// <param name="clamp">Set to true to clamp the <see cref="int"/>.</param>
         /// <returns>The mapped <see cref="int"/> value.</returns>
-        public static int Map(this int i, int inMin, int inMax, int outMin, int outMax, bool clampValue = false)
+        public static int Map(this int i, int inMin, int inMax, int outMin, int outMax, bool clamp = false)
         {
-            if (clampValue)
+            if (clamp)
                 i = i.Clamp(inMin, inMax);
             return 
                 (i - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
         }
 
         /// <summary>
+        /// Returns the <see cref="int"/> with a sign matching an<paramref name="other"/> <see cref="int"/>.
+        /// </summary>
+        /// <param name="other">The other <see cref="int"/> whose sign to match.</param>
+        /// <returns>The <see cref="int"/> with its sign matching <paramref name="other"/>.</returns>
+        public static int MatchingSign(this int f, int other)
+        {
+            if (Mathf.Sign(f) == Mathf.Sign(other))
+                return
+                    f;
+            else
+                return
+                    -f;
+        }
+
+        /// <summary>
         /// Returns the largest of two <see cref="int"/>s.
         /// </summary>
-        /// <returns>The largest <see cref="int"/> value between the <see cref="int"/> and <paramref name="otherValue"/>.</returns>
-        public static int Max(this int i, int otherValue)
+        /// <returns>The largest <see cref="int"/> value between the <see cref="int"/> and <paramref name="other"/>.</returns>
+        public static int Max(this int i, int other)
         {
             return 
-                Math.Max(i, otherValue);
+                Math.Max(i, other);
         }
 
         /// <summary>
         /// Returns the smallest of two <see cref="int"/>s.
         /// </summary>
-        /// <returns>The smallest <see cref="int"/> value between the <see cref="int"/> and <paramref name="otherValue"/>.</returns>
-        public static int Min(this int i, int otherValue)
+        /// <returns>The smallest <see cref="int"/> value between the <see cref="int"/> and <paramref name="other"/>.</returns>
+        public static int Min(this int i, int other)
         {
             return 
-                Math.Min(i, otherValue);
+                Math.Min(i, other);
         }
 
         /// <summary>
@@ -211,6 +226,21 @@ namespace StephanHooft.Extensions
             else
                 throw
                     new ArgumentOutOfRangeException(paramName);
+        }
+
+        /// <summary>
+        /// Returns the <see cref="int"/> with a sign opposite to an<paramref name="other"/> <see cref="int"/>.
+        /// </summary>
+        /// <param name="other">The other <see cref="int"/> whose sign to oppose.</param>
+        /// <returns>The <see cref="int"/> with its sign oppisite to that of <paramref name="other"/>.</returns>
+        public static int OppositeSign(this int f, int other)
+        {
+            if (Math.Sign(f) != Math.Sign(other))
+                return
+                    f;
+            else
+                return
+                    -f;
         }
 
         /// <summary>
