@@ -14,8 +14,10 @@ namespace StephanHooft.Extensions
         {
             foreach (T entry in a)
                 if (entry.Equals(item))
-                    return true;
-            return false;
+                    return 
+                        true;
+            return 
+                false;
         }
 
         /// <summary>
@@ -24,7 +26,8 @@ namespace StephanHooft.Extensions
         /// <returns>True if the <see cref="Array"/> is empty.</returns>
         public static bool IsEmpty<T>(this T[] a)
         {
-            return a.Length == 0;
+            return 
+                a.Length == 0;
         }
 
         /// <summary>
@@ -33,7 +36,8 @@ namespace StephanHooft.Extensions
         /// <returns>True if the <see cref="Array"/> is null or empty.</returns>
         public static bool IsNullOrEmpty<T>(this T[] a)
         {
-            return a.Length == 0 || a == null;
+            return 
+                a.Length == 0 || a == null;
         }
 
         /// <summary>
@@ -80,7 +84,8 @@ namespace StephanHooft.Extensions
         {
             List<T> output = new List<T>();
             output.AddRange(a);
-            return output;
+            return 
+                output;
         }
     }
 }
