@@ -6,17 +6,17 @@ namespace StephanHooft.ProgressIndicators
     public enum IndicatorStatus
     {
         /// <summary>
-        /// Indicates that the <see cref="Progress.Indicator"/> has started, but no progress has been made.
+        /// That the <see cref="Progress.Indicator"/> has started, but no progress has been made.
         /// </summary>
         Started,
 
         /// <summary>
-        /// Indicates that the <see cref="Progress.Indicator"/> is running and in progress.
+        /// The <see cref="Progress.Indicator"/> is running and in progress.
         /// </summary>
         InProgress,
 
         /// <summary>
-        /// Indicates that the <see cref="Progress.Indicator"/> has finished.
+        /// The <see cref="Progress.Indicator"/> has finished.
         /// </summary>
         Finished
     }

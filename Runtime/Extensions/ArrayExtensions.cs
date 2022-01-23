@@ -6,10 +6,10 @@ namespace StephanHooft.Extensions
     public static class ArrayExtensions
     {
         /// <summary>
-        /// Check whether a specific <paramref name="item"/> appears in the <see cref="Array"/>.
+        /// Checks whether a specific <paramref name="item"/> appears in the <see cref="Array"/>.
         /// </summary>
         /// <param name="item">The item to check the <see cref="Array"/> for.</param>
-        /// <returns>True if the <see cref="Array"/> contains <paramref name="item"/>.</returns>
+        /// <returns><see cref="true"/> if the <see cref="Array"/> contains <paramref name="item"/>.</returns>
         public static bool Contains<T>(this T[] a, T item)
         {
             foreach (T entry in a)
@@ -21,9 +21,9 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// Returns true if the <see cref="Array"/> is empty.
+        /// Returns <see cref="true"/> if the <see cref="Array"/> is empty.
         /// </summary>
-        /// <returns>True if the <see cref="Array"/> is empty.</returns>
+        /// <returns><see cref="true"/> if the <see cref="Array"/> is empty.</returns>
         public static bool IsEmpty<T>(this T[] a)
         {
             return 
@@ -31,9 +31,9 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// Returns true if the <see cref="Array"/> is null or empty.
+        /// Returns <see cref="true"/> if the <see cref="Array"/> is <see cref="null"/> or empty.
         /// </summary>
-        /// <returns>True if the <see cref="Array"/> is null or empty.</returns>
+        /// <returns><see cref="true"/> if the <see cref="Array"/> is <see cref="null"/> or empty.</returns>
         public static bool IsNullOrEmpty<T>(this T[] a)
         {
             return 
@@ -46,7 +46,7 @@ namespace StephanHooft.Extensions
         /// </summary>
         /// <param name="item">The <typeparamref name="T"/> to check for.</param>
         /// <param name="arrayName">The <see cref="Array"/> name to use if an <see cref="ArgumentException"/> is thrown.</param>
-        /// <returns>The original <see cref="Array"/>, assuming no <see cref="ArgumentException"/> was thrown.</returns>
+        /// <returns>The original <see cref="Array"/>.</returns>
         public static T[] MustContain<T>(this T[] a, T item, string arrayName)
         {
             foreach (T entry in a)
@@ -64,7 +64,7 @@ namespace StephanHooft.Extensions
         /// </summary>
         /// <param name="item">The <typeparamref name="T"/> to check against.</param>
         /// <param name="arrayName">The <see cref="Array"/> name to use if an <see cref="ArgumentException"/> is thrown.</param>
-        /// <returns>The original <see cref="Array"/>, assuming no <see cref="ArgumentException"/> was thrown.</returns>
+        /// <returns>The original <see cref="Array"/>.</returns>
         public static T[] MustNotContain<T>(this T[] a, T item, string arrayName)
         {
             foreach (T entry in a)

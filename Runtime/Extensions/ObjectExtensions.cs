@@ -11,7 +11,8 @@ namespace StephanHooft.Extensions
         /// <returns>True if the <see cref="object"/> is Null.</returns>
         public static bool IsNull(this object obj)
         {
-            return obj == null;
+            return
+                obj == null;
         }
 
         /// <summary>
@@ -20,7 +21,8 @@ namespace StephanHooft.Extensions
         /// <returns>True if the object is a <typeparamref name="T"/>, false otherwise.</returns>
         public static bool IsOfType<T>(this object obj)
         {
-            return obj is T;
+            return
+                obj is T;
         }
 
         /// <summary>
@@ -30,8 +32,10 @@ namespace StephanHooft.Extensions
         public static T MustNotBeNull<T>(this T obj)
         {
             if (obj == null) 
-                throw new ArgumentNullException(obj.GetType().ToString());
-            return obj;
+                throw
+                    new ArgumentNullException(obj.GetType().ToString());
+            return
+                obj;
         }
 
         /// <summary>
@@ -43,13 +47,16 @@ namespace StephanHooft.Extensions
         public static T MustNotBeNull<T>(this T obj, GameObject objectToDestroyIfNull)
         {
             if (objectToDestroyIfNull == null) 
-                throw new ArgumentNullException("objectToDestroyIfNull");
+                throw
+                    new ArgumentNullException("objectToDestroyIfNull");
             if (obj == null)
             {
                 UnityEngine.Object.Destroy(objectToDestroyIfNull);
-                throw new Exception("Reference to " + obj.GetType() + " is null.");
+                throw
+                    new Exception("Reference to " + obj.GetType() + " is null.");
             }
-            return obj;
+            return
+                obj;
         }
     }
 }

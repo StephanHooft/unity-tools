@@ -78,10 +78,11 @@ namespace StephanHooft.StateMachines
         public void UpdateCurrentState()
         {
             if (CurrentState == null) 
-                throw new InvalidOperationException("StateMachine has no set state to update.");
+                throw
+                    new InvalidOperationException("StateMachine has no set state to update.");
             TimeCurrentStateActive += Time.time - LastUpdateTime;
             LastUpdateTime = Time.time;
-            IState next = CurrentState.UpdateState();
+            var next = CurrentState.UpdateState();
             if (next != null)
                 SetState(next);
         }
@@ -97,7 +98,8 @@ namespace StephanHooft.StateMachines
         public void SetState(IState targetState)
         {
             if (targetState == null) 
-                throw new ArgumentNullException("targetState");
+                throw
+                    new ArgumentNullException("targetState");
             if (targetState != CurrentState)
             {
                 if (CurrentState == null) 

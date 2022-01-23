@@ -12,11 +12,12 @@ namespace StephanHooft.Extensions
         /// <returns>The amount of items in the <see cref="List{T}"/> that match the <paramref name="predicate"/>.</returns>
         public static int Count<T>(this List<T> l, Predicate<T> predicate)
         {
-            int result = 0;
+            var result = 0;
             foreach (T item in l)
                 if (predicate(item))
                     result++;
-            return result;
+            return
+                result;
         }
 
         /// <summary>
@@ -60,7 +61,7 @@ namespace StephanHooft.Extensions
         /// </summary>
         /// <param name="item">The <typeparamref name="T"/> to check for.</param>
         /// <param name="listName">The <see cref="List{T}"/> name to use if an <see cref="ArgumentException"/> is thrown.</param>
-        /// <returns>The original <see cref="List{T}"/>, assuming no <see cref="ArgumentException"/> was thrown.</returns>
+        /// <returns>The original <see cref="List{T}"/>.</returns>
         public static List<T> MustContain<T>(this List<T> l, T item, string listName)
         {
             if (l.Contains(item))
@@ -78,7 +79,7 @@ namespace StephanHooft.Extensions
         /// </summary>
         /// <param name="item">The <typeparamref name="T"/> to check against.</param>
         /// <param name="listName">The <see cref="List{T}"/> name to use if an <see cref="ArgumentException"/> is thrown.</param>
-        /// <returns>The original <see cref="List{T}"/>, assuming no <see cref="ArgumentException"/> was thrown.</returns>
+        /// <returns>The original <see cref="List{T}"/>.</returns>
         public static List<T> MustNotContain<T>(this List<T> l, T item, string listName)
         {
             if (!l.Contains(item))

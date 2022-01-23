@@ -14,7 +14,8 @@ namespace StephanHooft.Extensions
             if (gameObject.TryGetComponent(out T component))
                 UnityEngine.Object.Destroy(component);
             component = gameObject.AddComponent<T>();
-            return component;
+            return
+                component;
         }
 
         /// <summary>
@@ -24,7 +25,8 @@ namespace StephanHooft.Extensions
         /// <returns>A <see cref="Vector3"/> from the source <see cref="GameObject"/> to the destination <see cref="GameObject"/>.</returns>
         public static Vector3 DirectionTo(this GameObject source, GameObject destination)
         {
-            return Vector3.Normalize(destination.transform.position - source.transform.position);
+            return
+                Vector3.Normalize(destination.transform.position - source.transform.position);
         }
 
         /// <summary>
@@ -34,7 +36,8 @@ namespace StephanHooft.Extensions
         /// <returns>The <see cref="float"/> distance from the <paramref name="source"/> to the <paramref name="destination"/>.</returns>
         public static float DistanceTo(this GameObject source, GameObject destination)
         {
-            return Vector3.Distance(source.transform.position, destination.transform.position);
+            return
+                Vector3.Distance(source.transform.position, destination.transform.position);
         }
 
         /// <summary>
@@ -44,7 +47,8 @@ namespace StephanHooft.Extensions
         /// <returns>The <see cref="float"/> distance from the <paramref name="source"/> to the <paramref name="destination"/>.</returns>
         public static float DistanceTo(this GameObject source, Vector3 destination)
         {
-            return Vector3.Distance(source.transform.position, destination);
+            return
+                Vector3.Distance(source.transform.position, destination);
         }
 
         /// <summary>
@@ -55,12 +59,14 @@ namespace StephanHooft.Extensions
         public static T GetEssentialComponent<T>(this GameObject gameObject, bool destroyGameObjectOnFailure = false) where T: Component
         {
             if (gameObject.TryGetComponent(out T component))
-                return component;
+                return
+                    component;
             else
             {
                 if (destroyGameObjectOnFailure)
                     UnityEngine.Object.Destroy(gameObject);
-                throw new Exception("Cannot find a " + typeof(T) + ".");
+                throw
+                    new Exception("Cannot find a " + typeof(T) + ".");
             }
         }
 
@@ -71,14 +77,16 @@ namespace StephanHooft.Extensions
         /// <returns>A <typeparamref name="T"/>.</returns>
         public static T GetEssentialComponentInChildren<T>(this GameObject gameObject, bool destroyGameObjectOnFailure = false) where T: Component
         {
-            T component = gameObject.GetComponentInChildren<T>();
+            var component = gameObject.GetComponentInChildren<T>();
             if (component != null)
-                return component;
+                return
+                    component;
             else
             {
                 if(destroyGameObjectOnFailure)
                     UnityEngine.Object.Destroy(gameObject);
-                throw new Exception("Cannot find a " + typeof(T) + ".");
+                throw
+                    new Exception("Cannot find a " + typeof(T) + ".");
             }
         }
 
@@ -89,14 +97,16 @@ namespace StephanHooft.Extensions
         /// <returns>A <typeparamref name="T"/>.</returns>
         public static T GetEssentialComponentInParent<T>(this GameObject gameObject, bool destroyGameObjectOnFailure = false) where T : Component
         {
-            T component = gameObject.GetComponentInParent<T>();
+            var component = gameObject.GetComponentInParent<T>();
             if (component != null)
-                return component;
+                return
+                    component;
             else
             {
                 if (destroyGameObjectOnFailure)
                     UnityEngine.Object.Destroy(gameObject);
-                throw new Exception("Cannot find a " + typeof(T) + ".");
+                throw
+                    new Exception("Cannot find a " + typeof(T) + ".");
             }
         }
 
@@ -108,7 +118,8 @@ namespace StephanHooft.Extensions
         {
             if (!gameObject.TryGetComponent(out T component))
                 component = gameObject.AddComponent<T>();
-            return component;
+            return
+                component;
         }
 
         /// <summary>
@@ -117,7 +128,8 @@ namespace StephanHooft.Extensions
         /// <returns>True if the <see cref="GameObject"/> has a <see cref="Component"/> of <see cref="Type"/> <typeparamref name="T"/>.</returns>
         public static bool HasComponent<T>(this GameObject gameObject)
         {
-            return gameObject.GetComponent<T>() != null;
+            return
+                gameObject.GetComponent<T>() != null;
         }
     }
 }

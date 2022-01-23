@@ -18,18 +18,16 @@ namespace StephanHooft.CustomAttributes.EditorScripts
                 label.tooltip = "Range between " + minMaxAttribute.min.ToString("F2") + " and " + minMaxAttribute.max.ToString("F2") + ".";
             else if (propertyType == SerializedPropertyType.Vector2Int)
                 label.tooltip = "Range between " + minMaxAttribute.min.ToString() + " and " + minMaxAttribute.max.ToString() + ".";
-            Rect controlRect = EditorGUI.PrefixLabel(position, label);
-            int priorIndentLevel = EditorGUI.indentLevel;
+            var controlRect = EditorGUI.PrefixLabel(position, label);
+            var priorIndentLevel = EditorGUI.indentLevel;
             EditorGUI.indentLevel = 0;
-            Rect[] splittedRect = CreateMinMaxSliderRects(controlRect, 50, 5);
-
-            // Vector2 support
+            var splittedRect = CreateMinMaxSliderRects(controlRect, 50, 5);
             if (propertyType == SerializedPropertyType.Vector2)
             {
                 EditorGUI.BeginChangeCheck();
-                Vector2 vector = property.vector2Value;
-                float minVal = vector.x;
-                float maxVal = vector.y;
+                var vector = property.vector2Value;
+                var minVal = vector.x;
+                var maxVal = vector.y;
                 minVal = EditorGUI.FloatField(splittedRect[0], float.Parse(minVal.ToString("F2"))); // Draw a float field in the area of splittedRect[0]
                 maxVal = EditorGUI.FloatField(splittedRect[2], float.Parse(maxVal.ToString("F2"))); // Draw a float field in the area of splittedRect[2]
                 EditorGUI.MinMaxSlider(splittedRect[1], ref minVal, ref maxVal, minMaxAttribute.min, minMaxAttribute.max);
@@ -41,13 +39,12 @@ namespace StephanHooft.CustomAttributes.EditorScripts
                 if (EditorGUI.EndChangeCheck())
                     property.vector2Value = vector;
             }
-            // Vector2Int support
             else if (propertyType == SerializedPropertyType.Vector2Int)
             {
                 EditorGUI.BeginChangeCheck();
-                Vector2Int vector = property.vector2IntValue;
-                float minVal = vector.x;
-                float maxVal = vector.y;
+                var vector = property.vector2IntValue;
+                var minVal = (float)vector.x;
+                var maxVal = (float)vector.y;
                 minVal = EditorGUI.FloatField(splittedRect[0], minVal);
                 maxVal = EditorGUI.FloatField(splittedRect[2], maxVal);
                 EditorGUI.MinMaxSlider(splittedRect[1], ref minVal, ref maxVal, minMaxAttribute.min, minMaxAttribute.max);
@@ -60,7 +57,8 @@ namespace StephanHooft.CustomAttributes.EditorScripts
                     property.vector2IntValue = vector;
             }
             else 
-                throw new System.Exception("MinMaxAttribute can only be assigned to Vector2 and Vector2Int.");
+                throw
+                    new System.Exception("MinMaxAttribute can only be assigned to Vector2 and Vector2Int.");
             EditorGUI.indentLevel = priorIndentLevel;
         }
 
@@ -92,7 +90,8 @@ namespace StephanHooft.CustomAttributes.EditorScripts
                 floatFieldWidth,
                 controlRect.height
                 );
-            return rects;
+            return
+                rects;
         }
     }
 }

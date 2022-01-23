@@ -23,7 +23,8 @@ namespace StephanHooft.Extensions
         /// <returns>A <see cref="Vector3"/> from the source <see cref="Transform"/> to the destination <see cref="Transform"/>.</returns>
         public static Vector3 DirectionTo(this Transform source, Transform destination)
         {
-            return Vector3.Normalize(destination.position - source.position);
+            return
+                Vector3.Normalize(destination.position - source.position);
         }
 
         /// <summary>
@@ -33,7 +34,8 @@ namespace StephanHooft.Extensions
         /// <returns>The <see cref="float"/> distance from the <paramref name="source"/> to the <paramref name="destination"/>.</returns>
         public static float DistanceTo(this Transform source, Transform destination)
         {
-            return Vector3.Distance(source.position, destination.position);
+            return
+                Vector3.Distance(source.position, destination.position);
         }
 
         /// <summary>
@@ -43,7 +45,8 @@ namespace StephanHooft.Extensions
         /// <returns>The <see cref="float"/> distance from the <paramref name="source"/> to the <paramref name="destination"/>.</returns>
         public static float DistanceTo(this Transform source, Vector3 destination)
         {
-            return Vector3.Distance(source.position, destination);
+            return
+                Vector3.Distance(source.position, destination);
         }
 
         /// <summary>

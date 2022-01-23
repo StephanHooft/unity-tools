@@ -8,7 +8,7 @@ using UnityEditor;
 namespace StephanHooft.CustomEditorScripts
 {
     /// <summary>
-    /// Custom editor for MonoBehaviours.
+    /// Custom <see cref="Editor"/> for <see cref="MonoBehaviour"/>s.
     /// </summary>
     [CustomEditor(typeof(MonoBehaviour), true)]
     public class DefaultInspector : Editor
@@ -20,7 +20,7 @@ namespace StephanHooft.CustomEditorScripts
     }
 
     /// <summary>
-    /// Custom editor for ScriptableObjects.
+    /// Custom <see cref="Editor"/> for <see cref="ScriptableObject"/>s.
     /// </summary>
     [CustomEditor(typeof(ScriptableObject), true)]
     [CanEditMultipleObjects]
@@ -33,15 +33,15 @@ namespace StephanHooft.CustomEditorScripts
     }
 
     /// <summary>
-    /// Editor extension class that allows drawing of Inspectors without the "Script" field.
+    /// <see cref="Editor"/> extension class that allows drawing of Inspectors without the "Script" field.
     /// </summary>
     public static class DefaultInspector_EditorExtension
     {
         /// <summary>
         /// Draws an Inspector without the "Script" field.
         /// </summary>
-        /// <param name="Inspector">The Inspector to draw</param>
-        /// <returns>True if a control was changed.</returns>
+        /// <param name="Inspector">The Inspector to draw.</param>
+        /// <returns><see cref="true"/> if a control was changed.</returns>
         public static bool DrawDefaultInspectorWithoutScriptField(this Editor Inspector)
         {
             EditorGUI.BeginChangeCheck();
@@ -51,7 +51,8 @@ namespace StephanHooft.CustomEditorScripts
             while (Iterator.NextVisible(false))
                 EditorGUILayout.PropertyField(Iterator, true);
             Inspector.serializedObject.ApplyModifiedProperties();
-            return (EditorGUI.EndChangeCheck());
+            return
+                EditorGUI.EndChangeCheck();
         }
     }
 }
