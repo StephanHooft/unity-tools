@@ -1,183 +1,196 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 
 namespace StephanHooft.MultiKeyDictionary
 {
-	// *************************************************
-	// Created by Aron Weiler
-	// Feel free to use this code in any way you like, 
-	// just don't blame me when your coworkers think you're awesome.
-	// Comments?  Email aronweiler@gmail.com
-	// Revision 1.6
-	// Revised locking strategy based on the some bugs found with the existing lock objects. 
-	// Possible deadlock and race conditions resolved by swapping out the two lock objects for a ReaderWriterLockSlim. 
-	// Performance takes a very small hit, but correctness is guaranteed.
-	// *************************************************
-
 	/// <summary>
-	/// Multi-Key Dictionary Class.
+	/// A Dictionary that has both a primary <typeparamref name="TPrimaryKey"/> and a secondary <typeparamref name="TSubKey"/>
+	/// for every value.
+	/// <para>Based almost entirely on the excellent work of Aron Weiler (aronweiler@gmail.com).</para>
 	/// </summary>	
-	/// <typeparam name="K">Primary Key Type</typeparam>
-	/// <typeparam name="L">Sub Key Type</typeparam>
-	/// <typeparam name="V">Value Type</typeparam>
-	public class MultiKeyDictionary<K, L, V>
+	/// <typeparam name="TPrimaryKey">The type of the primary keys in the dictionary.</typeparam>
+	/// <typeparam name="TSubKey">The type of subkeys in the dictionary.</typeparam>
+	/// <typeparam name="TValue">The type of the values in the dictionary.</typeparam>
+	public class MultiKeyDictionary<TPrimaryKey, TSubKey, TValue>
 	{
-		internal readonly Dictionary<K, V> baseDictionary = new Dictionary<K, V>();
-		internal readonly Dictionary<L, K> subDictionary = new Dictionary<L, K>();
-		internal readonly Dictionary<K, L> primaryToSubkeyMapping = new Dictionary<K, L>();
-        readonly ReaderWriterLockSlim readerWriterLock = new ReaderWriterLockSlim();
-
-		public V this[L subKey]
+		/// <summary>
+		/// Gets the number of key/value pairs contained in the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>.
+		/// </summary>
+		public int Count
 		{
 			get
 			{
-				if (TryGetValue(subKey, out V item))
-					return item;
-
-				throw new KeyNotFoundException("sub key not found: " + subKey.ToString());
+				readerWriterLock.EnterReadLock();
+				try
+				{
+					return
+						baseDictionary.Count;
+				}
+				finally
+				{
+					readerWriterLock.ExitReadLock();
+				}
 			}
 		}
 
-		public V this[K primaryKey]
+		/// <summary>
+		/// Gets a collection containing the <typeparamref name="TPrimaryKey"/>s in the 
+		/// <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>.
+		/// </summary>
+		public Dictionary<TPrimaryKey,TValue>.KeyCollection PrimaryKeys
 		{
 			get
 			{
-				if (TryGetValue(primaryKey, out V item))
+				readerWriterLock.EnterReadLock();
+				try
+				{
+					return
+						baseDictionary.Keys;
+				}
+				finally
+				{
+					readerWriterLock.ExitReadLock();
+				}
+			}
+
+		}
+
+		/// <summary>
+		/// Gets a collection containing the <typeparamref name="TSubKey"/>s in the 
+		/// <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>.
+		/// </summary>
+		public Dictionary<TSubKey, TPrimaryKey>.KeyCollection SubKeys
+		{
+			get
+			{
+				readerWriterLock.EnterReadLock();
+				try
+				{
+					return
+						subDictionary.Keys;
+				}
+				finally
+				{
+					readerWriterLock.ExitReadLock();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Gets a collection containing the <typeparamref name="TValue"/>s in the 
+		/// <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>.
+		/// </summary>
+		public Dictionary<TPrimaryKey, TValue>.ValueCollection Values
+		{
+			get
+			{
+				readerWriterLock.EnterReadLock();
+				try
+				{
+					return
+						baseDictionary.Values;
+				}
+				finally
+				{
+					readerWriterLock.ExitReadLock();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Gets/sets the <typeparamref name="TValue"/> associated with the specified <typeparamref name="TSubKey"/>.
+		/// </summary>
+		/// <param name="subKey">The key of the <typeparamref name="TValue"/> to get.</param>
+		public TValue this[TSubKey subKey]
+		{
+			get
+			{
+				if (TryGetValue(subKey, out TValue item))
 					return item;
-
-				throw new KeyNotFoundException("primary key not found: " + primaryKey.ToString());
+				throw
+					new KeyNotFoundException("sub key not found: " + subKey.ToString());
 			}
-		}
-
-		public void Associate(L subKey, K primaryKey)
-		{
-			readerWriterLock.EnterUpgradeableReadLock();
-
-			try
-			{
-				if (!baseDictionary.ContainsKey(primaryKey))
-					throw new KeyNotFoundException(string.Format("The base dictionary does not contain the key '{0}'", primaryKey));
-
-				if (primaryToSubkeyMapping.ContainsKey(primaryKey)) // Remove the old mapping first
+            set
+            {
+				readerWriterLock.EnterWriteLock();
+				try
 				{
-					readerWriterLock.EnterWriteLock();
-
-					try
-					{
-						if (subDictionary.ContainsKey(primaryToSubkeyMapping[primaryKey]))
-						{
-							subDictionary.Remove(primaryToSubkeyMapping[primaryKey]);
-						}
-
-						primaryToSubkeyMapping.Remove(primaryKey);
-					}
-					finally
-					{
-						readerWriterLock.ExitWriteLock();
-					}
+					baseDictionary[subDictionary[subKey]] = value;
 				}
-
-				subDictionary[subKey] = primaryKey;
-				primaryToSubkeyMapping[primaryKey] = subKey;
-			}
-			finally
-			{
-				readerWriterLock.ExitUpgradeableReadLock();
-			}
-		}
-
-		public bool TryGetValue(L subKey, out V val)
-		{
-			val = default;
-
-			readerWriterLock.EnterReadLock();
-
-			try
-			{
-				if (subDictionary.TryGetValue(subKey, out K primaryKey))
+				finally
 				{
-					return baseDictionary.TryGetValue(primaryKey, out val);
+					readerWriterLock.ExitWriteLock();
 				}
 			}
-			finally
+		}
+
+		/// <summary>
+		/// Gets/sets the <typeparamref name="TValue"/> associated with the specified <typeparamref name="TPrimaryKey"/>.
+		/// </summary>
+		/// <param name="primaryKey">The key of the <typeparamref name="TValue"/> to get.</param>
+		public TValue this[TPrimaryKey primaryKey]
+		{
+			get
 			{
-				readerWriterLock.ExitReadLock();
+				if (TryGetValue(primaryKey, out TValue item))
+					return
+						item;
+				throw
+					new KeyNotFoundException("primary key not found: " + primaryKey.ToString());
 			}
-
-			return false;
-		}
-
-		public bool TryGetValue(K primaryKey, out V val)
-		{
-			readerWriterLock.EnterReadLock();
-
-			try
+			set
 			{
-				return baseDictionary.TryGetValue(primaryKey, out val);
-			}
-			finally
-			{
-				readerWriterLock.ExitReadLock();
-			}
-		}
-
-		public bool ContainsKey(L subKey)
-		{
-            return TryGetValue(subKey, out _);
-		}
-
-		public bool ContainsKey(K primaryKey)
-		{
-            return TryGetValue(primaryKey, out _);
-		}
-
-		public void Remove(K primaryKey)
-		{
-			readerWriterLock.EnterWriteLock();
-
-			try
-			{
-				if (primaryToSubkeyMapping.ContainsKey(primaryKey))
+				readerWriterLock.EnterWriteLock();
+				try
 				{
-					if (subDictionary.ContainsKey(primaryToSubkeyMapping[primaryKey]))
-					{
-						subDictionary.Remove(primaryToSubkeyMapping[primaryKey]);
-					}
-
-					primaryToSubkeyMapping.Remove(primaryKey);
+					baseDictionary[primaryKey] = value;
 				}
-
-				baseDictionary.Remove(primaryKey);
-			}
-			finally
-			{
-				readerWriterLock.ExitWriteLock();
+				finally
+				{
+					readerWriterLock.ExitWriteLock();
+				}
 			}
 		}
 
-		public void Remove(L subKey)
+		internal readonly Dictionary<TPrimaryKey, TValue> baseDictionary = new Dictionary<TPrimaryKey, TValue>();
+		internal readonly Dictionary<TSubKey, TPrimaryKey> subDictionary = new Dictionary<TSubKey, TPrimaryKey>();
+		internal readonly Dictionary<TPrimaryKey, TSubKey> primaryToSubkeyMapping = new Dictionary<TPrimaryKey, TSubKey>();
+		readonly ReaderWriterLockSlim readerWriterLock = new ReaderWriterLockSlim();
+
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MultiKeyDictionary{K, L, V}"/> class.
+		/// </summary>
+		public MultiKeyDictionary()
+        {}
+
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		/// <summary>
+		/// Adds the specified <typeparamref name="TPrimaryKey"/>, <typeparamref name="TSubKey"/>, and <typeparamref name="TValue"/>
+		/// to the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>.
+		/// </summary>
+		/// <param name="primaryKey">The <typeparamref name="TPrimaryKey"/> of the <typeparamref name="TValue"/> to add.</param>
+		/// <param name="subKey">The <typeparamref name="TSubKey"/> of the <typeparamref name="TValue"/> to add.</param>
+		/// <param name="val">The value of the <typeparamref name="TValue"/> to add. The <typeparamref name="TValue"/> can be null
+		/// for reference types.</param>
+		public void Add(TPrimaryKey primaryKey, TSubKey subKey, TValue val)
 		{
-			readerWriterLock.EnterWriteLock();
-
-			try
-			{
-				baseDictionary.Remove(subDictionary[subKey]);
-
-				primaryToSubkeyMapping.Remove(subDictionary[subKey]);
-
-				subDictionary.Remove(subKey);
-			}
-			finally
-			{
-				readerWriterLock.ExitWriteLock();
-			}
+			Add(primaryKey, val);
+			Associate(subKey, primaryKey);
 		}
 
-		public void Add(K primaryKey, V val)
+		/// <summary>
+		/// Adds the specified <typeparamref name="TPrimaryKey"/> and <typeparamref name="TValue"/> to the
+		/// <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>.
+		/// </summary>
+		/// <param name="primaryKey">The <typeparamref name="TPrimaryKey"/> of the <typeparamref name="TValue"/> to add.</param>
+		/// <param name="val">The value of the <typeparamref name="TValue"/> to add. The <typeparamref name="TValue"/> can be null
+		/// for reference types.</param>
+		public void Add(TPrimaryKey primaryKey, TValue val)
 		{
 			readerWriterLock.EnterWriteLock();
-
 			try
 			{
 				baseDictionary.Add(primaryKey, val);
@@ -188,94 +201,54 @@ namespace StephanHooft.MultiKeyDictionary
 			}
 		}
 
-		public void Add(K primaryKey, L subKey, V val)
+		/// <summary>
+		/// Associates a <typeparamref name="TSubKey"/> with an <typeparamref name="TValue"/> already added under a specific
+		/// <typeparamref name="TPrimaryKey"/>.
+		/// </summary>
+		/// <param name="subKey">The <typeparamref name="TSubKey"/> to associate with the <typeparamref name="TPrimaryKey"/>.</param>
+		/// <param name="primaryKey">The <typeparamref name="TPrimaryKey"/> to associate with.</param>
+		public void Associate(TSubKey subKey, TPrimaryKey primaryKey)
 		{
-			Add(primaryKey, val);
-
-			Associate(subKey, primaryKey);
-		}
-
-		public V[] CloneValues()
-		{
-			readerWriterLock.EnterReadLock();
-
+			readerWriterLock.EnterUpgradeableReadLock();
 			try
 			{
-				V[] values = new V[baseDictionary.Values.Count];
-
-				baseDictionary.Values.CopyTo(values, 0);
-
-				return values;
-			}
-			finally
-			{
-				readerWriterLock.ExitReadLock();
-			}
-		}
-
-		public List<V> Values
-		{
-			get
-			{
-				readerWriterLock.EnterReadLock();
-
-				try
+				if (!baseDictionary.ContainsKey(primaryKey))
+					throw
+						new KeyNotFoundException(string.Format("The base dictionary does not contain the key '{0}'", primaryKey));
+				if (primaryToSubkeyMapping.ContainsKey(primaryKey)) // Remove the old mapping first
 				{
-					return baseDictionary.Values.ToList();
+					readerWriterLock.EnterWriteLock();
+					try
+					{
+						if (subDictionary.ContainsKey(primaryToSubkeyMapping[primaryKey]))
+							subDictionary.Remove(primaryToSubkeyMapping[primaryKey]);
+						primaryToSubkeyMapping.Remove(primaryKey);
+					}
+					finally
+					{
+						readerWriterLock.ExitWriteLock();
+					}
 				}
-				finally
-				{
-					readerWriterLock.ExitReadLock();
-				}
-			}
-		}
-
-		public K[] ClonePrimaryKeys()
-		{
-			readerWriterLock.EnterReadLock();
-
-			try
-			{
-				K[] values = new K[baseDictionary.Keys.Count];
-
-				baseDictionary.Keys.CopyTo(values, 0);
-
-				return values;
+				subDictionary[subKey] = primaryKey;
+				primaryToSubkeyMapping[primaryKey] = subKey;
 			}
 			finally
 			{
-				readerWriterLock.ExitReadLock();
+				readerWriterLock.ExitUpgradeableReadLock();
 			}
 		}
 
-		public L[] CloneSubKeys()
-		{
-			readerWriterLock.EnterReadLock();
-
-			try
-			{
-				L[] values = new L[subDictionary.Keys.Count];
-
-				subDictionary.Keys.CopyTo(values, 0);
-
-				return values;
-			}
-			finally
-			{
-				readerWriterLock.ExitReadLock();
-			}
-		}
-
+		/// <summary>
+		/// Removes all <typeparamref name="TPrimaryKey"/>s, <typeparamref name="TSubKey"/>s and <typeparamref name="TValue"/> from the 
+		/// <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>.
+		/// </summary>
 		public void Clear()
 		{
 			readerWriterLock.EnterWriteLock();
-
 			try
 			{
 				baseDictionary.Clear();
-
 				subDictionary.Clear();
-
 				primaryToSubkeyMapping.Clear();
 			}
 			finally
@@ -284,30 +257,181 @@ namespace StephanHooft.MultiKeyDictionary
 			}
 		}
 
-		public int Count
+		/// <summary>
+		/// Clones the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>'s <typeparamref name="TValue"/>s to a
+		/// <typeparamref name="TValue"/>[].
+		/// </summary>
+		/// <returns>A <typeparamref name="TValue"/>[].</returns>
+		public TValue[] CloneValues()
 		{
-			get
+			readerWriterLock.EnterReadLock();
+			try
 			{
-				readerWriterLock.EnterReadLock();
-
-				try
-				{
-					return baseDictionary.Count;
-				}
-				finally
-				{
-					readerWriterLock.ExitReadLock();
-				}
+				TValue[] values = new TValue[baseDictionary.Values.Count];
+				baseDictionary.Values.CopyTo(values, 0);
+				return
+					values;
+			}
+			finally
+			{
+				readerWriterLock.ExitReadLock();
 			}
 		}
 
-		public IEnumerator<KeyValuePair<K, V>> GetEnumerator()
+		/// <summary>
+		/// Determines whether the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> contains the specified 
+		/// <typeparamref name="TSubKey"/>.
+		/// </summary>
+		/// <param name="subKey">The <typeparamref name="TSubKey"/> to locate in the
+		/// <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>.</param>
+		/// <returns><see cref="true"/> if the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> contains
+		/// an element with the specified <typeparamref name="TSubKey"/>; otherwise, <see cref="false"/>.</returns>
+		public bool ContainsKey(TSubKey subKey)
 		{
-			readerWriterLock.EnterReadLock();
+			return
+				TryGetValue(subKey, out _);
+		}
 
+		/// <summary>
+		/// Determines whether the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> contains the specified
+		/// <typeparamref name="TPrimaryKey"/>.
+		/// </summary>
+		/// <param name="primaryKey">The <typeparamref name="TPrimaryKey"/> to locate in the
+		/// <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>.</param>
+		/// <returns><see cref="true"/> if the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> contains
+		/// an element with the specified <typeparamref name="TPrimaryKey"/>; otherwise, <see cref="false"/>.</returns>
+		public bool ContainsKey(TPrimaryKey primaryKey)
+		{
+			return
+				TryGetValue(primaryKey, out _);
+		}
+
+		/// <summary>
+		/// Determines whether the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> contains the specified
+		/// <typeparamref name="TValue"/>.
+		/// </summary>
+		/// <param name="value">The <typeparamref name="TValue"/> to locate in the
+		/// <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>.</param>
+		/// <returns><see cref="true"/> if the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> contains
+		/// an element with the specified <typeparamref name="TValue"/>; otherwise, <see cref="false"/>.</returns>
+		public bool ContainsValue(TValue value)
+        {
+			readerWriterLock.EnterReadLock();
 			try
 			{
-				return baseDictionary.GetEnumerator();
+				return baseDictionary.ContainsValue(value);
+			}
+			finally
+			{
+				readerWriterLock.ExitReadLock();
+			}
+		}
+
+		/// <summary>
+		/// Returns an enumerator that iterates through the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>.
+		/// </summary>
+		/// <returns>An <see cref="IEnumerator{KeyValuePair{TPrimaryKey, TValue}}"/> structure for the
+		/// <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>.</returns>
+		public IEnumerator<KeyValuePair<TPrimaryKey, TValue>> GetEnumerator()
+		{
+			readerWriterLock.EnterReadLock();
+			try
+			{
+				return
+					baseDictionary.GetEnumerator();
+			}
+			finally
+			{
+				readerWriterLock.ExitReadLock();
+			}
+		}
+
+		/// <summary>
+		/// Removes the <typeparamref name="TValue"/> with the specified <typeparamref name="TPrimaryKey"/> from the
+		/// <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>.
+		/// </summary>
+		/// <param name="primaryKey">The <typeparamref name="TPrimaryKey"/> of the <typeparamref name="TValue"/> to remove.</param>
+		public void Remove(TPrimaryKey primaryKey)
+		{
+			readerWriterLock.EnterWriteLock();
+			try
+			{
+				if (primaryToSubkeyMapping.ContainsKey(primaryKey))
+				{
+					if (subDictionary.ContainsKey(primaryToSubkeyMapping[primaryKey]))
+						subDictionary.Remove(primaryToSubkeyMapping[primaryKey]);
+					primaryToSubkeyMapping.Remove(primaryKey);
+				}
+				baseDictionary.Remove(primaryKey);
+			}
+			finally
+			{
+				readerWriterLock.ExitWriteLock();
+			}
+		}
+
+		/// <summary>
+		/// Removes the <typeparamref name="TValue"/> with the specified <typeparamref name="TSubKey"/> from the
+		/// <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>.
+		/// </summary>
+		/// <param name="subKey">The <typeparamref name="TSubKey"/> of the <typeparamref name="TValue"/> to remove.</param>
+		public void Remove(TSubKey subKey)
+		{
+			readerWriterLock.EnterWriteLock();
+			try
+			{
+				baseDictionary.Remove(subDictionary[subKey]);
+				primaryToSubkeyMapping.Remove(subDictionary[subKey]);
+				subDictionary.Remove(subKey);
+			}
+			finally
+			{
+				readerWriterLock.ExitWriteLock();
+			}
+		}
+
+		/// <summary>
+		/// Gets the <typeparamref name="TValue"/> associated with the specified <typeparamref name="TSubKey"/>.
+		/// </summary>
+		/// <param name="subKey">The <typeparamref name="TSubKey"/> of the value to get.</param>
+		/// <param name="val">When this method returns, contains the <typeparamref name="TValue"/> associated with
+		/// the specified <typeparamref name="TSubKey"/>, if the <typeparamref name="TSubKey"/> is found; otherwise, 
+		/// the default value for the <typeparamref name="TValue"/>. This parameter is passed uninitialized.</param>
+		/// <returns><see cref="true"/> if the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> contains
+		/// an element with the specified <typeparamref name="TSubKey"/>; otherwise, <see cref="false"/>.</returns>
+		public bool TryGetValue(TSubKey subKey, out TValue val)
+		{
+			val = default;
+			readerWriterLock.EnterReadLock();
+			try
+			{
+				if (subDictionary.TryGetValue(subKey, out TPrimaryKey primaryKey))
+					return 
+						baseDictionary.TryGetValue(primaryKey, out val);
+			}
+			finally
+			{
+				readerWriterLock.ExitReadLock();
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// Gets the <typeparamref name="TValue"/> associated with the specified <typeparamref name="TPrimaryKey"/>.
+		/// </summary>
+		/// <param name="primaryKey">The <typeparamref name="TPrimaryKey"/> of the value to get.</param>
+		/// <param name="val">When this method returns, contains the <typeparamref name="TValue"/> associated with the
+		/// specified <typeparamref name="TPrimaryKey"/>, if the <typeparamref name="TPrimaryKey"/> is found; otherwise, 
+		/// the default value for the <typeparamref name="TValue"/>. This parameter is passed uninitialized.</param>
+		/// <returns><see cref="true"/> if the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> contains
+		/// an element with the specified <typeparamref name="TPrimaryKey"/>; otherwise, <see cref="false"/>.</returns>
+		public bool TryGetValue(TPrimaryKey primaryKey, out TValue val)
+		{
+			readerWriterLock.EnterReadLock();
+			try
+			{
+				return 
+					baseDictionary.TryGetValue(primaryKey, out val);
 			}
 			finally
 			{
