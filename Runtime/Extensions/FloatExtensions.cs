@@ -105,6 +105,7 @@ namespace StephanHooft.Extensions
         /// <summary>
         /// Returns the largest of two <see cref="float"/>s.
         /// </summary>
+        /// <param name="other">The other <see cref="float"/> to compare against.</param>
         /// <returns>The largest value between the <see cref="float"/> and <paramref name="other"/>.</returns>
         public static float Max(this float f, float other)
         {
@@ -113,13 +114,38 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
+        /// Returns the largest <see cref="float"/>.
+        /// </summary>
+        /// <param name="others">A range of <see cref="float"/>s to compare against.</param>
+        /// <returns>The largest <see cref="float"/> value.</returns>
+        public static float Max(this float f, float[] others)
+        {
+            var max = Mathf.Max(others);
+            return
+                Mathf.Max(f, max);
+        }
+
+        /// <summary>
         /// Returns the smallest of two <see cref="float"/>s.
         /// </summary>
+        /// <param name="other">The other <see cref="float"/> to compare against.</param>
         /// <returns>The largest value between the <see cref="float"/> and <paramref name="other"/>.</returns>
         public static float Min(this float f, float other)
         {
             return 
                 Mathf.Min(f, other);
+        }
+
+        /// <summary>
+        /// Returns the smallest <see cref="float"/>.
+        /// </summary>
+        /// <param name="others">A range of <see cref="float"/>s to compare against.</param>
+        /// <returns>The smallest <see cref="float"/> value.</returns>
+        public static float Min(this float f, float[] others)
+        {
+            var min = Mathf.Min(others);
+            return
+                Mathf.Min(f, min);
         }
 
         /// <summary>
@@ -228,7 +254,7 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// Returns the <see cref="float"/> with a sign opposite to an<paramref name="other"/> <see cref="float"/>.
+        /// Returns the <see cref="float"/> with a sign opposite to an <paramref name="other"/> <see cref="float"/>.
         /// </summary>
         /// <param name="other">The other <see cref="float"/> whose sign to oppose.</param>
         /// <returns>The <see cref="float"/> with its sign oppisite to that of <paramref name="other"/>.</returns>
@@ -245,7 +271,7 @@ namespace StephanHooft.Extensions
         /// <summary>
         /// Returns the <see cref="float"/> raised to power <paramref name="p"/>.
         /// </summary>
-        /// <param name="p">The power to raise the float to.</param>
+        /// <param name="p">The power to raise the <see cref="float"/> to.</param>
         /// <returns>The <see cref="float"/> raised to power <paramref name="p"/>.</returns>
         public static float Pow(this float f, float p)
         {
@@ -264,9 +290,9 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// Rounds the <see cref="float"/> to the nearest integer.
+        /// Rounds the <see cref="float"/> to the nearest <see cref="int"/>.
         /// </summary>
-        /// <returns>The <see cref="float"/> to the nearest integer.</returns>
+        /// <returns>The <see cref="float"/> to the nearest <see cref="int"/>.</returns>
         public static int RoundToInt(this float f)
         {
             return 
@@ -276,7 +302,6 @@ namespace StephanHooft.Extensions
         /// <summary>
         /// Returns the <see cref="float"/>'s sign.
         /// </summary>
-        /// <param name="f"></param>
         /// <returns>The <see cref="float"/>'s sign.</returns>
         public static float Sign(this float f)
         {
