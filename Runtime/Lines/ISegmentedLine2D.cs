@@ -8,9 +8,14 @@ namespace StephanHooft.Lines
     public interface ISegmentedLine2D
     {
         /// <summary>
-        /// The amount of points on the segmented line.
+        /// Whether or not the <see cref="ISegmentedLine2D"/> loops around.
         /// </summary>
-        public int PointCount { get; }
+        public bool Loop { get; set; }
+
+        /// <summary>
+        /// The amount of points on the <see cref="ISegmentedLine2D"/>.
+        /// </summary>
+        public int NodeCount { get; }
 
         /// <summary>
         /// The amount of total line segments.
@@ -18,38 +23,39 @@ namespace StephanHooft.Lines
         public int SegmentCount { get; }
 
         /// <summary>
-        /// Whether or not the segmented line loops around.
+        /// Gets/Sets one of the <see cref="ISegmentedLine2D"/>'s nodes.
         /// </summary>
-        public bool Loop { get; set; }
+        /// <param name="index">The <see cref="int "/> index of the node to set.</param>
+        public Vector2 this[int index] { get; set; }
 
         /// <summary>
-        /// Get a point on the line at value <paramref name="t"/> (0f - 1f).
-        /// </summary>
-        /// <param name="t">The distance along the line at which to get a point.</param>
-        /// <returns>A <see cref="Vector2"/> position (x,y).</returns>
-        public Vector2 GetPoint(float t);
-
-        /// <summary>
-        /// Get a direction along the line at value <paramref name="t"/> (0f - 1f).
-        /// </summary>
-        /// <param name="t"></param>
-        /// <returns>A <see cref="Vector2"/> direction (x,y).</returns>
-        public Vector2 GetDirection(float t);
-
-        /// <summary>
-        /// Get a velocity value along the line at value <paramref name="t"/> (0f - 1f).
-        /// </summary>
-        /// <param name="t"></param>
-        /// <returns>A <see cref="Vector2"/> velocity (x,y) value.</returns>
-        public Vector2 GetVelocity(float t);
-
-        /// <summary>
-        /// Add a node (and thus a line segment) to the segmented line.
+        /// Add a node (and thus a line segment) to the <see cref="ISegmentedLine2D"/>.
         /// </summary>
         public void AddNode();
 
         /// <summary>
-        /// Remove a node (and thus a line segment) from the segmented line.
+        /// Get a point on the <see cref="ISegmentedLine2D"/> at value <paramref name="t"/> (0f - 1f).
+        /// </summary>
+        /// <param name="t">The distance along the line at which to get a point.</param>
+        /// <returns>A <see cref="Vector2"/> position (x,y).</returns>
+        public Vector2 GetPositionOnLine(float t);
+
+        /// <summary>
+        /// Get a direction along the <see cref="ISegmentedLine2D"/> at value <paramref name="t"/> (0f - 1f).
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns>A <see cref="Vector2"/> direction (x,y).</returns>
+        public Vector2 GetDirectionOnLine(float t);
+
+        /// <summary>
+        /// Get a velocity value along the <see cref="ISegmentedLine2D"/> at value <paramref name="t"/> (0f - 1f).
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns>A <see cref="Vector2"/> velocity (x,y) value.</returns>
+        public Vector2 GetVelocityOnLine(float t);
+
+        /// <summary>
+        /// Remove a node (and thus a line segment) from the <see cref="ISegmentedLine2D"/>.
         /// </summary>
         public void RemoveNode();
     }

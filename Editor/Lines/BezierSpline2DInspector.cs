@@ -33,13 +33,12 @@ namespace StephanHooft.Lines.EditorScripts
 
         public override void OnInspectorGUI()
         {
-            //DrawDefaultInspector();
             spline = target as BezierSpline2D;
-            if (spline.PointCount < 1)
+            if (spline.NodeCount < 1)
                 spline.Reset();
 
             EditorGUI.BeginChangeCheck();
-            bool loop = EditorGUILayout.Toggle("Loop", spline.Loop);
+            var loop = EditorGUILayout.Toggle("Loop", spline.Loop);
             if (EditorGUI.EndChangeCheck())
             {
                 Undo.RecordObject(spline, "Toggle Loop");
@@ -51,12 +50,12 @@ namespace StephanHooft.Lines.EditorScripts
                 spline.AddNode();
                 EditorUtility.SetDirty(spline);
             }
-            if (spline.PointCount > 2 && GUILayout.Button("Remove Node"))
+            if (spline.NodeCount > 2 && GUILayout.Button("Remove Node"))
             {
                 spline.RemoveNode();
                 EditorUtility.SetDirty(spline);
             }
-            if (selectedIndex >= 0 && selectedIndex < spline.PointCount)
+            if (selectedIndex >= 0 && selectedIndex < spline.NodeCount)
                 DrawSelectedNodeInspector();
         }
 
@@ -66,9 +65,7 @@ namespace StephanHooft.Lines.EditorScripts
             handleTransform = spline.transform;
             handleRotation = Tools.pivotRotation == PivotRotation.Local ?
                 handleTransform.rotation : Quaternion.identity;
-
             DrawBezier();
-            //ShowDirections();
             DrawAllNodes();
         }
 
@@ -76,7 +73,7 @@ namespace StephanHooft.Lines.EditorScripts
         {
             if (!loop)
             {
-                if(selectedIndex == 0 && selectedPointIndex == 1 || selectedIndex == spline.PointCount - 1 && selectedPointIndex == 2)
+                if(selectedIndex == 0 && selectedPointIndex == 1 || selectedIndex == spline.NodeCount - 1 && selectedPointIndex == 2)
                 {
                     selectedIndex = -1;
                     selectedPointIndex = -1;
@@ -87,7 +84,7 @@ namespace StephanHooft.Lines.EditorScripts
 
         private void DrawBezier()
         {
-            for (int i = 1; i < spline.PointCount; i++)
+            for (int i = 1; i < spline.NodeCount; i++)
             {
                 Handles.DrawBezier(
                     handleTransform.TransformPoint(spline.GetControlPoint(i - 1, 0)),
@@ -98,9 +95,9 @@ namespace StephanHooft.Lines.EditorScripts
             }
             if (spline.Loop)
                 Handles.DrawBezier(
-                    handleTransform.TransformPoint(spline.GetControlPoint(spline.PointCount - 1, 0)),
+                    handleTransform.TransformPoint(spline.GetControlPoint(spline.NodeCount - 1, 0)),
                     handleTransform.TransformPoint(spline.GetControlPoint(0, 0)),
-                    handleTransform.TransformPoint(spline.GetControlPoint(spline.PointCount - 1, 2)),
+                    handleTransform.TransformPoint(spline.GetControlPoint(spline.NodeCount - 1, 2)),
                     handleTransform.TransformPoint(spline.GetControlPoint(0, 1)),
                     Color.white, null, 2f);
         }
@@ -108,48 +105,47 @@ namespace StephanHooft.Lines.EditorScripts
         private void ShowDirections()
         {
             Handles.color = Color.green;
-            Vector2 point = spline.GetPoint(0f);
-            Handles.DrawLine(point, point + spline.GetDirection(0f) * directionScale);
-            int steps = stepsPerCurve * spline.SegmentCount;
+            var point = spline.GetPositionOnLine(0f);
+            Handles.DrawLine(point, point + spline.GetDirectionOnLine(0f) * directionScale);
+            var steps = stepsPerCurve * spline.SegmentCount;
             for (int i = 1; i <= steps; i++)
             {
-                point = spline.GetPoint(i / (float)steps);
-                Handles.DrawLine(point, point + spline.GetDirection(i / (float)steps) * directionScale);
+                point = spline.GetPositionOnLine(i / (float)steps);
+                Handles.DrawLine(point, point + spline.GetDirectionOnLine(i / (float)steps) * directionScale);
             }
         }
 
         private void DrawAllNodes()
         {
-            for (int i = 0; i < spline.PointCount; i++)
+            for (int i = 0; i < spline.NodeCount; i++)
                 DrawNode(i);
         }
 
         private Vector2 DrawNode(int index)
         {
-            Vector2 point = handleTransform.TransformPoint(spline.GetControlPoint(index, 0));
-            Vector2 controlPointPre = handleTransform.TransformPoint(spline.GetControlPoint(index, 1));
-            Vector2 controlPointPost = handleTransform.TransformPoint(spline.GetControlPoint(index, 2));
-
+            var point = handleTransform.TransformPoint(spline.GetControlPoint(index, 0));
+            var controlPointPre = handleTransform.TransformPoint(spline.GetControlPoint(index, 1));
+            var controlPointPost = handleTransform.TransformPoint(spline.GetControlPoint(index, 2));
             Handles.color = Color.gray;
             if(spline.Loop || index > 0)
                 Handles.DrawLine(point, controlPointPre);
-            if(spline.Loop || index < spline.PointCount - 1)
+            if(spline.Loop || index < spline.NodeCount - 1)
                 Handles.DrawLine(point, controlPointPost);
-
             for (int i = 0; i <= 2; i++)
             {
                 DrawNodeButton(index, i);
                 DrawNodeHandle(index, i);
             }
-            return point;
+            return
+                point;
         }
 
         private void DrawNodeButton(int nodeIndex, int pointIndex)
         {
-            if (!spline.Loop && (nodeIndex == 0 && pointIndex == 1 || nodeIndex == spline.PointCount - 1 && pointIndex == 2))
+            if (!spline.Loop && (nodeIndex == 0 && pointIndex == 1 || nodeIndex == spline.NodeCount - 1 && pointIndex == 2))
                 return;
-            Vector2 position = handleTransform.TransformPoint(spline.GetControlPoint(nodeIndex, pointIndex));
-            float size = HandleUtility.GetHandleSize(position);
+            var position = handleTransform.TransformPoint(spline.GetControlPoint(nodeIndex, pointIndex));
+            var size = HandleUtility.GetHandleSize(position);
             if (pointIndex == 0)
                 size *= nodeIndex == 0 ? 6f : 3f;
             Handles.color = modeColors[(int)spline.GetControlPointMode(nodeIndex)];
@@ -165,9 +161,9 @@ namespace StephanHooft.Lines.EditorScripts
 
         private void DrawNodeHandle(int nodeIndex, int pointIndex)
         {
-            if (!spline.Loop && (nodeIndex == 0 && pointIndex == 1 || nodeIndex == spline.PointCount - 1 && pointIndex == 2))
+            if (!spline.Loop && (nodeIndex == 0 && pointIndex == 1 || nodeIndex == spline.NodeCount - 1 && pointIndex == 2))
                 return;
-            Vector2 position = handleTransform.TransformPoint(spline.GetControlPoint(nodeIndex, pointIndex));
+            var position = handleTransform.TransformPoint(spline.GetControlPoint(nodeIndex, pointIndex));
             if (selectedIndex == nodeIndex && selectedPointIndex == pointIndex)
             {
                 EditorGUI.BeginChangeCheck();
@@ -188,7 +184,7 @@ namespace StephanHooft.Lines.EditorScripts
             EditorGUI.indentLevel++;
             VectorField("Node Position", 0, "Move Node");
             EditorGUI.BeginChangeCheck();
-            BezierControlPointMode mode = (BezierControlPointMode)EditorGUILayout.EnumPopup("Control Point Mode", spline.GetControlPointMode(selectedIndex));
+            var mode = (BezierControlPointMode)EditorGUILayout.EnumPopup("Control Point Mode", spline.GetControlPointMode(selectedIndex));
             if (EditorGUI.EndChangeCheck())
             {
                 Undo.RecordObject(spline, "Change Control Point Mode");
@@ -198,17 +194,17 @@ namespace StephanHooft.Lines.EditorScripts
             VectorField("Control Point 1", 1, "Move Control Point");
             VectorField("Control Point 2", 2, "Move Control Point");
             EditorGUI.indentLevel--;
+        }
 
-            void VectorField(string fieldName, int index, string undoName)
+        private void VectorField(string fieldName, int index, string undoName)
+        {
+            EditorGUI.BeginChangeCheck();
+            var point = EditorGUILayout.Vector2Field(fieldName, spline.GetControlPoint(selectedIndex, index));
+            if (EditorGUI.EndChangeCheck())
             {
-                EditorGUI.BeginChangeCheck();
-                Vector2 point = EditorGUILayout.Vector2Field(fieldName, spline.GetControlPoint(selectedIndex, index));
-                if (EditorGUI.EndChangeCheck())
-                {
-                    Undo.RecordObject(spline, undoName);
-                    EditorUtility.SetDirty(spline);
-                    spline.SetControlPoint(selectedIndex, index, point);
-                }
+                Undo.RecordObject(spline, undoName);
+                EditorUtility.SetDirty(spline);
+                spline.SetControlPoint(selectedIndex, index, point);
             }
         }
     }

@@ -8,45 +8,58 @@ namespace StephanHooft.Lines
     /// </summary>
     public class BezierSpline2D : SegmentedLine2D
     {
-        public override int PointCount => points.Length;
+        public override bool Loop
+        {
+            get => loop;
+            set => loop = value;
+        }
+
+        public override int NodeCount => points.Length;
 
         public override int SegmentCount => points.Length - (loop ? 0 : 1);
 
-        public override bool Loop
+        public override Vector2 this[int index]
         {
-            get { return loop; }
-            set { loop = value; }
+            get => GetControlPoint(0, index);
+            set => SetControlPoint(0, index, value);
         }
 
         [SerializeField] private bool loop;
         [SerializeField] private BezierControlPoint2D[] points;
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         /// <summary>
-        /// Get the control point mode of one of the <see cref="BezierSpline2D"/>'s nodes.
+        /// Gets the control point mode of one of the <see cref="BezierSpline2D"/>'s nodes.
         /// </summary>
         /// <param name="nodeIndex">The index of the node to check.</param>
         /// <returns>A <see cref="BezierControlPointMode"/> value.</returns>
         public BezierControlPointMode GetControlPointMode(int nodeIndex)
         {
             if (nodeIndex < 0 || nodeIndex > points.Length - 1)
-                throw new ArgumentOutOfRangeException("nodeIndex");
-            return points[nodeIndex].ControlPointMode;
+                throw
+                    new ArgumentOutOfRangeException("nodeIndex");
+            return
+                points[nodeIndex].ControlPointMode;
         }
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         /// <summary>
-        /// Set the control point mode of one of the <see cref="BezierSpline2D"/>'s nodes.
+        /// Sets the control point mode of one of the <see cref="BezierSpline2D"/>'s nodes.
         /// </summary>
         /// <param name="nodeIndex">The index of the node to set.</param>
         /// <param name="mode">The <see cref="BezierControlPointMode"/> to set.</param>
         public void SetControlPointMode(int nodeIndex, BezierControlPointMode mode)
         {
             if (nodeIndex < 0 || nodeIndex > points.Length - 1)
-                throw new ArgumentOutOfRangeException("nodeIndex");
+                throw
+                    new ArgumentOutOfRangeException("nodeIndex");
             points[nodeIndex].ControlPointMode = mode;
         }
 
         /// <summary>
-        /// Get the position of one of the <see cref="BezierSpline2D"/>'s control points.
+        /// Gets the position of one of the <see cref="BezierSpline2D"/>'s control points.
         /// </summary>
         /// <param name="nodeIndex">The index of the <see cref="BezierControlPoint2D"/> to get a position from.</param>
         /// <param name="pointIndex">The index of the point to retrieve.
@@ -55,14 +68,17 @@ namespace StephanHooft.Lines
         public Vector2 GetControlPoint(int nodeIndex, int pointIndex)
         {
             if (nodeIndex < 0 || nodeIndex > points.Length - 1)
-                throw new ArgumentOutOfRangeException("nodeIndex");
+                throw
+                    new ArgumentOutOfRangeException("nodeIndex");
             if (pointIndex < 0 || pointIndex > 2)
-                throw new ArgumentOutOfRangeException("pointIndex");
-            return points[nodeIndex].GetPosition(pointIndex);
+                throw
+                    new ArgumentOutOfRangeException("pointIndex");
+            return
+                points[nodeIndex].GetPosition(pointIndex);
         }
 
         /// <summary>
-        /// Set the position of one of the <see cref="BezierSpline2D"/>'s control points.
+        /// Sets the position of one of the <see cref="BezierSpline2D"/>'s control points.
         /// </summary>
         /// <param name="nodeIndex">The index of the <see cref="BezierControlPoint2D"/> to set a position from.</param>
         /// <param name="pointIndex">The index of the point to set.
@@ -71,13 +87,15 @@ namespace StephanHooft.Lines
         public void SetControlPoint(int nodeIndex, int pointIndex, Vector2 position)
         {
             if (nodeIndex < 0 || nodeIndex > points.Length - 1)
-                throw new ArgumentOutOfRangeException("nodeIndex");
+                throw
+                    new ArgumentOutOfRangeException("nodeIndex");
             if (pointIndex < 0 || pointIndex > 2)
-                throw new ArgumentOutOfRangeException("pointIndex");
+                throw
+                    new ArgumentOutOfRangeException("pointIndex");
             points[nodeIndex].SetPosition(pointIndex, position);
         }
 
-        public override Vector2 GetPoint(float t)
+        public override Vector2 GetPositionOnLine(float t)
         {
             int i;
             if (t >= 1f)
@@ -91,19 +109,21 @@ namespace StephanHooft.Lines
                 i = (int)t;
                 t -= i;
             }
-            return transform.TransformPoint(BezierMath.GetPoint(
-                points[i].GetPosition(0), 
-                points[i].GetPosition(2), 
-                points[loop && i == PointCount - 1 ? 0 : i + 1].GetPosition(1), 
-                points[loop && i == PointCount - 1 ? 0 : i + 1].GetPosition(0), t));
+            return
+                transform.TransformPoint(BezierMath.GetPoint(
+                    points[i].GetPosition(0), 
+                    points[i].GetPosition(2), 
+                    points[loop && i == NodeCount - 1 ? 0 : i + 1].GetPosition(1), 
+                    points[loop && i == NodeCount - 1 ? 0 : i + 1].GetPosition(0), t));
         }
 
-        public override Vector2 GetDirection(float t)
+        public override Vector2 GetDirectionOnLine(float t)
         {
-            return GetVelocity(t).normalized;
+            return
+                GetVelocityOnLine(t).normalized;
         }
 
-        public override Vector2 GetVelocity(float t)
+        public override Vector2 GetVelocityOnLine(float t)
         {
             int i;
             if (t >= 1f)
@@ -120,16 +140,15 @@ namespace StephanHooft.Lines
             return transform.TransformPoint(BezierMath.GetFirstDerivative(
                 points[i].GetPosition(0), 
                 points[i].GetPosition(2), 
-                points[loop && i == PointCount - 1 ? 0 : i + 1].GetPosition(1), 
-                points[loop && i == PointCount - 1 ? 0 : i + 1].GetPosition(0), t))
+                points[loop && i == NodeCount - 1 ? 0 : i + 1].GetPosition(1), 
+                points[loop && i == NodeCount - 1 ? 0 : i + 1].GetPosition(0), t))
                 - transform.position;
         }
 
         public override void AddNode()
         {
-            Vector2 point = points[points.Length - 1].GetPosition(2);
-            Vector2 direction = GetDirection(1f);
-            
+            var point = points[points.Length - 1].GetPosition(2);
+            var direction = GetDirectionOnLine(1f);
             BezierControlPoint2D node = new BezierControlPoint2D(
                 point + (direction * 2),
                 point + (direction * 1), 
@@ -141,7 +160,7 @@ namespace StephanHooft.Lines
 
         public override void RemoveNode()
         {
-            if (PointCount > 2)
+            if (NodeCount > 2)
                 Array.Resize(ref points, points.Length - 1);
             else
                 Debug.LogWarning("Removing the last 2 spline nodes is not permitted.");

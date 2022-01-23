@@ -14,7 +14,7 @@ namespace StephanHooft.Lines
         /// </summary>
         public BezierControlPointMode ControlPointMode
         {
-            get { return mode; }
+            get => mode;
             set
             {
                 mode = value;
@@ -24,6 +24,8 @@ namespace StephanHooft.Lines
 
         [SerializeField] private BezierControlPointMode mode;
         [SerializeField] private Vector2[] positions;
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
         /// Create a new <see cref="BezierControlPoint2D"/>.
@@ -39,6 +41,8 @@ namespace StephanHooft.Lines
             EnforceMode(2, positions[2]);
         }
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         /// <summary>
         /// Get the position of one of the <see cref="BezierControlPoint2D"/>'s points.
         /// </summary>
@@ -47,8 +51,10 @@ namespace StephanHooft.Lines
         public Vector2 GetPosition(int pointIndex)
         {
             if (pointIndex < 0 || pointIndex > 2)
-                throw new ArgumentOutOfRangeException("index");
-            return positions[pointIndex];
+                throw
+                    new ArgumentOutOfRangeException("index");
+            return
+                positions[pointIndex];
         }
 
         /// <summary>
@@ -60,7 +66,8 @@ namespace StephanHooft.Lines
         public void SetPosition(int pointIndex, Vector2 position)
         {
             if (pointIndex < 0 || pointIndex > 2)
-                throw new ArgumentOutOfRangeException("index");
+                throw
+                    new ArgumentOutOfRangeException("index");
             if (pointIndex == 0)
             {
                 Vector2 delta = position - positions[pointIndex];
@@ -72,6 +79,8 @@ namespace StephanHooft.Lines
             positions[pointIndex] = position;
         }
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         private void EnforceMode(int pointIndex, Vector2 position)
         {
             Vector2 offset = position - positions[0];
@@ -79,7 +88,7 @@ namespace StephanHooft.Lines
                 positions[pointIndex == 1 ? 2 : 1] = positions[0] - offset;
             else if (mode == BezierControlPointMode.Aligned)
             {
-                float distance = Vector2.Distance(positions[0], positions[pointIndex == 1 ? 2 : 1]);
+                var distance = Vector2.Distance(positions[0], positions[pointIndex == 1 ? 2 : 1]);
                 positions[pointIndex == 1 ? 2 : 1] = positions[0] - offset.normalized * distance;
             }
         }

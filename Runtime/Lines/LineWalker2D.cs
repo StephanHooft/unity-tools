@@ -49,7 +49,7 @@ namespace StephanHooft.Lines
                     goingForward = true;
                 }
             }
-            Vector2 position = line.GetPoint(progress);
+            Vector2 position = line.GetPositionOnLine(progress);
             transform.localPosition = position;
         }
 

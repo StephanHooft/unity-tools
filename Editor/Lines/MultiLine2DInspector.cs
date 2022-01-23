@@ -23,13 +23,12 @@ namespace StephanHooft.Lines.EditorScripts
 
         public override void OnInspectorGUI()
         {
-            //DrawDefaultInspector();
             line = target as MultiLine2D;
-            if (line.PointCount < 1)
+            if (line.NodeCount < 1)
                 line.Reset();
 
             EditorGUI.BeginChangeCheck();
-            bool loop = EditorGUILayout.Toggle("Loop", line.Loop);
+            var loop = EditorGUILayout.Toggle("Loop", line.Loop);
             if (EditorGUI.EndChangeCheck())
             {
                 Undo.RecordObject(line, "Toggle Loop");
@@ -41,12 +40,12 @@ namespace StephanHooft.Lines.EditorScripts
                 line.AddNode();
                 EditorUtility.SetDirty(line);
             }
-            if (line.PointCount > 2 && GUILayout.Button("Remove Node"))
+            if (line.NodeCount > 2 && GUILayout.Button("Remove Node"))
             {
                 line.RemoveNode();
                 EditorUtility.SetDirty(line);
             }
-            if (selectedIndex >= 0 && selectedIndex < line.PointCount)
+            if (selectedIndex >= 0 && selectedIndex < line.NodeCount)
                 DrawSelectedNodeInspector();
         }
 
@@ -56,7 +55,6 @@ namespace StephanHooft.Lines.EditorScripts
             handleTransform = line.transform;
             handleRotation = Tools.pivotRotation == PivotRotation.Local ?
                 handleTransform.rotation : Quaternion.identity;
-
             DrawLine();
             DrawAllNodes();
         }
@@ -69,38 +67,39 @@ namespace StephanHooft.Lines.EditorScripts
         private void DrawLine()
         {
             Handles.color = Color.white;
-            for (int i = 1; i < line.PointCount; i++)
+            for (int i = 1; i < line.NodeCount; i++)
             {
                 Handles.DrawLine(
-                    handleTransform.TransformPoint(line.GetControlPoint(i-1)),
-                    handleTransform.TransformPoint(line.GetControlPoint(i)),
+                    handleTransform.TransformPoint(line[i-1]),
+                    handleTransform.TransformPoint(line[i]),
                     2f);
             }
             if (line.Loop)
                 Handles.DrawLine(
-                    handleTransform.TransformPoint(line.GetControlPoint(line.PointCount - 1)),
-                    handleTransform.TransformPoint(line.GetControlPoint(0)),
+                    handleTransform.TransformPoint(line[line.NodeCount - 1]),
+                    handleTransform.TransformPoint(line[0]),
                     2f);
         }
 
         private void DrawAllNodes()
         {
-            for (int i = 0; i < line.PointCount; i++)
+            for (int i = 0; i < line.NodeCount; i++)
                 DrawNode(i);
         }
 
         private Vector2 DrawNode(int index)
         {
-            Vector2 point = handleTransform.TransformPoint(line.GetControlPoint(index));
+            var point = handleTransform.TransformPoint(line[index]);
             DrawNodeButton(index);
             DrawNodeHandle(index);
-            return point;
+            return
+                point;
         }
 
         private void DrawNodeButton(int nodeIndex)
         {
-            Vector2 position = handleTransform.TransformPoint(line.GetControlPoint(nodeIndex));
-            float size = HandleUtility.GetHandleSize(position);
+            var position = handleTransform.TransformPoint(line[nodeIndex]);
+            var size = HandleUtility.GetHandleSize(position);
             size *= nodeIndex == 0 ? 6f : 3f;
             Handles.color = new Color(1f, 0.6f, 0f, 1f);
             if (Handles.Button(position, handleRotation, size * handleSize, size * pickSize, Handles.SphereHandleCap))
@@ -112,7 +111,7 @@ namespace StephanHooft.Lines.EditorScripts
 
         private void DrawNodeHandle(int nodeIndex)
         {
-            Vector2 position = handleTransform.TransformPoint(line.GetControlPoint(nodeIndex));
+            var position = handleTransform.TransformPoint(line[nodeIndex]);
             if (selectedIndex == nodeIndex)
             {
                 EditorGUI.BeginChangeCheck();
@@ -121,7 +120,7 @@ namespace StephanHooft.Lines.EditorScripts
                 {
                     Undo.RecordObject(line, "Move Node");
                     EditorUtility.SetDirty(line);
-                    line.SetControlPoint(nodeIndex, handleTransform.InverseTransformPoint(position));
+                    line[nodeIndex] = handleTransform.InverseTransformPoint(position);
                 }
             }
         }
@@ -133,17 +132,17 @@ namespace StephanHooft.Lines.EditorScripts
             EditorGUI.indentLevel++;
             VectorField("Node Position", selectedIndex, "Move Node");
             EditorGUI.indentLevel--;
+        }
 
-            void VectorField(string fieldName, int index, string undoName)
+        private void VectorField(string fieldName, int index, string undoName)
+        {
+            EditorGUI.BeginChangeCheck();
+            var point = EditorGUILayout.Vector2Field(fieldName, line[index]);
+            if (EditorGUI.EndChangeCheck())
             {
-                EditorGUI.BeginChangeCheck();
-                Vector2 point = EditorGUILayout.Vector2Field(fieldName, line.GetControlPoint(index));
-                if (EditorGUI.EndChangeCheck())
-                {
-                    Undo.RecordObject(line, undoName);
-                    EditorUtility.SetDirty(line);
-                    line.SetControlPoint(index, point);
-                }
+                Undo.RecordObject(line, undoName);
+                EditorUtility.SetDirty(line);
+                line[index] = point;
             }
         }
     }

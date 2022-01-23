@@ -8,59 +8,54 @@ namespace StephanHooft.Lines
     /// </summary>
     public class MultiLine2D : SegmentedLine2D
     {
-        public override int PointCount => points.Length;
+        public override bool Loop
+        {
+            get => loop;
+            set => loop = value;
+        }
+
+        public override int NodeCount => points.Length;
 
         public override int SegmentCount => points.Length - (loop ? 0 : 1);
 
-        public override bool Loop
+        public override Vector2 this[int index]
         {
-            get { return loop; }
-            set { loop = value; }
+            get
+            {
+                if (index < 0 || index > points.Length - 1)
+                    throw
+                        new ArgumentOutOfRangeException("nodeIndex");
+                return points[index];
+            }
+            set
+            {
+                if (index < 0 || index > points.Length - 1)
+                    throw
+                        new ArgumentOutOfRangeException("nodeIndex");
+                points[index] = value;
+            }
         }
 
         [SerializeField] private bool loop;
         [SerializeField] private Vector2[] points;
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public override void AddNode()
         {
-            Vector2 point = points[points.Length - 1];
-            Vector2 direction = GetDirection(1f);
-
-            Vector2 node = point + direction;
+            var point = points[points.Length - 1];
+            var direction = GetDirectionOnLine(1f);
+            var node = point + direction;
             Array.Resize(ref points, points.Length + 1);
             points[points.Length - 1] = node;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="nodeIndex"></param>
-        /// <returns></returns>
-        public Vector2 GetControlPoint(int nodeIndex)
+        public override Vector2 GetDirectionOnLine(float t)
         {
-            if (nodeIndex < 0 || nodeIndex > points.Length - 1)
-                throw new ArgumentOutOfRangeException("nodeIndex");
-            return points[nodeIndex];
+            return GetVelocityOnLine(t).normalized;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="nodeIndex"></param>
-        /// <param name="position"></param>
-        public void SetControlPoint(int nodeIndex, Vector2 position)
-        {
-            if (nodeIndex < 0 || nodeIndex > points.Length - 1)
-                throw new ArgumentOutOfRangeException("nodeIndex");
-            points[nodeIndex] = position;
-        }
-
-        public override Vector2 GetDirection(float t)
-        {
-            return GetVelocity(t).normalized;
-        }
-
-        public override Vector2 GetPoint(float t)
+        public override Vector2 GetPositionOnLine(float t)
         {
             int i;
             if (t >= 1f)
@@ -77,12 +72,12 @@ namespace StephanHooft.Lines
             return transform.TransformPoint(
                 Vector2.Lerp(
                     points[i], 
-                    points[loop && i == PointCount - 1 ? 0 : i + 1], 
+                    points[loop && i == NodeCount - 1 ? 0 : i + 1], 
                     t)
                 );
         }
 
-        public override Vector2 GetVelocity(float t)
+        public override Vector2 GetVelocityOnLine(float t)
         {
             int i;
             if (t >= 1f)
@@ -94,12 +89,12 @@ namespace StephanHooft.Lines
                 t = Mathf.Clamp01(t) * SegmentCount;
                 i = (int)t;
             }
-            return points[loop && i == PointCount - 1 ? 0 : i + 1] - points[i];
+            return points[loop && i == NodeCount - 1 ? 0 : i + 1] - points[i];
         }
 
         public override void RemoveNode()
         {
-            if (PointCount > 2)
+            if (NodeCount > 2)
                 Array.Resize(ref points, points.Length - 1);
             else
                 Debug.LogWarning("Removing the last 2 spline nodes is not permitted.");
