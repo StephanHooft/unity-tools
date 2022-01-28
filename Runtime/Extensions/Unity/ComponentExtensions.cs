@@ -1,3 +1,4 @@
+using StephanHooft.Exceptions;
 using System;
 using UnityEngine;
 
@@ -6,40 +7,80 @@ namespace StephanHooft.Extensions
     public static class ComponentExtensions
     {
         /// <summary>
-        /// Adds a <typeparamref name="T"/> to the <see cref="Component"/>'s <see cref="GameObject"/>,
+        /// Adds a <typeparamref name="TComponent"/> to the <see cref="Component"/>'s <see cref="GameObject"/>,
         /// and replaces an existing one if found.
         /// </summary>
-        /// <returns>A <typeparamref name="T"/>.</returns>
-        public static T AddComponent<T>(this Component component) where T: Component
+        /// <returns>A <typeparamref name="TComponent"/>.</returns>
+        public static TComponent AddComponent<TComponent>(this Component component) where TComponent: Component
         {
             return
-                component.gameObject.AddComponent<T>();
+                component.gameObject.AddComponent<TComponent>();
         }
 
         /// <summary>
-        /// Adds a <typeparamref name="T"/> to the <see cref="Component"/>'s <see cref="GameObject"/>,
+        /// Adds a <typeparamref name="TComponent"/> to the <see cref="Component"/>'s <see cref="GameObject"/>,
         /// and replaces an existing one if found.
         /// </summary>
-        /// <returns>A <typeparamref name="T"/>.</returns>
-        public static T AddOrReplaceComponent<T>(this Component component) where T : Component
+        /// <returns>A <typeparamref name="TComponent"/>.</returns>
+        public static TComponent AddOrReplaceComponent<TComponent>
+            (this Component component) where TComponent : Component
         {
-            if (component.TryGetComponent(out T foundComponent))
+            if (component.TryGetComponent(out TComponent foundComponent))
                 UnityEngine.Object.Destroy(foundComponent);
-            foundComponent = component.gameObject.AddComponent<T>();
+            foundComponent = component.gameObject.AddComponent<TComponent>();
             return
                 foundComponent;
         }
 
         /// <summary>
-        /// Gets a <typeparamref name="T"/> from the <see cref="Component"/>'s <see cref="GameObject"/>,
-        /// and throws an <see cref="Exception"/> if none are found.
+        /// Destroys all other <see cref="Component"/>s of the same <see cref="Type"/> in the
+        /// hierarchy of the <see cref="GameObject"/> that the <see cref="Component"/> is attached to.
         /// </summary>
-        /// <param name="destroyGameObjectOnFailure">Set to true to destroy the <see cref="Component"/>'s<see cref="GameObject"/> if no 
-        /// <typeparamref name="T"/> is found.</param>
-        /// <returns>A <typeparamref name="T"/>.</returns>
-        public static T GetEssentialComponent<T>(this Component component, bool destroyGameObjectOnFailure = false) where T : Component
+        public static void DestroyOtherComponentsOfSameTypeInHierarchy(this Component component)
         {
-            if (component.TryGetComponent(out T otherComponent))
+            var type = component.GetType();
+            var components = component.transform.root.GetComponentsInChildren(type, true);
+            for (int i = 0; i < components.Length; i++)
+                if (components[i] != component)
+                    UnityEngine.Object.Destroy(components[i]);
+        }
+
+        /// <summary>
+        /// Gets a <typeparamref name="TComponent"/> from the <see cref="Component"/>'s 
+        /// <see cref="GameObject"/>'s hierarchy.
+        /// </summary>
+        /// <returns>A <typeparamref name="TComponent"/>, or <see cref="null"/> if none are
+        /// found.</returns>
+        public static TComponent GetComponentInHierarchy<TComponent>(this Component component)
+            where TComponent : Component
+        {
+            return
+                component.transform.root.GetComponentInChildren<TComponent>();
+        }
+
+        /// <summary>
+        /// Gets all <typeparamref name="TComponent"/>s from the <see cref="Component"/>'s 
+        /// <see cref="GameObject"/>'s hierarchy.
+        /// </summary>
+        /// <returns>A <typeparamref name="TComponent"/>[].</returns>
+        public static TComponent[] GetComponentsInHierarchy<TComponent>(this Component component)
+            where TComponent : Component
+        {
+            return
+                component.transform.root.GetComponentsInChildren<TComponent>();
+        }
+
+        /// <summary>
+        /// Gets a <typeparamref name="TComponent"/> from the <see cref="Component"/>'s <see cref="GameObject"/>,
+        /// and throws a <see cref="ComponentNotFoundException{TComponent}"/> if none are found.
+        /// </summary>
+        /// <param name="destroyGameObjectOnFailure">Set to true to destroy the <see cref="Component"/>'s 
+        /// <see cref="GameObject"/> if no <typeparamref name="TComponent"/> is found.</param>
+        /// <returns>A <typeparamref name="TComponent"/>.</returns>
+        public static TComponent GetEssentialComponent<TComponent>
+            (this Component component, bool destroyGameObjectOnFailure = false) where TComponent : Component
+        {
+            if (component.TryGetComponent(out TComponent otherComponent))
                 return
                     otherComponent;
             else
@@ -47,19 +88,22 @@ namespace StephanHooft.Extensions
                 if (destroyGameObjectOnFailure)
                     UnityEngine.Object.Destroy(component.gameObject);
                 throw
-                    new Exception("Cannot find a " + typeof(T) + ".");
+                    new ComponentNotFoundException<TComponent>();
             }
         }
 
         /// <summary>
-        /// Gets a <typeparamref name="T"/> from the <see cref="Component"/>'s <see cref="GameObject"/> or its children, 
-        /// and throws an <see cref="Exception"/> if none are found.
+        /// Gets a <typeparamref name="TComponent"/> from the <see cref="Component"/>'s <see cref="GameObject"/>
+        /// or its children, and throws a <see cref="ComponentNotFoundException{TComponent}"/> if none are found.
         /// </summary>
-        /// <param name="destroyGameObjectOnFailure">Set to true to destroy the <see cref="GameObject"/> if no <typeparamref name="T"/> is found.</param>
-        /// <returns>A <typeparamref name="T"/>.</returns>
-        public static T GetEssentialComponentInChildren<T>(this Component component, bool destroyGameObjectOnFailure = false) where T : Component
+        /// <param name="destroyGameObjectOnFailure">Set to <see cref="true"/> to destroy the 
+        /// <see cref="Component"/>'s <see cref="GameObject"/> if no <typeparamref name="TComponent"/>
+        /// is found.</param>
+        /// <returns>A <typeparamref name="TComponent"/>.</returns>
+        public static TComponent GetEssentialComponentInChildren<TComponent>
+            (this Component component, bool destroyGameObjectOnFailure = false) where TComponent : Component
         {
-            var otherComponent = component.GetComponentInChildren<T>();
+            var otherComponent = component.GetComponentInChildren<TComponent>();
             if (otherComponent != null)
                 return
                     otherComponent;
@@ -68,19 +112,47 @@ namespace StephanHooft.Extensions
                 if (destroyGameObjectOnFailure)
                     UnityEngine.Object.Destroy(component.gameObject);
                 throw
-                    new Exception("Cannot find a " + typeof(T) + ".");
+                    new ComponentNotFoundException<TComponent>();
             }
         }
 
         /// <summary>
-        /// Gets a <typeparamref name="T"/> from the <see cref="Component"/>'s <see cref="GameObject"/> or its parents, 
-        /// and throws an <see cref="Exception"/> if none are found.
+        /// Gets a <typeparamref name="TComponent"/> from the <see cref="Component"/>'s<see cref="GameObject"/>'s
+        /// hierarchy, and throws a <see cref="ComponentNotFoundException{TComponent}"/> if none are found.
         /// </summary>
-        /// <param name="destroyGameObjectOnFailure">Set to true to destroy the <see cref="GameObject"/> if no <typeparamref name="T"/> is found.</param>
-        /// <returns>A <typeparamref name="T"/>.</returns>
-        public static T GetEssentialComponentInParent<T>(this Component component, bool destroyGameObjectOnFailure = false) where T : Component
+        /// <param name="destroyGameObjectOnFailure">Set to <see cref="true"/> to destroy the 
+        /// <see cref="Component"/>'s <see cref="GameObject"/> if no <typeparamref name="TComponent"/>
+        /// is found.</param>
+        /// <returns>A <typeparamref name="TComponent"/>.</returns>
+        public static TComponent GetEssentialComponentInHierarchy<TComponent>
+            (this GameObject gameObject, bool destroyGameObjectOnFailure = false)
+            where TComponent : Component
         {
-            var otherComponent = component.GetComponentInParent<T>();
+            var component = gameObject.transform.root.GetComponentInChildren<TComponent>();
+            if (component != null)
+                return
+                    component;
+            else
+            {
+                if (destroyGameObjectOnFailure)
+                    UnityEngine.Object.Destroy(gameObject);
+                throw
+                    new ComponentNotFoundException<TComponent>();
+            }
+        }
+
+        /// <summary>
+        /// Gets a <typeparamref name="TComponent"/> from the <see cref="Component"/>'s <see cref="GameObject"/>
+        /// or its parents, and throws a <see cref="ComponentNotFoundException{TComponent}"/> if none are found.
+        /// </summary>
+        /// <param name="destroyGameObjectOnFailure">Set to <see cref="true"/> to destroy the 
+        /// <see cref="Component"/>'s <see cref="GameObject"/> if no <typeparamref name="TComponent"/>
+        /// is found.</param>
+        /// <returns>A <typeparamref name="TComponent"/>.</returns>
+        public static TComponent GetEssentialComponentInParent<TComponent>
+            (this Component component, bool destroyGameObjectOnFailure = false) where TComponent : Component
+        {
+            var otherComponent = component.GetComponentInParent<TComponent>();
             if (otherComponent != null)
                 return
                     otherComponent;
@@ -89,31 +161,71 @@ namespace StephanHooft.Extensions
                 if (destroyGameObjectOnFailure)
                     UnityEngine.Object.Destroy(component.gameObject);
                 throw
-                    new Exception("Cannot find a " + typeof(T) + ".");
+                    new ComponentNotFoundException<TComponent>();
             }
         }
 
         /// <summary>
-        /// Gets a <typeparamref name="T"/> from the <see cref="Component"/>'s <see cref="GameObject"/>, and adds one if none are found.
+        /// Gets a <typeparamref name="TComponent"/> from the <see cref="Component"/>'s
+        /// <see cref="GameObject"/>, and adds one if none are found.
         /// </summary>
-        /// <returns>A <typeparamref name="T"/>.</returns>
-        public static T GetOrAddComponent<T>(this Component component) where T : Component
+        /// <returns>A <typeparamref name="TComponent"/>.</returns>
+        public static TComponent GetOrAddComponent<TComponent>
+            (this Component component) where TComponent : Component
         {
-            if (!component.TryGetComponent(out T foundComponent))
-                foundComponent = component.gameObject.AddComponent<T>();
+            if (!component.TryGetComponent(out TComponent foundComponent))
+                foundComponent = component.gameObject.AddComponent<TComponent>();
             return
                 foundComponent;
         }
 
         /// <summary>
-        /// Returns true if the <see cref="Component"/>'s <see cref="GameObject"/> has a <typeparamref name="T"/>.
+        /// Returns true if the <see cref="Component"/>'s <see cref="GameObject"/> has a
+        /// <typeparamref name="TComponent"/>.
         /// </summary>
-        /// <returns>True if the <see cref="Component"/>'s <see cref="GameObject"/> has a <see cref="Component"/> of <see cref="Type"/> 
-        /// <typeparamref name="T"/>.</returns>
-        public static bool HasComponent<T>(this Component component) where T : Component
+        /// <returns>True if the <see cref="Component"/>'s <see cref="GameObject"/> has a
+        /// <see cref="Component"/> of <see cref="Type"/> <typeparamref name="TComponent"/>.</returns>
+        public static bool HasComponent<TComponent>(this Component component) where TComponent : Component
         {
             return
-                component.GetComponent<T>() != null;
+                component.GetComponent<TComponent>() != null;
+        }
+
+        /// <summary>
+        /// Returns <see cref="true"/> if the <see cref="Component"/> is the only one of its
+        /// <see cref="Type"/> in the hierarchy of the <see cref="GameObject"/> it's attached to.
+        /// </summary>
+        /// <returns><see cref="true"/> if the <see cref="Component"/> is the only one of its
+        /// <see cref="Type"/>.</returns>
+        public static bool IsOnlyComponentOfTypeInHierarchy(this Component component)
+        {
+            var type = component.GetType();
+            var components = component.transform.root.GetComponentsInChildren(type, true);
+            return
+                components.Length == 1;
+        }
+
+        /// <summary>
+        /// Returns the <see cref="Component"/>, but only if it's the only one of its <see cref="Type"/> 
+        /// in the hierarchy of the <see cref="GameObject"/> it's attached to.
+        /// <para>If another <see cref="Component"/> of the same <see cref="Type"/> is found in the
+        /// <see cref="GameObject"/>'s hierarchy, an <see cref="InvalidOperationException"/>
+        ///is thrown.</para>
+        /// </summary>
+        /// <returns>The <see cref="Component"/>.</returns>
+        public static Component OnlyComponentOfTypeInHierarchy
+            (this Component component)
+        {
+            var type = component.GetType();
+            var components = component.transform.root.GetComponentsInChildren(type, true);
+            if(components.Length > 1)
+            {
+                UnityEngine.Object.Destroy(component);
+                throw
+                    new ComponentNotPermittedException(type);
+            }
+            return
+                component;
         }
     }
 }
