@@ -69,8 +69,7 @@ namespace StephanHooft.Extensions
                     l;
             else
                 throw
-                    new ArgumentException(item.ToString() + " must be present in List<" + typeof(T).ToString()
-                    + "> " + listName + ".");
+                    new ArgumentException(string.Format("{0} must be present in List<{1}> {2}.", item, typeof(T), listName));
         }
 
         /// <summary>
@@ -87,8 +86,7 @@ namespace StephanHooft.Extensions
                     l;
             else
                 throw
-                    new ArgumentException(item.ToString() + " must not be present in List<" + typeof(T).ToString()
-                    + "> " + listName + ".");
+                    new ArgumentException(string.Format("{0} must not be present in List<{1}> {2}.", item, typeof(T), listName));
         }
     }
 }

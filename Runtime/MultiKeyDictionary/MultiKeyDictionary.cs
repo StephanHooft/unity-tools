@@ -52,7 +52,6 @@ namespace StephanHooft.MultiKeyDictionary
 					readerWriterLock.ExitReadLock();
 				}
 			}
-
 		}
 
 		/// <summary>
@@ -108,7 +107,7 @@ namespace StephanHooft.MultiKeyDictionary
 				if (TryGetValue(subKey, out TValue item))
 					return item;
 				throw
-					new KeyNotFoundException("sub key not found: " + subKey.ToString());
+					new KeyNotFoundException(string.Format("Sub key {0} not found.", subKey.ToString()));
 			}
             set
             {
@@ -136,7 +135,7 @@ namespace StephanHooft.MultiKeyDictionary
 					return
 						item;
 				throw
-					new KeyNotFoundException("primary key not found: " + primaryKey.ToString());
+					new KeyNotFoundException(string.Format("Primary key {0} not found.", primaryKey.ToString()));
 			}
 			set
 			{
@@ -163,7 +162,7 @@ namespace StephanHooft.MultiKeyDictionary
 		/// Initializes a new instance of the <see cref="MultiKeyDictionary{K, L, V}"/> class.
 		/// </summary>
 		public MultiKeyDictionary()
-        {}
+		{ }
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

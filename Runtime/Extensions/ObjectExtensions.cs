@@ -53,7 +53,7 @@ namespace StephanHooft.Extensions
             {
                 UnityEngine.Object.Destroy(objectToDestroyIfNull);
                 throw
-                    new Exception("Reference to " + obj.GetType() + " is null.");
+                    new Exception(string.Format("{0} is null.", obj.GetType()));
             }
             return
                 obj;

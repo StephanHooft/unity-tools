@@ -54,8 +54,7 @@ namespace StephanHooft.Extensions
                     return 
                         a;
             throw
-                new ArgumentException(item.ToString() + " must be present in " + typeof(T).ToString()
-                    + "[] " + arrayName + ".");
+                new ArgumentException(string.Format("{0} must be present in {1}[] {2}.", item, typeof(T), arrayName));
         }
 
         /// <summary>
@@ -70,8 +69,7 @@ namespace StephanHooft.Extensions
             foreach (T entry in a)
                 if (entry.Equals(item))
                     throw
-                        new ArgumentException(item.ToString() + " must not be present in " + typeof(T).ToString()
-                        + "[] " + arrayName + ".");
+                        new ArgumentException(string.Format("{0} must not be present in {1}[] {2}.", item, typeof(T), arrayName));
             return
                 a;
         }

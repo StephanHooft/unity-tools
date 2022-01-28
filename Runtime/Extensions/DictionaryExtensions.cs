@@ -54,8 +54,9 @@ namespace StephanHooft.Extensions
                     d;
             else
                 throw
-                    new ArgumentException("Key " + key.ToString() + " must be present in Dictionary<" + typeof(TKey).ToString()
-                    + ", " + typeof(TValue).ToString() + "> " + dictionaryName + ".");
+                    new ArgumentException(string.Format(
+                        "Key {0} must be present in Dictionary<{1},{2}> {3}.",
+                        key, typeof(TKey), typeof(TValue),dictionaryName));
         }
 
         /// <summary>
@@ -72,8 +73,9 @@ namespace StephanHooft.Extensions
                     d;
             else
                 throw
-                    new ArgumentException("Value " + value.ToString() + " must be present in Dictionary<" + typeof(TKey).ToString()
-                    + ", " + typeof(TValue).ToString() + "> " + dictionaryName + ".");
+                    new ArgumentException(string.Format(
+                        "Value {0} must be present in Dictionary<{1},{2}> {3}.", 
+                        value, typeof(TKey), typeof(TValue), dictionaryName));
         }
 
         /// <summary>
@@ -90,8 +92,9 @@ namespace StephanHooft.Extensions
                     d;
             else
                 throw
-                    new ArgumentException("Key " + key.ToString() + " must not be present in Dictionary<" + typeof(TKey).ToString()
-                    + ", " + typeof(TValue).ToString() + "> " + dictionaryName + ".");
+                    new ArgumentException(string.Format(
+                        "Key {0} must not be present in Dictionary<{1},{2}> {3}.",
+                        key, typeof(TKey), typeof(TValue), dictionaryName));
         }
 
         /// <summary>
@@ -108,8 +111,9 @@ namespace StephanHooft.Extensions
                     d;
             else
                 throw
-                    new ArgumentException("Value " + value.ToString() + " must not be present in Dictionary<" + typeof(TKey).ToString()
-                    + ", " + typeof(TValue).ToString() + "> " + dictionaryName + ".");
+                    new ArgumentException(string.Format(
+                        "Value {0} must not be present in Dictionary<{1},{2}> {3}.",
+                        value, typeof(TKey), typeof(TValue), dictionaryName));
         }
 
         /// <summary>

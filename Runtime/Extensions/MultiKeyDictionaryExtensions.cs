@@ -77,9 +77,9 @@ namespace StephanHooft.Extensions
                     d;
             else
                 throw
-                    new ArgumentException("PrimaryKey " + primaryKey.ToString() + " must be present in MultiKeyDictionary<"
-                    + typeof(TPrimaryKey).ToString() + ", " + typeof(TSubKey).ToString() + ", " + typeof(TValue).ToString()
-                    + "> " + dictionaryName + ".");
+                    new ArgumentException(string.Format(
+                        "Primary Key {0} must be present in MultiKeyDictionary<{1},{2},{3}> {4}.",
+                    primaryKey, typeof(TPrimaryKey), typeof(TSubKey), typeof(TValue), dictionaryName));
         }
 
         /// <summary>
@@ -99,9 +99,9 @@ namespace StephanHooft.Extensions
                     d;
             else
                 throw
-                    new ArgumentException("SubKey " + subKey.ToString() + " must be present in MultiKeyDictionary<"
-                    + typeof(TPrimaryKey).ToString() + ", " + typeof(TSubKey).ToString() + ", " + typeof(TValue).ToString()
-                    + "> " + dictionaryName + ".");
+                    new ArgumentException(string.Format(
+                        "Sub Key {0} must be present in MultiKeyDictionary<{1},{2},{3}> {4}.",
+                    subKey, typeof(TPrimaryKey), typeof(TSubKey), typeof(TValue), dictionaryName));
         }
 
         /// <summary>
@@ -121,9 +121,9 @@ namespace StephanHooft.Extensions
                     d;
             else
                 throw
-                    new ArgumentException("Value " + value.ToString() + " must be present in MultiKeyDictionary<"
-                    + typeof(TPrimaryKey).ToString() + ", " + typeof(TSubKey).ToString() + ", " + typeof(TValue).ToString()
-                    + "> " + dictionaryName + ".");
+                    new ArgumentException(string.Format(
+                        "Value {0} must be present in MultiKeyDictionary<{1},{2},{3}> {4}.",
+                    value, typeof(TPrimaryKey), typeof(TSubKey), typeof(TValue), dictionaryName));
         }
 
         ///////////////////////////////////////////////////////////////////////////
@@ -146,9 +146,9 @@ namespace StephanHooft.Extensions
                     d;
             else
                 throw
-                    new ArgumentException("PrimaryKey " + primaryKey.ToString() + " must not be present in MultiKeyDictionary<"
-                    + typeof(TPrimaryKey).ToString() + ", " + typeof(TSubKey).ToString() + ", " + typeof(TValue).ToString()
-                    + "> " + dictionaryName + ".");
+                    new ArgumentException(string.Format(
+                        "Primary Key {0} must not be present in MultiKeyDictionary<{1},{2},{3}> {4}.",
+                    primaryKey, typeof(TPrimaryKey), typeof(TSubKey), typeof(TValue), dictionaryName));
         }
 
         /// <summary>
@@ -168,9 +168,9 @@ namespace StephanHooft.Extensions
                     d;
             else
                 throw
-                    new ArgumentException("SubKey " + subKey.ToString() + " must not be present in MultiKeyDictionary<"
-                    + typeof(TPrimaryKey).ToString() + ", " + typeof(TSubKey).ToString() + ", " + typeof(TValue).ToString()
-                    + "> " + dictionaryName + ".");
+                    new ArgumentException(string.Format(
+                        "Sub Key {0} must not be present in MultiKeyDictionary<{1},{2},{3}> {4}.",
+                    subKey, typeof(TPrimaryKey), typeof(TSubKey), typeof(TValue), dictionaryName));
         }
 
         /// <summary>
@@ -190,9 +190,9 @@ namespace StephanHooft.Extensions
                     d;
             else
                 throw
-                    new ArgumentException("Value " + value.ToString() + " must not be present in MultiKeyDictionary<"
-                    + typeof(TPrimaryKey).ToString() + ", " + typeof(TSubKey).ToString() + ", " + typeof(TValue).ToString()
-                    + "> " + dictionaryName + ".");
+                    new ArgumentException(string.Format(
+                        "Value {0} must not be present in MultiKeyDictionary<{1},{2},{3}> {4}.",
+                    value, typeof(TPrimaryKey), typeof(TSubKey), typeof(TValue), dictionaryName));
         }
 
         /// <summary>
