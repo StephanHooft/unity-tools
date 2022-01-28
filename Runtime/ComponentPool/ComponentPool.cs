@@ -81,7 +81,7 @@ namespace StephanHooft.ComponentPool
                     new ArgumentNullException("component");
             if (components.Contains(component))
                 throw 
-                    new InvalidOperationException("Component of " + component.name + " already added to ComponentPool.");
+                    new InvalidOperationException(string.Format("Component of {0} already added to ComponentPool.", component.name));
             component.gameObject.SetActive(false);
             components.Add(component);
             componentQueue.Enqueue(component);

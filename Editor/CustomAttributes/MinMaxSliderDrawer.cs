@@ -15,9 +15,9 @@ namespace StephanHooft.CustomAttributes.EditorScripts
             var minMaxAttribute = (MinMaxAttribute)attribute;
             var propertyType = property.propertyType;
             if (propertyType == SerializedPropertyType.Vector2)
-                label.tooltip = "Range between " + minMaxAttribute.min.ToString("F2") + " and " + minMaxAttribute.max.ToString("F2") + ".";
+                label.tooltip = string.Format("Range between {0} and {1}.", minMaxAttribute.min.ToString("F2"), minMaxAttribute.max.ToString("F2"));
             else if (propertyType == SerializedPropertyType.Vector2Int)
-                label.tooltip = "Range between " + minMaxAttribute.min.ToString() + " and " + minMaxAttribute.max.ToString() + ".";
+                label.tooltip = string.Format("Range between {0} and {1}.", minMaxAttribute.min, minMaxAttribute.max);
             var controlRect = EditorGUI.PrefixLabel(position, label);
             var priorIndentLevel = EditorGUI.indentLevel;
             EditorGUI.indentLevel = 0;

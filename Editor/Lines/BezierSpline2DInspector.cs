@@ -180,7 +180,7 @@ namespace StephanHooft.Lines.EditorScripts
         private void DrawSelectedNodeInspector()
         {
             EditorGUILayout.Separator();
-            GUILayout.Label("Selected Node: " + selectedIndex);
+            GUILayout.Label(string.Format("Selected Node: {0}", selectedIndex));
             EditorGUI.indentLevel++;
             VectorField("Node Position", 0, "Move Node");
             EditorGUI.BeginChangeCheck();

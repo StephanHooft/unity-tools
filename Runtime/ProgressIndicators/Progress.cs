@@ -399,7 +399,7 @@ namespace StephanHooft.ProgressIndicators
         {
             if (parentID >= 0 && !Exists(parentID))
                 throw
-                    new ArgumentException("No " + IndicatorClass + " with ID " + parentID + " exists.", "parentID");
+                    new ArgumentException(string.Format("No {0} with ID {1} exists.", IndicatorClass, parentID), "parentID");
             if (weight < 1)
                 throw
                     new ArgumentOutOfRangeException("weight", "weight must be 1 or higher.");
@@ -434,7 +434,7 @@ namespace StephanHooft.ProgressIndicators
                     new ArgumentOutOfRangeException("totalSteps", "totalSteps must be 1 or greater.");
             if (parentID >= 0 && !Exists(parentID))
                 throw
-                    new ArgumentException("No " + IndicatorClass + " with ID " + parentID + " exists.", "parentID");
+                    new ArgumentException(string.Format("No {0} with ID {1} exists.", IndicatorClass, parentID), "parentID");
             if (weight < 1)
                 throw
                     new ArgumentOutOfRangeException("weight", "weight must be 1 or higher.");
