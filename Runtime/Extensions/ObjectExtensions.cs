@@ -40,18 +40,18 @@ namespace StephanHooft.Extensions
 
         /// <summary>
         /// <para>Throws an <see cref="Exception"/> if the <typeparamref name="T"/> is null.</para>
-        /// <para><paramref name="objectToDestroyIfNull"/> will also be destroyed if null.</para>
+        /// <para><paramref name="destroyIfNull"/> will also be destroyed if null.</para>
         /// </summary>
-        /// <param name="objectToDestroyIfNull">The <see cref="GameObject"/> to destroy if the <typeparamref name="T"/> reference is null.</param>
+        /// <param name="destroyIfNull">The <see cref="GameObject"/> to destroy if the <typeparamref name="T"/> reference is null.</param>
         /// <returns>The <typeparamref name="T"/>.</returns>
-        public static T MustNotBeNull<T>(this T obj, GameObject objectToDestroyIfNull)
+        public static T MustNotBeNull<T>(this T obj, GameObject destroyIfNull)
         {
-            if (objectToDestroyIfNull == null) 
+            if (destroyIfNull == null) 
                 throw
                     new ArgumentNullException("objectToDestroyIfNull");
             if (obj == null)
             {
-                UnityEngine.Object.Destroy(objectToDestroyIfNull);
+                EditModeSafe.Destroy(destroyIfNull);
                 throw
                     new Exception(string.Format("{0} is null.", obj.GetType()));
             }

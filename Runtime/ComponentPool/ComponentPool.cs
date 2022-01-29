@@ -348,7 +348,7 @@ namespace StephanHooft.ComponentPool
                     new ArgumentOutOfRangeException("limit", "The passed value for limit needs to be 1 or higher.");
             Limit = limit;
             while (componentQueue.Count > limit)
-                UnityEngine.Object.Destroy(componentQueue.Dequeue().gameObject);
+                Extensions.EditModeSafe.Destroy(componentQueue.Dequeue().gameObject);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -361,13 +361,13 @@ namespace StephanHooft.ComponentPool
         {
             if (componentQueue.Contains(componentToDestroy))
                 throw
-                    new Exception("ComponentPool may not destroy a Component while it's in a Queue.");
+                    new InvalidOperationException("ComponentPool may not destroy a Component while it's in a Queue.");
             if (FromThisPool(componentToDestroy))
                 components.Remove(componentToDestroy);
             else 
                 throw
-                    new Exception("ComponentPool may only destroy Components that it itself has created.");
-            UnityEngine.Object.Destroy(componentToDestroy.gameObject);
+                    new InvalidOperationException("ComponentPool may only destroy Components that it itself has created.");
+            Extensions.EditModeSafe.Destroy(componentToDestroy.gameObject);
         }
 
         /// <summary>

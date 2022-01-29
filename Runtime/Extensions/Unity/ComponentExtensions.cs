@@ -1,5 +1,4 @@
 using StephanHooft.Exceptions;
-using System;
 using UnityEngine;
 
 namespace StephanHooft.Extensions
@@ -26,7 +25,7 @@ namespace StephanHooft.Extensions
             (this Component component) where TComponent : Component
         {
             if (component.TryGetComponent(out TComponent foundComponent))
-                UnityEngine.Object.Destroy(foundComponent);
+                EditModeSafe.Destroy(foundComponent);
             foundComponent = component.gameObject.AddComponent<TComponent>();
             return
                 foundComponent;
@@ -42,7 +41,7 @@ namespace StephanHooft.Extensions
             var components = component.transform.root.GetComponentsInChildren(type, true);
             for (int i = 0; i < components.Length; i++)
                 if (components[i] != component)
-                    UnityEngine.Object.Destroy(components[i]);
+                    EditModeSafe.Destroy(components[i]);
         }
 
         /// <summary>
@@ -80,13 +79,13 @@ namespace StephanHooft.Extensions
         public static TComponent GetEssentialComponent<TComponent>
             (this Component component, bool destroyGameObjectOnFailure = false) where TComponent : Component
         {
-            if (component.TryGetComponent(out TComponent otherComponent))
+            if (component.TryGetComponent(out TComponent foundComponent))
                 return
-                    otherComponent;
+                    foundComponent;
             else
             {
                 if (destroyGameObjectOnFailure)
-                    UnityEngine.Object.Destroy(component.gameObject);
+                    EditModeSafe.Destroy(component.gameObject);
                 throw
                     new ComponentNotFoundException<TComponent>();
             }
@@ -110,7 +109,7 @@ namespace StephanHooft.Extensions
             else
             {
                 if (destroyGameObjectOnFailure)
-                    UnityEngine.Object.Destroy(component.gameObject);
+                    EditModeSafe.Destroy(component.gameObject);
                 throw
                     new ComponentNotFoundException<TComponent>();
             }
@@ -125,17 +124,17 @@ namespace StephanHooft.Extensions
         /// is found.</param>
         /// <returns>A <typeparamref name="TComponent"/>.</returns>
         public static TComponent GetEssentialComponentInHierarchy<TComponent>
-            (this GameObject gameObject, bool destroyGameObjectOnFailure = false)
+            (this Component component, bool destroyGameObjectOnFailure = false)
             where TComponent : Component
         {
-            var component = gameObject.transform.root.GetComponentInChildren<TComponent>();
-            if (component != null)
+            var foundComponent = component.transform.root.GetComponentInChildren<TComponent>();
+            if (foundComponent != null)
                 return
-                    component;
+                    foundComponent;
             else
             {
                 if (destroyGameObjectOnFailure)
-                    UnityEngine.Object.Destroy(gameObject);
+                    EditModeSafe.Destroy(component.gameObject);
                 throw
                     new ComponentNotFoundException<TComponent>();
             }
@@ -152,14 +151,14 @@ namespace StephanHooft.Extensions
         public static TComponent GetEssentialComponentInParent<TComponent>
             (this Component component, bool destroyGameObjectOnFailure = false) where TComponent : Component
         {
-            var otherComponent = component.GetComponentInParent<TComponent>();
-            if (otherComponent != null)
+            var foundComponent = component.GetComponentInParent<TComponent>();
+            if (foundComponent != null)
                 return
-                    otherComponent;
+                    foundComponent;
             else
             {
                 if (destroyGameObjectOnFailure)
-                    UnityEngine.Object.Destroy(component.gameObject);
+                    EditModeSafe.Destroy(component.gameObject);
                 throw
                     new ComponentNotFoundException<TComponent>();
             }
@@ -220,7 +219,7 @@ namespace StephanHooft.Extensions
             var components = component.transform.root.GetComponentsInChildren(type, true);
             if(components.Length > 1)
             {
-                UnityEngine.Object.Destroy(component);
+                EditModeSafe.Destroy(component);
                 throw
                     new ComponentNotPermittedException(type);
             }

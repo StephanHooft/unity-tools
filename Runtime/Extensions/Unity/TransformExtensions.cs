@@ -6,47 +6,126 @@ namespace StephanHooft.Extensions
     public static class TransformExtensions
     {
         /// <summary>
+        /// Creates a new <see cref="GameObject"/> with the current <see cref="Transform"/> as its parent.
+        /// </summary>
+        /// <returns>The newly created <see cref="GameObject"/>.</returns>
+        public static GameObject AddChildGameObject
+            (this Transform transform)
+        {
+            var childObject = new GameObject();
+            childObject.transform.SetParent(transform);
+            childObject.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            return childObject;
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="GameObject"/> with the current <see cref="Transform"/> as its parent.
+        /// </summary>
+        /// <param name="name">The name of the new <see cref="GameObject"/>.</param>
+        /// <returns>The newly created <see cref="GameObject"/>.</returns>
+        public static GameObject AddChildGameObject
+            (this Transform transform, string name)
+        {
+            var childObject = new GameObject(name);
+            childObject.transform.SetParent(transform);
+            childObject.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            return childObject;
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="GameObject"/> with the current <see cref="Transform"/> as its parent.
+        /// </summary>
+        /// <param name="localPosition">The local starting position of the new <see cref="GameObject"/>.</param>
+        /// <param name="localRotation">The local starting rotation of the new <see cref="GameObject"/>.</param>
+        /// <returns>The newly created <see cref="GameObject"/>.</returns>
+        public static GameObject AddChildGameObject
+            (this Transform transform, Vector3 localPosition, Quaternion localRotation)
+        {
+            var childObject = new GameObject();
+            childObject.transform.SetParent(transform);
+            childObject.transform.SetLocalPositionAndRotation(localPosition, localRotation);
+            return childObject;
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="GameObject"/> with the current <see cref="Transform"/> as its parent.
+        /// </summary>
+        /// <param name="name">The name of the new <see cref="GameObject"/>.</param>
+        /// <param name="localPosition">The local starting position of the new <see cref="GameObject"/>.</param>
+        /// <param name="localRotation">The local starting rotation of the new <see cref="GameObject"/>.</param>
+        /// <returns>The newly created <see cref="GameObject"/>.</returns>
+        public static GameObject AddChildGameObject
+            (this Transform transform, string name, Vector3 localPosition, Quaternion localRotation)
+        {
+            var childObject = new GameObject(name);
+            childObject.transform.SetParent(transform);
+            childObject.transform.SetLocalPositionAndRotation(localPosition, localRotation);
+            return childObject;
+        }
+
+        /// <summary>
         /// Destroys all child <see cref="GameObject"/>s of the <see cref="Transform"/>.
         /// </summary>
         public static void DestroyChildren(this Transform transform)
         {
-            var children = new List<GameObject>();
+            var children = new List<GameObject>
+            {
+                Capacity = transform.childCount
+            };
             foreach (Transform child in transform)
                 children.Add(child.gameObject);
-            children.ForEach(child => Object.Destroy(child));
+            children.ForEach(child => EditModeSafe.Destroy(child));
         }
 
         /// <summary>
-        /// Returns the normalised direction <see cref="Vector3"/> from this <see cref="Transform"/> to another.
+        /// Returns the normalised direction <see cref="Vector3"/> from this <see cref="Transform"/>
+        /// to another.
         /// </summary>
         /// <param name="destination">The destination <see cref="Transform"/>.</param>
-        /// <returns>A <see cref="Vector3"/> from the source <see cref="Transform"/> to the destination <see cref="Transform"/>.</returns>
-        public static Vector3 DirectionTo(this Transform source, Transform destination)
+        /// <returns>A <see cref="Vector3"/> from the source <see cref="Transform"/> to the destination 
+        /// <see cref="Transform"/>.</returns>
+        public static Vector3 DirectionTo(this Transform transform, Transform destination)
         {
             return
-                Vector3.Normalize(destination.position - source.position);
+                Vector3.Normalize(destination.position - transform.position);
+        }
+
+        /// <summary>
+        /// Returns the normalised direction <see cref="Vector3"/> from this <see cref="Transform"/>
+        /// to a <see cref="Vector3"/>.
+        /// </summary>
+        /// <param name="destination">The destination <see cref="Vector3"/>.</param>
+        /// <returns>A <see cref="Vector3"/> from the source <see cref="Transform"/> to the destination 
+        /// <see cref="Vector3"/>.</returns>
+        public static Vector3 DirectionTo(this Transform transform, Vector3 destination)
+        {
+            return
+                Vector3.Normalize(destination - transform.position);
         }
 
         /// <summary>
         /// Returns the distance <see cref="float"/> from this <see cref="Transform"/> to another.
         /// </summary>
         /// <param name="destination">The destination <see cref="Transform"/>.</param>
-        /// <returns>The <see cref="float"/> distance from the <paramref name="source"/> to the <paramref name="destination"/>.</returns>
-        public static float DistanceTo(this Transform source, Transform destination)
+        /// <returns>The <see cref="float"/> distance from the <paramref name="transform"/> to the 
+        /// <paramref name="destination"/>.</returns>
+        public static float DistanceTo(this Transform transform, Transform destination)
         {
             return
-                Vector3.Distance(source.position, destination.position);
+                Vector3.Distance(transform.position, destination.position);
         }
 
         /// <summary>
-        /// Returns the distance <see cref="float"/> from this <see cref="Transform"/> to a <see cref="Vector3"/> point.
+        /// Returns the distance <see cref="float"/> from this <see cref="Transform"/> to a 
+        /// <see cref="Vector3"/> point.
         /// </summary>
         /// <param name="destination">The destination <see cref="Vector3"/>.</param>
-        /// <returns>The <see cref="float"/> distance from the <paramref name="source"/> to the <paramref name="destination"/>.</returns>
-        public static float DistanceTo(this Transform source, Vector3 destination)
+        /// <returns>The <see cref="float"/> distance from the <paramref name="transform"/> to the 
+        /// <paramref name="destination"/>.</returns>
+        public static float DistanceTo(this Transform transform, Vector3 destination)
         {
             return
-                Vector3.Distance(source.position, destination);
+                Vector3.Distance(transform.position, destination);
         }
 
         /// <summary>
@@ -54,7 +133,8 @@ namespace StephanHooft.Extensions
         /// </summary>
         /// <param name="position">The target <see cref="Vector3"/> position.</param>
         /// <param name="rotation">The target <see cref="Quaternion"/> rotation.</param>
-        public static void SetLocalPositionAndRotation(this Transform transform, Vector3 position, Quaternion rotation)
+        public static void SetLocalPositionAndRotation
+            (this Transform transform, Vector3 position, Quaternion rotation)
         {
             transform.localPosition = position;
             transform.localRotation = rotation;

@@ -1,11 +1,70 @@
 using StephanHooft.Exceptions;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace StephanHooft.Extensions
 {
     public static class GameObjectExtensions
     {
+        /// <summary>
+        /// Creates a new <see cref="GameObject"/> with the current <see cref="GameObject"/> as its parent.
+        /// </summary>
+        /// <returns>The newly created <see cref="GameObject"/>.</returns>
+        public static GameObject AddChildGameObject
+            (this GameObject gameObject)
+        {
+            var childObject = new GameObject();
+            childObject.transform.SetParent(gameObject.transform);
+            childObject.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            return childObject;
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="GameObject"/> with the current <see cref="GameObject"/> as its parent.
+        /// </summary>
+        /// <param name="name">The name of the new <see cref="GameObject"/>.</param>
+        /// <returns>The newly created <see cref="GameObject"/>.</returns>
+        public static GameObject AddChildGameObject
+            (this GameObject gameObject, string name)
+        {
+            var childObject = new GameObject(name);
+            childObject.transform.SetParent(gameObject.transform);
+            childObject.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            return childObject;
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="GameObject"/> with the current <see cref="GameObject"/> as its parent.
+        /// </summary>
+        /// <param name="localPosition">The local starting position of the new <see cref="GameObject"/>.</param>
+        /// <param name="localRotation">The local starting rotation of the new <see cref="GameObject"/>.</param>
+        /// <returns>The newly created <see cref="GameObject"/>.</returns>
+        public static GameObject AddChildGameObject
+            (this GameObject gameObject, Vector3 localPosition, Quaternion localRotation)
+        {
+            var childObject = new GameObject();
+            childObject.transform.SetParent(gameObject.transform);
+            childObject.transform.SetLocalPositionAndRotation(localPosition, localRotation);
+            return childObject;
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="GameObject"/> with the current <see cref="GameObject"/> as its parent.
+        /// </summary>
+        /// <param name="name">The name of the new <see cref="GameObject"/>.</param>
+        /// <param name="localPosition">The local starting position of the new <see cref="GameObject"/>.</param>
+        /// <param name="localRotation">The local starting rotation of the new <see cref="GameObject"/>.</param>
+        /// <returns>The newly created <see cref="GameObject"/>.</returns>
+        public static GameObject AddChildGameObject
+            (this GameObject gameObject, string name, Vector3 localPosition, Quaternion localRotation)
+        {
+            var childObject = new GameObject(name);
+            childObject.transform.SetParent(gameObject.transform);
+            childObject.transform.SetLocalPositionAndRotation(localPosition, localRotation);
+            return childObject;
+        }
+
         /// <summary>
         /// Adds a <typeparamref name="TComponent"/> to the <see cref="GameObject"/>, and replaces an
         /// existing one if found.
@@ -15,10 +74,24 @@ namespace StephanHooft.Extensions
             where TComponent : Component
         {
             if (gameObject.TryGetComponent(out TComponent component))
-                UnityEngine.Object.Destroy(component);
+                EditModeSafe.Destroy(component);
             component = gameObject.AddComponent<TComponent>();
             return
                 component;
+        }
+
+        /// <summary>
+        /// Destroys all child <see cref="GameObject"/>s of the <see cref="GameObject"/>.
+        /// </summary>
+        public static void DestroyChildren(this GameObject gameObject)
+        {
+            var children = new List<GameObject>
+            {
+                Capacity = gameObject.transform.childCount
+            };
+            foreach (Transform child in gameObject.transform)
+                children.Add(child.gameObject);
+            children.ForEach(child => EditModeSafe.Destroy(child));
         }
 
         /// <summary>
@@ -32,6 +105,19 @@ namespace StephanHooft.Extensions
         {
             return
                 Vector3.Normalize(destination.transform.position - gameObject.transform.position);
+        }
+
+        /// <summary>
+        /// Returns the normalised direction <see cref="Vector3"/> from this <see cref="GameObject"/>
+        /// to a <see cref="Vector3"/>.
+        /// </summary>
+        /// <param name="destination">The destination <see cref="Vector3"/>.</param>
+        /// <returns>A <see cref="Vector3"/> from the source <see cref="GameObject"/> to the destination 
+        /// <see cref="Vector3"/>.</returns>
+        public static Vector3 DirectionTo(this GameObject gameObject, Vector3 destination)
+        {
+            return
+                Vector3.Normalize(destination - gameObject.transform.position);
         }
 
         /// <summary>
@@ -99,7 +185,7 @@ namespace StephanHooft.Extensions
             else
             {
                 if (destroyGameObjectOnFailure)
-                    UnityEngine.Object.Destroy(gameObject);
+                    EditModeSafe.Destroy(gameObject);
                 throw
                     new ComponentNotFoundException<TComponent>();
             }
@@ -123,7 +209,7 @@ namespace StephanHooft.Extensions
             else
             {
                 if(destroyGameObjectOnFailure)
-                    UnityEngine.Object.Destroy(gameObject);
+                    EditModeSafe.Destroy(gameObject);
                 throw
                     new ComponentNotFoundException<TComponent>();
             }
@@ -147,7 +233,7 @@ namespace StephanHooft.Extensions
             else
             {
                 if (destroyGameObjectOnFailure)
-                    UnityEngine.Object.Destroy(gameObject);
+                    EditModeSafe.Destroy(gameObject);
                 throw
                     new ComponentNotFoundException<TComponent>();
             }
@@ -171,7 +257,7 @@ namespace StephanHooft.Extensions
             else
             {
                 if (destroyGameObjectOnFailure)
-                    UnityEngine.Object.Destroy(gameObject);
+                    EditModeSafe.Destroy(gameObject);
                 throw
                     new ComponentNotFoundException<TComponent>();
             }
