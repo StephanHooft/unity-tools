@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StephanHooft.EditorSafe;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -348,7 +349,7 @@ namespace StephanHooft.ComponentPool
                     new ArgumentOutOfRangeException("limit", "The passed value for limit needs to be 1 or higher.");
             Limit = limit;
             while (componentQueue.Count > limit)
-                Extensions.EditModeSafe.Destroy(componentQueue.Dequeue().gameObject);
+                EditModeSafe.Destroy(componentQueue.Dequeue().gameObject);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -367,7 +368,7 @@ namespace StephanHooft.ComponentPool
             else 
                 throw
                     new InvalidOperationException("ComponentPool may only destroy Components that it itself has created.");
-            Extensions.EditModeSafe.Destroy(componentToDestroy.gameObject);
+            EditModeSafe.Destroy(componentToDestroy.gameObject);
         }
 
         /// <summary>

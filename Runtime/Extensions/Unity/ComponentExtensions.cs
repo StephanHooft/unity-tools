@@ -1,3 +1,4 @@
+using StephanHooft.EditorSafe;
 using StephanHooft.Exceptions;
 using UnityEngine;
 

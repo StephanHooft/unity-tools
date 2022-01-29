@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using StephanHooft.EditorSafe;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace StephanHooft.Extensions

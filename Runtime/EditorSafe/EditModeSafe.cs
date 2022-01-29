@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace StephanHooft.Extensions
+namespace StephanHooft.EditorSafe
 {
     /// <summary>
     /// A collection of static methods that execute differently while in Edit Mode.
