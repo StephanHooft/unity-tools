@@ -1,5 +1,6 @@
 using StephanHooft.EditorSafe;
 using StephanHooft.Exceptions;
+using System;
 using UnityEngine;
 
 namespace StephanHooft.Extensions
@@ -216,13 +217,17 @@ namespace StephanHooft.Extensions
         public static Component OnlyComponentOfTypeInHierarchy
             (this Component component)
         {
-            var type = component.GetType();
-            var components = component.transform.root.GetComponentsInChildren(type, true);
-            if(components.Length > 1)
+            if (!component.IsOnlyComponentOfTypeInHierarchy())
             {
+                string errorMessage = string.Format(
+                    "A '{0}' already exists in the game object's hierarchy!",
+                        component.GetType().Name, component.gameObject.name);
+                if (Application.isPlaying)
+                    throw
+                        new InvalidOperationException(errorMessage);
+                else
+                    UnityEditor.EditorUtility.DisplayDialog("Invalid operation.", errorMessage, "Ok");
                 EditModeSafe.Destroy(component);
-                throw
-                    new ComponentNotPermittedException(type);
             }
             return
                 component;
