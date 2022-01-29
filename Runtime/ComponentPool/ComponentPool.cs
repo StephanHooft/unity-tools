@@ -6,17 +6,21 @@ using UnityEngine;
 namespace StephanHooft.ComponentPool
 {
     /// <summary>
-    /// A generic pooler class for objects with a <see cref="Component"/>-inheriting class instance attached to it. Can be used as an alternative 
-    /// to repeatedly creating/destroying <see cref="GameObject"/>s with a certain <see cref="Component"/>.
-    /// <para><see cref="GameObject"/>s attached to <see cref="Component"/>s provided by the <see cref="ComponentPool{T}"/> are deactivated when returned to it, and
-    ///  activated upon being retrieved again.</para>
-    /// <para>The class also offers method overloads to change a <see cref="GameObject"/>'s name or <see cref="Transform"/> parent
-    /// when their associated <see cref="Component"/>s are retrieved from (or returned to) the <see cref="ComponentPool{T}"/>.</para>
+    /// A generic pooler class for objects with a <see cref="Component"/>-inheriting class instance attached to it.
+    /// Can be used as an alternative to repeatedly creating/destroying <see cref="GameObject"/>s with a certain 
+    /// <see cref="Component"/>.
+    /// <para><see cref="GameObject"/>s attached to <see cref="Component"/>s provided by the
+    /// <see cref="ComponentPool{T}"/> are deactivated when returned to it, and activated upon being retrieved
+    /// again.</para>
+    /// <para>The class also offers method overloads to change a <see cref="GameObject"/>'s name or
+    /// <see cref="Transform"/> parent when their associated <see cref="Component"/>s are retrieved from (or returned
+    /// to) the <see cref="ComponentPool{T}"/>.</para>
     /// </summary>
     public sealed class ComponentPool<T> where T : Component
     {
         /// <summary>
-        /// The maximum amount of <typeparamref name="T"/>s the <see cref="ComponentPool{T}"/> will store before destroying excess <typeparamref name="T"/>s.
+        /// The maximum amount of <typeparamref name="T"/>s the <see cref="ComponentPool{T}"/> will store before
+        /// destroying excess <typeparamref name="T"/>s.
         /// </summary>
         public int Limit { get; private set; }
 
@@ -25,14 +29,7 @@ namespace StephanHooft.ComponentPool
         /// </summary>
         public int Count => componentQueue.Count;
 
-        /// <summary>
-        /// A list of every <typeparamref name="T"/> known to the <see cref="ComponentPool{T}"/>, both active and inactive.
-        /// </summary>
-        private readonly List<T> components = new List<T>();
-
-        /// <summary>
-        /// A First-In-First-Out <see cref="Queue{T}"/> of inactive <typeparamref name="T"/>s to draw from.
-        /// </summary>
+        private readonly List<T> ownedComponents = new List<T>();
         private readonly Queue<T> componentQueue = new Queue<T>();
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,16 +49,17 @@ namespace StephanHooft.ComponentPool
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
-        /// Create a new <see cref="GameObject"/> with a <typeparamref name="T"/> attached to it, and add it to the <see cref="ComponentPool{T}"/>.
+        /// Create a new <see cref="GameObject"/> with a <typeparamref name="T"/> attached to it, and add it to the
+        /// <see cref="ComponentPool{T}"/>.
         /// </summary>
-        public void AddToPool()
+        public void Add()
         {
             if (componentQueue.Count < Limit)
             {
                 var newGameObject = new GameObject();
                 newGameObject.SetActive(false);
                 var newComponent = (T)newGameObject.AddComponent(typeof(T));
-                components.Add(newComponent);
+                ownedComponents.Add(newComponent);
                 componentQueue.Enqueue(newComponent);
             }
             else 
@@ -69,22 +67,26 @@ namespace StephanHooft.ComponentPool
         }
 
         /// <summary>
-        /// Add a manually-created <see cref="GameObject"/> with a <typeparamref name="T"/> to the <see cref="ComponentPool{T}"/>.
-        /// <para>This method should be used if you don't want the <see cref="ComponentPool{T}"/> to automatically create a <see cref="GameObject"/>
-        /// with a matching <typeparamref name="T"/>, but want to configure the <see cref="GameObject"/> yourself before adding them to the 
+        /// Add a manually-created <see cref="GameObject"/> with a <typeparamref name="T"/> to the
+        /// <see cref="ComponentPool{T}"/>.
+        /// <para>This method should be used if you don't want the <see cref="ComponentPool{T}"/> to automatically
+        /// create a <see cref="GameObject"/>
+        /// with a matching <typeparamref name="T"/>, but want to configure the <see cref="GameObject"/> yourself
+        /// before adding them to the 
         /// <see cref="ComponentPool{T}"/>.</para>
         /// </summary>
         /// <param name="component">The <typeparamref name="T"/> to add to the <see cref="ComponentPool{T}"/>.</param>
-        public void AddToPool(T component)
+        public void Add(T component)
         {
             if (component == null) 
                 throw 
                     new ArgumentNullException("component");
-            if (components.Contains(component))
+            if (ownedComponents.Contains(component))
                 throw 
-                    new InvalidOperationException(string.Format("Component of {0} already added to ComponentPool.", component.name));
+                    new InvalidOperationException(
+                        string.Format("Component of {0} already added to ComponentPool.",component.name));
             component.gameObject.SetActive(false);
-            components.Add(component);
+            ownedComponents.Add(component);
             componentQueue.Enqueue(component);
         }
 
@@ -92,10 +94,10 @@ namespace StephanHooft.ComponentPool
         /// Get a <typeparamref name="T"/> from the <see cref="ComponentPool{T}"/> and activate it.
         /// </summary>
         /// <returns>A <typeparamref name="T"/> attached to an active <see cref="GameObject"/>.</returns>
-        public T GetFromPool()
+        public T Get()
         {
             if (componentQueue.Count == 0)
-                AddToPool();
+                Add();
             var component = componentQueue.Dequeue();
             component.gameObject.SetActive(true);
             return
@@ -103,35 +105,42 @@ namespace StephanHooft.ComponentPool
         }
 
         /// <summary>
-        /// Get a <typeparamref name="T"/> from the <see cref="ComponentPool{T}"/> and set its <see cref="Transform"/> <paramref name="parent"/>.
+        /// Get a <typeparamref name="T"/> from the <see cref="ComponentPool{T}"/> and set its <see cref="Transform"/>
+        /// <paramref name="parent"/>.
         /// </summary>
-        /// <param name="parent">The <see cref="Transform"/> to parent the <typeparamref name="T"/>'s <see cref="GameObject"/> to.</param>
+        /// <param name="parent">The <see cref="Transform"/> to parent the <typeparamref name="T"/>'s
+        /// <see cref="GameObject"/> to.</param>
         /// <returns>A <typeparamref name="T"/> attached to an active <see cref="GameObject"/>.</returns>
-        public T GetFromPool(Transform parent)
+        public T Get(Transform parent)
         {
             if (parent == null)
                 throw
                     new ArgumentNullException("parent");
-            if (componentQueue.Count == 0) AddToPool();
+            if (componentQueue.Count == 0)
+                Add();
             var component = componentQueue.Dequeue();
             component.transform.SetParent(parent);
+            component.transform.localPosition = Vector3.zero;
+            component.transform.localRotation = Quaternion.identity;
             component.gameObject.SetActive(true);
             return
                 component;
         }
 
         /// <summary>
-        /// Get a <typeparamref name="T"/> from the <see cref="ComponentPool{T}"/> and set its <see cref="GameObject"/>'s <paramref name="name"/>.
+        /// Get a <typeparamref name="T"/> from the <see cref="ComponentPool{T}"/> and set its <see cref="GameObject"/>
+        /// 's <paramref name="name"/>.
         /// </summary>
-        /// <param name="name">The <see cref="string"/> name to assign to the <typeparamref name="T"/>'s <see cref="GameObject"/>.</param>
+        /// <param name="name">The <see cref="string"/> name to assign to the <typeparamref name="T"/>'s
+        /// <see cref="GameObject"/>.</param>
         /// <returns>A <typeparamref name="T"/> attached to an active <see cref="GameObject"/>.</returns>
-        public T GetFromPool(string name)
+        public T Get(string name)
         {
             if (name == null || name == "")
                 throw
                     new ArgumentNullException("name");
             if (componentQueue.Count == 0)
-                AddToPool();
+                Add();
             var component = componentQueue.Dequeue();
             component.name = name;
             component.gameObject.SetActive(true);
@@ -140,13 +149,15 @@ namespace StephanHooft.ComponentPool
         }
 
         /// <summary>
-        /// Get a <typeparamref name="T"/> from the <see cref="ComponentPool{T}"/>, set its <see cref="Transform"/> <paramref name="parent"/>,
-        /// and set its <see cref="GameObject"/>'s <paramref name="name"/>.
+        /// Get a <typeparamref name="T"/> from the <see cref="ComponentPool{T}"/>, set its <see cref="Transform"/>
+        /// <paramref name="parent"/>, and set its <see cref="GameObject"/>'s <paramref name="name"/>.
         /// </summary>
-        /// <param name="parent">The <see cref="Transform"/> to parent the <typeparamref name="T"/>'s <see cref="GameObject"/> to.</param>
-        /// <param name="name">The <see cref="string"/> name to assign to the <typeparamref name="T"/>'s <see cref="GameObject"/>.</param>
+        /// <param name="parent">The <see cref="Transform"/> to parent the <typeparamref name="T"/>'s
+        /// <see cref="GameObject"/> to.</param>
+        /// <param name="name">The <see cref="string"/> name to assign to the <typeparamref name="T"/>'s
+        /// <see cref="GameObject"/>.</param>
         /// <returns>A <typeparamref name="T"/> attached to an active <see cref="GameObject"/>.</returns>
-        public T GetFromPool(Transform parent, string name)
+        public T Get(Transform parent, string name)
         {
             if (parent == null)
                 throw
@@ -155,9 +166,11 @@ namespace StephanHooft.ComponentPool
                 throw
                     new ArgumentNullException("name");
             if (componentQueue.Count == 0)
-                AddToPool();
+                Add();
             var component = componentQueue.Dequeue();
             component.transform.SetParent(parent);
+            component.transform.localPosition = Vector3.zero;
+            component.transform.localRotation = Quaternion.identity;
             component.name = name;
             component.gameObject.SetActive(true);
             return
@@ -165,17 +178,20 @@ namespace StephanHooft.ComponentPool
         }
 
         /// <summary>
-        /// Deactivate a <typeparamref name="T"/>'s associated <see cref="GameObject"/> and send the <typeparamref name="T"/> back to the <see cref="ComponentPool{T}"/>.
+        /// Deactivate a <typeparamref name="T"/>'s associated <see cref="GameObject"/> and send the
+        /// <typeparamref name="T"/> back to the <see cref="ComponentPool{T}"/>.
         /// </summary>
-        /// <param name="component">The <typeparamref name="T"/> to return to the <see cref="ComponentPool{T}"/>.</param>
-        public void ReturnToPool(T component)
+        /// <param name="component">The <typeparamref name="T"/> to return to the <see cref="ComponentPool{T}"/>.
+        /// </param>
+        public void Return(T component)
         {
             if (component == null)
                 throw
                     new ArgumentNullException("component");
             if (!FromThisPool(component))
                 throw
-                    new ArgumentException("Cannot return a component to a ComponentPool that didn't dispense it.", "component");
+                    new ArgumentException("Cannot return a component to a ComponentPool that didn't dispense it.",
+                    "component");
             if (componentQueue.Count >= Limit)
                 DestroyComponentObject(component);
             else
@@ -186,19 +202,23 @@ namespace StephanHooft.ComponentPool
         }
 
         /// <summary>
-        /// Deactivate a <typeparamref name="T"/>'s associated <see cref="GameObject"/>, set its <see cref="Transform"/> <paramref name="parent"/>,
-        /// and send the <typeparamref name="T"/> back to the <see cref="ComponentPool{T}"/>.
+        /// Deactivate a <typeparamref name="T"/>'s associated <see cref="GameObject"/>, set its
+        /// <see cref="Transform"/> <paramref name="parent"/>, and send the <typeparamref name="T"/> back to the
+        /// <see cref="ComponentPool{T}"/>.
         /// </summary>
-        /// <param name="component">The <typeparamref name="T"/> to return to the <see cref="ComponentPool{T}"/>.</param>
-        /// <param name="parent">The <see cref="Transform"/> to parent the <typeparamref name="T"/>'s <see cref="GameObject"/> to.</param>
-        public void ReturnToPool(T component, Transform parent)
+        /// <param name="component">The <typeparamref name="T"/> to return to the <see cref="ComponentPool{T}"/>.
+        /// </param>
+        /// <param name="parent">The <see cref="Transform"/> to parent the <typeparamref name="T"/>'s
+        /// <see cref="GameObject"/> to.</param>
+        public void Return(T component, Transform parent)
         {
             if (component == null)
                 throw
                     new ArgumentNullException("component");
             if (!FromThisPool(component))
                 throw
-                    new ArgumentException("Cannot return a component to a ComponentPool that didn't dispense it.", "component");
+                    new ArgumentException("Cannot return a component to a ComponentPool that didn't dispense it.",
+                    "component");
             if (parent == null)
                 throw
                     new ArgumentNullException("parent");
@@ -208,24 +228,30 @@ namespace StephanHooft.ComponentPool
             {
                 component.gameObject.SetActive(false);
                 component.transform.SetParent(parent);
+                component.transform.localPosition = Vector3.zero;
+                component.transform.localRotation = Quaternion.identity;
                 componentQueue.Enqueue(component);
             }
         }
 
         /// <summary>
-        /// Deactivate a <typeparamref name="T"/>'s associated <see cref="GameObject"/>, set its <see cref="GameObject"/>'s <paramref name="name"/>,
-        /// and send the <typeparamref name="T"/> back to the <see cref="ComponentPool{T}"/>.
+        /// Deactivate a <typeparamref name="T"/>'s associated <see cref="GameObject"/>, set its
+        /// <see cref="GameObject"/>'s <paramref name="name"/>, and send the <typeparamref name="T"/> back to the
+        /// <see cref="ComponentPool{T}"/>.
         /// </summary>
-        /// <param name="component">The <typeparamref name="T"/> to return to the <see cref="ComponentPool{T}"/>.</param>
-        /// <param name="name">The <see cref="string"/> name to assign to the <typeparamref name="T"/>'s <see cref="GameObject"/>.</param>
-        public void ReturnToPool(T component, string name)
+        /// <param name="component">The <typeparamref name="T"/> to return to the <see cref="ComponentPool{T}"/>.
+        /// </param>
+        /// <param name="name">The <see cref="string"/> name to assign to the <typeparamref name="T"/>'s
+        /// <see cref="GameObject"/>.</param>
+        public void Return(T component, string name)
         {
             if (component == null)
                 throw
                     new ArgumentNullException("component");
             if (!FromThisPool(component))
                 throw
-                    new ArgumentException("Cannot return a component to a ComponentPool that didn't dispense it.", "component");
+                    new ArgumentException("Cannot return a component to a ComponentPool that didn't dispense it.",
+                    "component");
             component.name = name ??
                 throw
                     new ArgumentNullException("name");
@@ -240,20 +266,25 @@ namespace StephanHooft.ComponentPool
         }
 
         /// <summary>
-        /// Deactivate a <typeparamref name="T"/>'s associated <see cref="GameObject"/>, set its <see cref="Transform"/> <paramref name="parent"/>,
-        /// set its <see cref="GameObject"/>'s <paramref name="name"/>, and send the <typeparamref name="T"/> back to the <see cref="ComponentPool{T}"/>.
+        /// Deactivate a <typeparamref name="T"/>'s associated <see cref="GameObject"/>, set its
+        /// <see cref="Transform"/> <paramref name="parent"/>, set its <see cref="GameObject"/>'s
+        /// <paramref name="name"/>, and send the <typeparamref name="T"/> back to the <see cref="ComponentPool{T}"/>.
         /// </summary>
-        /// <param name="component">The <typeparamref name="T"/> to return to the <see cref="ComponentPool{T}"/>.</param>
-        /// <param name="parent">The <see cref="Transform"/> to parent the <typeparamref name="T"/>'s <see cref="GameObject"/> to.</param>
-        /// <param name="name">The <see cref="string"/> name to assign to the <typeparamref name="T"/>'s <see cref="GameObject"/>.</param>
-        public void ReturnToPool(T component, Transform parent, string name)
+        /// <param name="component">The <typeparamref name="T"/> to return to the <see cref="ComponentPool{T}"/>.
+        /// </param>
+        /// <param name="parent">The <see cref="Transform"/> to parent the <typeparamref name="T"/>'s
+        /// <see cref="GameObject"/> to.</param>
+        /// <param name="name">The <see cref="string"/> name to assign to the <typeparamref name="T"/>'s
+        /// <see cref="GameObject"/>.</param>
+        public void Return(T component, Transform parent, string name)
         {
             if (component == null)
                 throw
                     new ArgumentNullException("component");
             if (!FromThisPool(component))
                 throw
-                    new ArgumentException("Cannot return a component to a ComponentPool that didn't dispense it.", "component");
+                    new ArgumentException("Cannot return a component to a ComponentPool that didn't dispense it.",
+                    "component");
             if (parent == null)
                 throw
                     new ArgumentNullException("parent");
@@ -266,63 +297,71 @@ namespace StephanHooft.ComponentPool
             {
                 component.gameObject.SetActive(false);
                 component.transform.SetParent(parent);
+                component.transform.localPosition = Vector3.zero;
+                component.transform.localRotation = Quaternion.identity;
                 component.name = name;
                 componentQueue.Enqueue(component);
             }
         }
 
         /// <summary>
-        /// Deactivate the <see cref="GameObject"/>s of all <typeparamref name="T"/>s that were dispensed from the <see cref="ComponentPool{T}"/>,
-        /// and return the <typeparamref name="T"/>s to the pool.
+        /// Deactivate the <see cref="GameObject"/>s of all <typeparamref name="T"/>s that were dispensed from the
+        /// <see cref="ComponentPool{T}"/>, and return the <typeparamref name="T"/>s to the pool.
         /// </summary>
-        public void CollectAndReturnAllToPool()
+        public void ReturnAll()
         {
-            foreach (T component in components)
+            foreach (T component in ownedComponents)
                 if (component != null && !componentQueue.Contains(component))
-                    ReturnToPool(component);
-            components.RemoveAll(item => item == null); // Remove all "null" entries from the list, in case one of the Components got destroyed somehow.
+                    Return(component);
+            ownedComponents.RemoveAll(item => item == null);
         }
 
         /// <summary>
-        /// Deactivate the <see cref="GameObject"/>s of all <typeparamref name="T"/>s that were dispensed from the <see cref="ComponentPool{T}"/>,
-        /// set their <see cref="Transform"/> <paramref name="parent"/>s, and return the <typeparamref name="T"/>s to the pool.
+        /// Deactivate the <see cref="GameObject"/>s of all <typeparamref name="T"/>s that were dispensed from the
+        /// <see cref="ComponentPool{T}"/>, set their <see cref="Transform"/> <paramref name="parent"/>s, and return
+        /// the <typeparamref name="T"/>s to the pool.
         /// </summary>
-        /// <param name="parent">The <see cref="Transform"/> to parent the collected <typeparamref name="T"/>s' <see cref="GameObject"/>s to.</param>
-        public void CollectAndReturnAllToPool(Transform parent)
+        /// <param name="parent">The <see cref="Transform"/> to parent the collected <typeparamref name="T"/>s'
+        /// <see cref="GameObject"/>s to.</param>
+        public void ReturnAll(Transform parent)
         {
             if (parent == null)
                 throw
                     new ArgumentNullException("parent");
-            foreach (T component in components)
+            foreach (T component in ownedComponents)
                 if (component != null && !componentQueue.Contains(component)) 
-                    ReturnToPool(component, parent);
-            components.RemoveAll(item => item == null); // Remove all "null" entries from the list, in case one of the Components got destroyed somehow.
+                    Return(component, parent);
+            ownedComponents.RemoveAll(item => item == null);
         }
 
         /// <summary>
-        /// Deactivate the <see cref="GameObject"/>s of all <typeparamref name="T"/>s that were dispensed from the <see cref="ComponentPool{T}"/>,
-        /// set their <see cref="GameObject"/>s' <paramref name="name"/>s, and return the <typeparamref name="T"/>s to the pool.
+        /// Deactivate the <see cref="GameObject"/>s of all <typeparamref name="T"/>s that were dispensed from the
+        /// <see cref="ComponentPool{T}"/>, set their <see cref="GameObject"/>s' <paramref name="name"/>s, and return
+        /// the <typeparamref name="T"/>s to the pool.
         /// </summary>
-        /// <param name="name">The <see cref="string"/> name to assign to the collected <typeparamref name="T"/>s' <see cref="GameObject"/>s.</param>
-        public void CollectAndReturnAllToPool(string name)
+        /// <param name="name">The <see cref="string"/> name to assign to the collected <typeparamref name="T"/>s'
+        /// <see cref="GameObject"/>s.</param>
+        public void ReturnAll(string name)
         {
             if (name == null || name == "")
                 throw
                     new ArgumentNullException("name");
-            foreach (T component in components)
+            foreach (T component in ownedComponents)
                 if (component != null && !componentQueue.Contains(component))
-                    ReturnToPool(component, name);
-            components.RemoveAll(item => item == null); // Remove all "null" entries from the list, in case one of the Components got destroyed somehow.
+                    Return(component, name);
+            ownedComponents.RemoveAll(item => item == null);
         }
 
         /// <summary>
-        /// Deactivate the <see cref="GameObject"/>s of all <typeparamref name="T"/>s that were dispensed from the <see cref="ComponentPool{T}"/>,
-        /// set their <see cref="Transform"/> <paramref name="parent"/>s, set their <see cref="GameObject"/>s' <paramref name="name"/>s, 
-        /// and return the <typeparamref name="T"/>s to the pool.
+        /// Deactivate the <see cref="GameObject"/>s of all <typeparamref name="T"/>s that were dispensed from the
+        /// <see cref="ComponentPool{T}"/>, set their <see cref="Transform"/> <paramref name="parent"/>s, set their
+        /// <see cref="GameObject"/>s' <paramref name="name"/>s, and return the <typeparamref name="T"/>s to the pool.
         /// </summary>
-        /// <param name="parent">The <see cref="Transform"/> to parent the collected <typeparamref name="T"/>s' <see cref="GameObject"/>s to.</param>
-        /// <param name="name">The <see cref="string"/> name to assign to the collected <typeparamref name="T"/>s' <see cref="GameObject"/>s.</param>
-        public void CollectAndReturnAllToPool(Transform parent, string name)
+        /// <param name="parent">The <see cref="Transform"/> to parent the collected <typeparamref name="T"/>s'
+        /// <see cref="GameObject"/>s to.</param>
+        /// <param name="name">The <see cref="string"/> name to assign to the collected <typeparamref name="T"/>s'
+        /// <see cref="GameObject"/>s.</param>
+        public void ReturnAll(Transform parent, string name)
         {
             if (parent == null)
                 throw
@@ -330,10 +369,10 @@ namespace StephanHooft.ComponentPool
             if (name == null || name == "")
                 throw
                     new ArgumentNullException("name");
-            foreach (T component in components)
+            foreach (T component in ownedComponents)
                 if (component != null && !componentQueue.Contains(component))
-                    ReturnToPool(component, parent, name);
-            components.RemoveAll(item => item == null); // Remove all "null" entries from the list, in case one of the Components got destroyed somehow.
+                    Return(component, parent, name);
+            ownedComponents.RemoveAll(item => item == null);
         }
 
         /// <summary>
@@ -355,7 +394,8 @@ namespace StephanHooft.ComponentPool
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
-        /// Destroy the <see cref="GameObject"/> of a <typeparamref name="T"/> that came from this <see cref="ComponentPool{T}"/>.
+        /// Destroy the <see cref="GameObject"/> of a <typeparamref name="T"/> that came from this
+        /// <see cref="ComponentPool{T}"/>.
         /// </summary>
         /// <param name="componentToDestroy"></param>
         private void DestroyComponentObject(T componentToDestroy)
@@ -364,22 +404,23 @@ namespace StephanHooft.ComponentPool
                 throw
                     new InvalidOperationException("ComponentPool may not destroy a Component while it's in a Queue.");
             if (FromThisPool(componentToDestroy))
-                components.Remove(componentToDestroy);
+                ownedComponents.Remove(componentToDestroy);
             else 
                 throw
-                    new InvalidOperationException("ComponentPool may only destroy Components that it itself has created.");
+                    new InvalidOperationException("ComponentPool may only destroy Components that it has created.");
             EditModeSafe.Destroy(componentToDestroy.gameObject);
         }
 
         /// <summary>
-        /// Check if a specific <typeparamref name="T"/> <paramref name="component"/> is from this <see cref="ComponentPool{T}"/> or not.
+        /// Check if a specific <typeparamref name="T"/> <paramref name="component"/> is from this
+        /// <see cref="ComponentPool{T}"/> or not.
         /// </summary>
         /// <param name="component">The <typeparamref name="T"/> to check.</param>
         /// <returns>True if the <typeparamref name="T"/> is from this <see cref="ComponentPool{T}"/></returns>
         private bool FromThisPool(T component)
         {
             return
-                components.Contains(component);
+                ownedComponents.Contains(component);
         }
     }
 }

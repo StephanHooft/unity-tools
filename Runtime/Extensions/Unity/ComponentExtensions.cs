@@ -220,7 +220,7 @@ namespace StephanHooft.Extensions
             if (!component.IsOnlyComponentOfTypeInHierarchy())
             {
                 string errorMessage = string.Format(
-                    "A '{0}' already exists in the game object's hierarchy!",
+                    "A '{0}' already exists in {1}'s hierarchy!",
                         component.GetType().Name, component.gameObject.name);
                 if (Application.isPlaying)
                     throw
