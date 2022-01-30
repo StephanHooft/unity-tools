@@ -37,6 +37,7 @@ namespace StephanHooft.LineRendererUpdate
         public void SetSource(ILineRendererUpdateSource source)
         {
             this.source = source;
+            lineRenderer.SetPositions(source.GetPositions());
         }
     }
 }
