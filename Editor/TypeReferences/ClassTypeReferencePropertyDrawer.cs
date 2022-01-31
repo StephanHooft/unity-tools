@@ -25,7 +25,7 @@ namespace StephanHooft.TypeReferences.EditorScripts
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
-			DrawTypeSelectionControl(position, property.FindPropertyRelative("_classRef"), label, attribute as ClassTypeConstraintAttribute);
+			DrawTypeSelectionControl(position, property.FindPropertyRelative("typeRef"), label, attribute as ClassTypeConstraintAttribute);
 		}
 
 		/// <summary>
