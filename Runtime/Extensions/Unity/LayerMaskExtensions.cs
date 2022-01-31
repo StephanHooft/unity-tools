@@ -10,7 +10,7 @@ namespace StephanHooft.Extensions
         /// <param name="gameObject">The <see cref="GameObject"/> to check against.</param>
         /// <returns><see cref="true"/> if the <see cref="LayerMask"/> contains the <see cref="GameObject"/>'s
         /// layer.</returns>
-        private static bool Contains(this LayerMask mask, GameObject gameObject)
+        public static bool Contains(this LayerMask mask, GameObject gameObject)
         {
             var objLayerMask = 1 << gameObject.layer;
             return
@@ -23,7 +23,7 @@ namespace StephanHooft.Extensions
         /// <param name="component">The <see cref="Component"/> to check against.</param>
         /// <returns><see cref="true"/> if the <see cref="LayerMask"/> contains the <see cref="Component"/>'s
         /// layer.</returns>
-        private static bool Contains(this LayerMask mask, Component component)
+        public static bool Contains(this LayerMask mask, Component component)
         {
             var objLayerMask = 1 << component.gameObject.layer;
             return
@@ -36,18 +36,18 @@ namespace StephanHooft.Extensions
         /// <param name="layer">The layer <see cref="int"/> to check against.</param>
         /// <returns><see cref="true"/> if the <see cref="LayerMask"/> contains the <see cref="int"/>
         /// layer.</returns>
-        private static bool Contains(this LayerMask mask, int layer)
+        public static bool Contains(this LayerMask mask, int layer)
         {
             var objLayerMask = 1 << layer;
             return
                 (mask.value & objLayerMask) > 0;
         }
-        
+
         /// <summary>
         /// Returns <see cref="true"/> if the <see cref="LayerMask"/> is empty.
         /// </summary>
         /// <returns><see cref="true"/> if the <see cref="LayerMask"/> has zero layers included.</returns>
-        private static bool IsEmpty(this LayerMask mask)
+        public static bool IsEmpty(this LayerMask mask)
         {
             return mask.value == 0;
         }
