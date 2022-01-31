@@ -46,10 +46,8 @@ namespace StephanHooft.TypeReferences.EditorScripts
 		{
 			var types = new List<Type>();
 			var excludedTypes = (ExcludedTypeCollectionGetter != null ? ExcludedTypeCollectionGetter() : null);
-			var assembly = Assembly.GetExecutingAssembly();
-			FilterTypes(assembly, filter, excludedTypes, types);
-			foreach (var referencedAssembly in assembly.GetReferencedAssemblies())
-				FilterTypes(Assembly.Load(referencedAssembly), filter, excludedTypes, types);
+			foreach (var referencedAssembly in AppDomain.CurrentDomain.GetAssemblies())
+				FilterTypes(Assembly.Load(referencedAssembly.GetName()), filter, excludedTypes, types);
 			types.Sort((a, b) => a.FullName.CompareTo(b.FullName));
 			return
 				types;
