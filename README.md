@@ -7,6 +7,7 @@ This repo is a Unity package for C# code to reuse across projects. It contains:
 - A "MultiKeyDictionary" class.
 - A "Progress" class to help various tasks to generically track their progress.
 - A "StateMachines" framework for setting up (finite) state machines.
+- A "TypeReferences" system to serialize Type references.
 - Custom attributes.
 - Extension methods for various standard Unity classes.
 - Tools for drawing and following (segmented) lines in 2D space.

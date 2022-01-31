@@ -4,7 +4,7 @@ using UnityEditor;
 namespace StephanHooft.CustomAttributes.EditorScripts
 {
     /// <summary>
-    /// A <see cref="CustomPropertyDrawer"/> for <see cref="CustomAttributes"/>
+    /// A <see cref="CustomPropertyDrawer"/> for the <see cref="MinMaxAttribute"/>.
     /// <remarks><para>Heavily based on code from: https://github.com/GucioDevs/SimpleMinMaxSlider .</para></remarks>
     /// </summary>
     [CustomPropertyDrawer(typeof(MinMaxAttribute))]
