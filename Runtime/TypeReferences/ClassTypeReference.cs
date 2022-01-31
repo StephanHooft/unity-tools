@@ -61,7 +61,7 @@ namespace StephanHooft.TypeReferences
 			if (type != null && !type.IsClass)
 				throw
 					new ArgumentException(string.Format("'{0}' is not a class type.",
-					type != null ? type.FullName : "null"), "type");
+					type.FullName), "type");
 			this.type = type;
 			typeRef = GetClassTypeRef(type);
 		}
