@@ -7,19 +7,19 @@ namespace StephanHooft.TypeReferences
 	/// when selecting a <see cref="ClassTypeReference"/> with the Unity inspector.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
-	public sealed class ClassImplementsAttribute : ClassTypeConstraintAttribute
+	public sealed class ClassTypeImplementsAttribute : ClassTypeConstraintAttribute
 	{
 		/// <summary>
-		/// Creates a new <see cref="ClassImplementsAttribute"/>.
+		/// Creates a new <see cref="ClassTypeImplementsAttribute"/>.
 		/// </summary>
-		public ClassImplementsAttribute()
+		public ClassTypeImplementsAttribute()
 		{ }
 
 		/// <summary>
-		/// Creates a new <see cref="ClassImplementsAttribute"/>.
+		/// Creates a new <see cref="ClassTypeImplementsAttribute"/>.
 		/// </summary>
 		/// <param name="interfaceType">Type of interface that selectable classes must implement.</param>
-		public ClassImplementsAttribute(Type interfaceType) =>		
+		public ClassTypeImplementsAttribute(Type interfaceType) =>		
 			InterfaceType = interfaceType;
 
 		/// <summary>
