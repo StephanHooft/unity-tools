@@ -3,8 +3,13 @@ using System.Collections.Generic;
 
 namespace StephanHooft.Extensions
 {
+    /// <summary>
+    /// Extension methods for <see cref="List{T}"/>.
+    /// </summary>
     public static class ListExtensions
     {
+        #region Static Methods
+
         /// <summary>
         /// Counts the amount of items in the <see cref="List{T}"/> that match a certain <see cref="Predicate{T}"/>.
         /// </summary>
@@ -38,21 +43,21 @@ namespace StephanHooft.Extensions
         /// Returns true if the <see cref="List{T}"/> is null or empty.
         /// </summary>
         /// <returns>True if the <see cref="List{T}"/> is null or empty.</returns>
-        public static bool IsNullOrEmpty<T>(this List<T> l) 
+        public static bool IsNullOrEmpty<T>(this List<T> l)
             => l.Count == 0 || l == null;
 
         /// <summary>
         /// <para>The highest-indexed item of a <see cref="List{T}"/></para>
         /// </summary>
         /// <returns>The last <typeparamref name="T"/> in the <see cref="List{T}"/>.</returns>
-        public static T Last<T>(this List<T> l) 
+        public static T Last<T>(this List<T> l)
             => l[l.Count - 1];
 
         /// <summary>
         /// <para>Returns the highest index of a <see cref="List{T}"/></para>
         /// </summary>
         /// <returns>The <paramref name="offset"/> index of the last <typeparamref name="T"/> in the <see cref="List{T}"/>.</returns>
-        public static int LastIndex<T>(this List<T> l) 
+        public static int LastIndex<T>(this List<T> l)
             => l.Count - 1;
 
         /// <summary>
@@ -88,5 +93,7 @@ namespace StephanHooft.Extensions
                 throw
                     new ArgumentException(string.Format("{0} must not be present in List<{1}> {2}.", item, typeof(T), listName));
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

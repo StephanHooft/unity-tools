@@ -9,15 +9,7 @@ namespace StephanHooft.ProgressIndicators
     /// </summary>
     public sealed class Progress
     {
-        /// <summary>
-        /// Returns the global average progression of all active <see cref="Indicator"/>s.
-        /// </summary>
-        public float GlobalProgress => CalculateGlobalProgress();
-
-        /// <summary>
-        /// Returns true if there is at least one running <see cref="Indicator"/>, false otherwise.
-        /// </summary>
-        public static bool Running => Instance.HasRunningIndicators();
+        #region Events
 
         /// <summary>
         /// An event raised when a new <see cref="Indicator"/> starts.
@@ -45,26 +37,50 @@ namespace StephanHooft.ProgressIndicators
             add => Instance.UpdatedInstance += value;
             remove => Instance.UpdatedInstance -= value;
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Properties
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>
+        /// Returns the global average progression of all active <see cref="Indicator"/>s.
+        /// </summary>
+        public float GlobalProgress => CalculateGlobalProgress();
+
+        /// <summary>
+        /// Returns true if there is at least one running <see cref="Indicator"/>, false otherwise.
+        /// </summary>
+        public static bool Running => Instance.HasRunningIndicators();
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Fields
 
         private static Progress Instance => lazy.Value;
-        private static readonly Lazy<Progress> lazy = new Lazy<Progress> (() => new Progress());
+        private static readonly Lazy<Progress> lazy = new Lazy<Progress>(() => new Progress());
         private event Action<Indicator> AddedInstance;
         private event Action<Indicator> RemovedInstance;
         private event Action<Indicator> UpdatedInstance;
-        private readonly Dictionary<int,Indicator> indicators = new Dictionary<int,Indicator>();
+        private readonly Dictionary<int, Indicator> indicators = new Dictionary<int, Indicator>();
         private static string IndicatorClass => typeof(Indicator).ToString();
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Constructors and Finaliser
 
         /// <summary>
-        /// Constructor deliberately kept private. <see cref="Instance"/> will call this instructor when accessed for the first time.
+        /// Constructor deliberately kept private. <see cref="Instance"/> will call this instructor when accessed for
+        /// the first time.
         /// </summary>
-        private Progress() 
-        {}
+        private Progress()
+        { }
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ~Progress()
+        {
+
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Static Methods
 
         /// <summary>
         /// Returns an enumerator to loop over all <see cref="Indicator"/>s.
@@ -99,7 +115,7 @@ namespace StephanHooft.ProgressIndicators
         {
             if (!Exists(id))
                 throw
-                    new ArgumentException("No Progress.Indicator with this ID value exists.", "id");
+                    new ArgumentException(NoIndicatorWithIDExists(id));
             Instance.indicators[id].Finish();
         }
 
@@ -122,7 +138,7 @@ namespace StephanHooft.ProgressIndicators
         {
             if (!Exists(id))
                 throw
-                    new ArgumentException("No Progress.Indicator with this ID value exists.", "id");
+                    new ArgumentException(NoIndicatorWithIDExists(id));
             return
                 Instance.indicators[id].CurrentStep;
         }
@@ -136,7 +152,7 @@ namespace StephanHooft.ProgressIndicators
         {
             if (!Exists(id))
                 throw
-                    new ArgumentException("No Progress.Indicator with this ID value exists.", "id");
+                    new ArgumentException(NoIndicatorWithIDExists(id));
             return
                 Instance.indicators[id].Name;
         }
@@ -151,7 +167,7 @@ namespace StephanHooft.ProgressIndicators
         {
             if (!Exists(id))
                 throw
-                    new ArgumentException("No Progress.Indicator with this ID value exists.", "id");
+                    new ArgumentException(NoIndicatorWithIDExists(id));
             return
                 Instance.indicators[id].ParentID;
         }
@@ -165,7 +181,7 @@ namespace StephanHooft.ProgressIndicators
         {
             if (!Exists(id))
                 throw
-                    new ArgumentException("No Progress.Indicator with this ID value exists.", "id");
+                    new ArgumentException(NoIndicatorWithIDExists(id));
             return
                 Instance.indicators[id].Parent;
         }
@@ -179,7 +195,7 @@ namespace StephanHooft.ProgressIndicators
         {
             if (!Exists(id))
                 throw
-                    new ArgumentException("No Progress.Indicator with this ID value exists.", "id");
+                    new ArgumentException(NoIndicatorWithIDExists(id));
             return
                 Instance.indicators[id].Progress;
         }
@@ -188,7 +204,8 @@ namespace StephanHooft.ProgressIndicators
         /// Gets a reference to a <see cref="Indicator"/>.
         /// </summary>
         /// <param name="id">The <see cref="Indicator"/>'s unique ID.</param>
-        /// <returns>The <see cref="Indicator"/>, or null if no <see cref="Indicator"/>. with the provided <paramref name="id"/> exists.</returns>
+        /// <returns>The <see cref="Indicator"/>, or null if no <see cref="Indicator"/>. with the provided
+        /// <paramref name="id"/> exists.</returns>
         public static Indicator GetIndicatorById(int id)
         {
             if (!Exists(id))
@@ -207,7 +224,7 @@ namespace StephanHooft.ProgressIndicators
         {
             if (!Exists(id))
                 throw
-                    new ArgumentException("No Progress.Indicator with this ID value exists.", "id");
+                    new ArgumentException(NoIndicatorWithIDExists(id));
             return
                 Instance.indicators[id].Root;
         }
@@ -220,7 +237,7 @@ namespace StephanHooft.ProgressIndicators
         {
             var count = 0;
             foreach (Indicator indicator in Instance.indicators.Values)
-                if (indicator.Running) 
+                if (indicator.Running)
                     count++;
             return
                 count;
@@ -235,7 +252,7 @@ namespace StephanHooft.ProgressIndicators
         {
             if (!Exists(id))
                 throw
-                    new ArgumentException("No Progress.Indicator with this ID value exists.", "id");
+                    new ArgumentException(NoIndicatorWithIDExists(id));
             return
                 Instance.indicators[id].StartTime;
         }
@@ -249,7 +266,7 @@ namespace StephanHooft.ProgressIndicators
         {
             if (!Exists(id))
                 throw
-                    new ArgumentException("No Progress.Indicator with this ID value exists.", "id");
+                    new ArgumentException(NoIndicatorWithIDExists(id));
             return
                 Instance.indicators[id].Status;
         }
@@ -263,7 +280,7 @@ namespace StephanHooft.ProgressIndicators
         {
             if (!Exists(id))
                 throw
-                    new ArgumentException("No Progress.Indicator with this ID value exists.", "id");
+                    new ArgumentException(NoIndicatorWithIDExists(id));
             return
                 Instance.indicators[id].StepLabel;
         }
@@ -277,7 +294,7 @@ namespace StephanHooft.ProgressIndicators
         {
             if (!Exists(id))
                 throw
-                    new ArgumentException("No Progress.Indicator with this ID value exists.", "id");
+                    new ArgumentException(NoIndicatorWithIDExists(id));
             return
                 Instance.indicators[id].TotalSteps;
         }
@@ -291,7 +308,7 @@ namespace StephanHooft.ProgressIndicators
         {
             if (!Exists(id))
                 throw
-                    new ArgumentException("No Progress.Indicator with this ID value exists.", "id");
+                    new ArgumentException(NoIndicatorWithIDExists(id));
             return
                 Instance.indicators[id].UpdateTime;
         }
@@ -305,7 +322,7 @@ namespace StephanHooft.ProgressIndicators
         {
             if (!Exists(id))
                 throw
-                    new ArgumentException("No Progress.Indicator with this ID value exists.", "id");
+                    new ArgumentException(NoIndicatorWithIDExists(id));
             return
                 Instance.indicators[id].Weight;
         }
@@ -319,7 +336,7 @@ namespace StephanHooft.ProgressIndicators
         {
             if (!Exists(id))
                 throw
-                    new ArgumentException("No Progress.Indicator with this ID value exists.", "id");
+                    new ArgumentException(NoIndicatorWithIDExists(id));
             if (callback == null)
                 throw
                     new ArgumentNullException("callback");
@@ -334,7 +351,7 @@ namespace StephanHooft.ProgressIndicators
         {
             if (!Exists(id))
                 throw
-                    new ArgumentException("No Progress.Indicator with this ID value exists.", "id");
+                    new ArgumentException(NoIndicatorWithIDExists(id));
             Remove(Instance.indicators[id]);
         }
 
@@ -347,10 +364,10 @@ namespace StephanHooft.ProgressIndicators
         {
             if (!Exists(id))
                 throw
-                    new ArgumentException("No Progress.Indicator with this ID value exists.", "id");
+                    new ArgumentException(NoIndicatorWithIDExists(id));
             if (progress < 0f || progress > 1f)
                 throw
-                    new ArgumentOutOfRangeException("newProgress", "newProgress must be a value between 0f and 1f");
+                    new ArgumentOutOfRangeException("progress");
             Instance.indicators[id].Report(progress);
         }
 
@@ -364,13 +381,13 @@ namespace StephanHooft.ProgressIndicators
         {
             if (!Exists(id))
                 throw
-                    new ArgumentException("No Progress.Indicator with this ID value exists.", "id");
+                    new ArgumentException(NoIndicatorWithIDExists(id));
             if (totalSteps < 1)
                 throw
-                    new ArgumentOutOfRangeException("newtotalSteps", "newTotalSteps must be 1 or greater.");
+                    new ArgumentOutOfRangeException("totalSteps");
             if (currentStep > totalSteps)
                 throw
-                    new ArgumentOutOfRangeException("newCurrentTurnStep", "newCurrentTurnStep cannot be greater than newTotalSteps");
+                    new ArgumentOutOfRangeException("currentStep");
             Instance.indicators[id].Report(currentStep, totalSteps);
         }
 
@@ -383,7 +400,7 @@ namespace StephanHooft.ProgressIndicators
         {
             if (!Exists(id))
                 throw
-                    new ArgumentException("No Progress.Indicator with this ID value exists.", "id");
+                    new ArgumentException(NoIndicatorWithIDExists(id));
             Instance.indicators[id].SetStepLabel(stepLabel);
         }
 
@@ -399,10 +416,10 @@ namespace StephanHooft.ProgressIndicators
         {
             if (parentID >= 0 && !Exists(parentID))
                 throw
-                    new ArgumentException(string.Format("No {0} with ID {1} exists.", IndicatorClass, parentID), "parentID");
+                    new ArgumentException(NoIndicatorWithIDExists(parentID));
             if (weight < 1)
                 throw
-                    new ArgumentOutOfRangeException("weight", "weight must be 1 or higher.");
+                    new ArgumentOutOfRangeException("weight");
             var id = 0;
             while (Instance.indicators.ContainsKey(id)) // create a unique identifier
                 id++;
@@ -411,7 +428,7 @@ namespace StephanHooft.ProgressIndicators
             starter.Start(id, name, weight);
             Instance.indicators.Add(id, indicator);
             Instance.AddedInstance?.Invoke(indicator);
-            if(parentID >= 0)
+            if (parentID >= 0)
                 starter.SetParent(parentID);
             return
                 id;
@@ -420,24 +437,26 @@ namespace StephanHooft.ProgressIndicators
         /// <summary>
         /// Starts a new <see cref="Indicator"/>.
         /// </summary>
-        /// <param name="totalSteps">The total number of steps for the new <see cref="Indicator"/>. (Must be 1 or greater.)</param>
+        /// <param name="totalSteps">The total number of steps for the new <see cref="Indicator"/>.
+        /// (Must be 1 or greater.)</param>
         /// <param name="name">The new <see cref="Indicator"/>'s name.</param>
         /// <param name="stepLabel">The label that displays the new <see cref="Indicator"/>'s steps.</param>
         /// <param name="parentID">The unique ID of the parent <see cref="Indicator"/>, if any. 
         /// If the <see cref="Indicator"/> should have no parent, pass -1.</param>
         /// <param name="weight">The weight of the new <see cref="Indicator"/>. Must be 1 or higher.</param>
         /// <returns>The new <see cref="Indicator"/>'s unique ID.</returns>
-        public static int Start(int totalSteps, string name = "", string stepLabel = "", int parentID = -1, int weight = 1)
+        public static int Start
+            (int totalSteps, string name = "", string stepLabel = "", int parentID = -1, int weight = 1)
         {
             if (totalSteps < 1)
                 throw
-                    new ArgumentOutOfRangeException("totalSteps", "totalSteps must be 1 or greater.");
+                    new ArgumentOutOfRangeException("totalSteps");
             if (parentID >= 0 && !Exists(parentID))
                 throw
-                    new ArgumentException(string.Format("No {0} with ID {1} exists.", IndicatorClass, parentID), "parentID");
+                    new ArgumentException(NoIndicatorWithIDExists(parentID));
             if (weight < 1)
                 throw
-                    new ArgumentOutOfRangeException("weight", "weight must be 1 or higher.");
+                    new ArgumentOutOfRangeException("weight");
             int id = 0;
             while (Instance.indicators.ContainsKey(id)) // create a unique identifier
                 id++;
@@ -460,11 +479,35 @@ namespace StephanHooft.ProgressIndicators
         {
             if (!Exists(id))
                 throw
-                    new ArgumentException("No Progress.Indicator with this ID value exists.", "id");
+                    new ArgumentException(NoIndicatorWithIDExists(id));
             Instance.indicators[id].UnregisterFinishCallback();
         }
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        private static void InvokeUpdated(Indicator indicator)
+        {
+            if (Exists(indicator.ID))
+                Instance.UpdatedInstance?.Invoke(indicator);
+        }
+
+        private static void Remove(Indicator indicator)
+        {
+            if (Exists(indicator.ID))
+            {
+                if (indicator.HasChildren)
+                    foreach (Indicator childIndicator in indicator.Children)
+                        Remove(childIndicator);
+                Instance.indicators.Remove(indicator.ID);
+                Instance.RemovedInstance?.Invoke(indicator);
+                if (indicator.HasParent && !indicator.Parent.Finished)
+                {
+                    IIndicator parent = indicator.Parent;
+                    parent.RecalculateProgress();
+                }
+            }
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Methods
 
         private float CalculateGlobalProgress()
         {
@@ -477,13 +520,25 @@ namespace StephanHooft.ProgressIndicators
 
         private bool HasRunningIndicators()
         {
-            foreach(Indicator indicator in Instance.indicators.Values)
+            foreach (Indicator indicator in Instance.indicators.Values)
                 if (indicator.Running)
                     return
                         true;
             return
                 false;
         }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Exception Messages
+
+        private static string NoIndicatorWithIDExists(int id) => 
+            string.Format("No {0} with ID value {1} exists.", IndicatorClass, id);
+
+        
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Interfaces
 
         private interface IIndicator
         {
@@ -492,38 +547,17 @@ namespace StephanHooft.ProgressIndicators
             void Start(int id, string name, int weight);
             void Start(int id, int totalSteps, string name, string stepLabel, int weight);
         }
-
-        private static void InvokeUpdated(Indicator indicator)
-        {
-            if(Exists(indicator.ID))
-                Instance.UpdatedInstance?.Invoke(indicator);
-        }
-
-        private static void Remove(Indicator indicator)
-        {
-            if (Exists(indicator.ID))
-            {
-                if (indicator.HasChildren)
-                    foreach (Indicator childIndicator in indicator.Children) 
-                        Remove(childIndicator);
-                Instance.indicators.Remove(indicator.ID);
-                Instance.RemovedInstance?.Invoke(indicator);
-                if (indicator.HasParent && !indicator.Parent.Finished)
-                {
-                    IIndicator parent = indicator.Parent;
-                    parent.RecalculateProgress();
-                }
-            }
-        }
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Progress.Indicator Subclass
 
         /// <summary>
         /// An indicator that can be used to tracks progress on some kind of arbitrary task.
         /// </summary>
         public sealed class Indicator : IIndicator
         {
+            #region Properties
+
             /// <summary>
             /// The number of children the <see cref="Indicator"/> has.
             /// </summary>
@@ -541,14 +575,15 @@ namespace StephanHooft.ProgressIndicators
             public int CurrentStep { get; private set; }
 
             /// <summary>
-            /// Checks whether the <see cref="Indicator"/> exists. Removed <see cref="Indicator"/>s are considered nonexistant.
+            /// Checks whether the <see cref="Indicator"/> exists. Removed <see cref="Indicator"/>s are considered
+            /// nonexistant.
             /// </summary>
             public bool Exists => Exists(ID);
 
             /// <summary>
-            /// Returns true if the <see cref="Indicator"/> is finished, but not-yet-removed.
+            /// Returns <see cref="true"/> if the <see cref="Indicator"/> is finished, but not-yet-removed.
             /// </summary>
-            public bool Finished => Started && Exists && Status == IndicatorStatus.Finished;
+            public bool Finished => Started && Exists && Progress >= 1f;
 
             /// <summary>
             /// Returns the <see cref="Indicator"/>'s unique identifier.
@@ -576,14 +611,16 @@ namespace StephanHooft.ProgressIndicators
             public Indicator Parent => GetIndicatorById(ParentID);
 
             /// <summary>
-            /// Returns the unique ID of the <see cref="Indicator"/>'s parent, or -1 if the <see cref="Indicator"/> is not a child of another <see cref="Indicator"/>.
+            /// Returns the unique ID of the <see cref="Indicator"/>'s parent, or -1 if the <see cref="Indicator"/> is
+            /// not a child of another <see cref="Indicator"/>.
             /// </summary>
             public int ParentID { get; private set; }
 
             /// <summary>
             /// Returns the <see cref="Indicator"/>'s progress value.
             /// </summary>
-            public float Progress => (!Exists || !Started) ? -1f : StepBased ? (float)CurrentStep / TotalSteps : reportedProgress;
+            public float Progress => 
+                (!Exists || !Started) ? -1f : StepBased ? (float)CurrentStep / TotalSteps : reportedProgress;
 
             /// <summary>
             /// Returns the topmost <see cref="Indicator"/> in the <see cref="Indicator"/>'s hierarchy.
@@ -591,12 +628,13 @@ namespace StephanHooft.ProgressIndicators
             public Indicator Root => FindRoot();
 
             /// <summary>
-            /// Returns true if the <see cref="Indicator"/> is running.
+            /// Returns <see cref="true"/> if the <see cref="Indicator"/> is started and not yet finished.
             /// </summary>
-            public bool Running => Started && (Status == IndicatorStatus.Started || Status == IndicatorStatus.InProgress);
+            public bool Running => 
+                Started && Progress < 1f;
 
             /// <summary>
-            /// Returns the timewhen the <see cref="Indicator"/> started.
+            /// Returns the time when the <see cref="Indicator"/> started.
             /// </summary>
             public DateTime StartTime { get; private set; }
 
@@ -607,14 +645,14 @@ namespace StephanHooft.ProgressIndicators
             {
                 get
                 {
-                    if(!Started)
+                    if (!Started)
                         throw
-                            new InvalidOperationException(string.Format("{0} was not started.", IndicatorClass));
+                            new InvalidOperationException(NotStarted);
                     var progress = Progress;
-                    return 
-                        progress <= 0f ? 
+                    return
+                        progress <= 0f ?
                             IndicatorStatus.Started
-                            : progress >= 1f ? 
+                            : progress >= 1f ?
                                 IndicatorStatus.Finished
                                 : IndicatorStatus.InProgress;
                 }
@@ -641,31 +679,39 @@ namespace StephanHooft.ProgressIndicators
             public DateTime UpdateTime { get; private set; }
 
             /// <summary>
-            /// The <see cref="Indicator"/>'s weight value. Used to compute the progress value of a parent <see cref="Indicator"/>
-            /// with one or more child <see cref="Indicator"/>s.
+            /// The <see cref="Indicator"/>'s weight value. Used to compute the progress value of a parent
+            /// <see cref="Indicator"/> with one or more child <see cref="Indicator"/>s.
             /// </summary>
             public int Weight { get; private set; }
-
-            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-            private IIndicator IParent => Parent;
-            private IIndicator IThis => this;
+            
             private bool ParentShouldRecalculate => (HasParent && !Parent.Finished);
             private bool Started => ID >= 0;
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            #endregion
+            #region Fields
 
             private event Action<Indicator> FinishCallback;
             private float reportedProgress;
             private List<Indicator> childIndicators;
 
-            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            #endregion
+            #region Constructors and Finaliser
 
             /// <summary>
-            /// No public constructor. The Progress class uses <see cref="FormatterServices.GetUninitializedObject"/> as a workaround
-            /// to instantiate <see cref="Indicator"/>s.
+            /// No public constructor. The Progress class uses <see cref="FormatterServices.GetUninitializedObject"/> as
+            /// a workaround to instantiate <see cref="Indicator"/>s.
             /// </summary>
-            private Indicator() {}
+            private Indicator() 
+            { }
 
-            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ~Indicator()
+            { }
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            #endregion
+            #region Methods
 
             /// <summary>
             /// Marks the <see cref="Indicator"/> as finished.
@@ -675,18 +721,18 @@ namespace StephanHooft.ProgressIndicators
             {
                 if (!Started)
                     throw
-                        new InvalidOperationException(string.Format("{0} was not started.", IndicatorClass));
+                        new InvalidOperationException(NotStarted);
                 if (!Exists)
                     throw
-                        new InvalidOperationException(string.Format("{0} no longer exists.", IndicatorClass));
-                if(Status != IndicatorStatus.Finished)
+                        new InvalidOperationException(NoLongerExists);
+                if (Progress < 1f)
                 {
                     if (StepBased)
                         CurrentStep = TotalSteps;
                     else
                         reportedProgress = 1f;
-                    if (HasChildren) 
-                        foreach (Indicator child in childIndicators) 
+                    if (HasChildren)
+                        foreach (Indicator child in childIndicators)
                             child.Finish();
                     UpdateTime = DateTime.Now;
                     FinishCallback?.Invoke(this);
@@ -705,9 +751,9 @@ namespace StephanHooft.ProgressIndicators
             /// <param name="callback">This method is called when the <see cref="Indicator"/> is finished.</param>
             public void RegisterFinishCallback(Action<Indicator> callback)
             {
-                if (!Exists) 
+                if (!Exists)
                     throw
-                        new InvalidOperationException(string.Format("{0} no longer exists.", IndicatorClass));
+                        new InvalidOperationException(NoLongerExists);
                 FinishCallback = callback ??
                     throw
                         new ArgumentNullException("callback");
@@ -722,17 +768,17 @@ namespace StephanHooft.ProgressIndicators
             {
                 if (!Exists)
                     throw
-                        new InvalidOperationException(string.Format("{0} no longer exists.", IndicatorClass));
+                        new InvalidOperationException(NoLongerExists);
                 if (!Running)
                     throw
-                        new InvalidOperationException(string.Format("Cannot report progress on a {0} that isn't running.", IndicatorClass));
+                        new InvalidOperationException(NotRunning);
                 if (HasChildren)
                     throw
-                        new InvalidOperationException(string.Format("Cannot report progress on a {0} that has one or more {0}s.", IndicatorClass));
+                        new InvalidOperationException(CannotReportOnParent);
                 if (progress < 0f || progress > 1f)
                     throw
-                        new ArgumentOutOfRangeException("newProgress", "newProgress must be a value between 0f and 1f");
-                if(reportedProgress != progress || StepBased)
+                        new ArgumentOutOfRangeException("newProgress");
+                if (reportedProgress != progress || StepBased)
                 {
                     reportedProgress = progress;
                     CurrentStep = 0;
@@ -751,7 +797,8 @@ namespace StephanHooft.ProgressIndicators
 
             /// <summary>
             /// Reports the <see cref="Indicator"/>'s current status.
-            /// <para>Reporting a <paramref name="currentStep"/> value matching <paramref name="totalSteps"/> will cause the <see cref="Indicator"/> to finish.</para>
+            /// <para>Reporting a <paramref name="currentStep"/> value matching <paramref name="totalSteps"/> will cause
+            /// the <see cref="Indicator"/> to finish.</para>
             /// </summary>
             /// <param name="currentStep">An updated current step.</param>
             /// <param name="totalSteps">An updated total number of steps. (Must be 1 or greater.)</param>
@@ -759,17 +806,20 @@ namespace StephanHooft.ProgressIndicators
             {
                 if (!Exists)
                     throw
-                        new InvalidOperationException(string.Format("{0} no longer exists.", IndicatorClass));
+                        new InvalidOperationException(NoLongerExists);
                 if (!Running)
                     throw
-                        new InvalidOperationException(string.Format("Cannot report progress on a {0} that isn't running.", IndicatorClass));
+                        new InvalidOperationException(NotRunning);
+                if (HasChildren)
+                    throw
+                        new InvalidOperationException(CannotReportOnParent);
                 if (totalSteps < 1)
                     throw
-                        new ArgumentOutOfRangeException("newtotalSteps", "newTotalSteps must be 1 or greater.");
-                if (currentStep > totalSteps) 
+                        new ArgumentOutOfRangeException("newtotalSteps");
+                if (currentStep > totalSteps)
                     throw
-                        new ArgumentOutOfRangeException("newCurrentTurnStep", "newCurrentTurnStep cannot be greater than newTotalSteps");
-                if(currentStep != CurrentStep || totalSteps != TotalSteps)
+                        new ArgumentOutOfRangeException("newCurrentTurnStep");
+                if (currentStep != CurrentStep || totalSteps != TotalSteps)
                 {
                     reportedProgress = 0f;
                     CurrentStep = currentStep;
@@ -794,7 +844,7 @@ namespace StephanHooft.ProgressIndicators
             {
                 if (!Exists)
                     throw
-                        new InvalidOperationException(string.Format("{0} no longer exists.", IndicatorClass));
+                        new InvalidOperationException(NoLongerExists);
                 if (string.IsNullOrEmpty(stepLabel))
                     StepLabel = "";
                 else
@@ -804,15 +854,16 @@ namespace StephanHooft.ProgressIndicators
             /// <summary>
             /// Returns the <see cref="Indicator"/>'s information as a string of text.
             /// </summary>
-            /// <returns>A pretty <see cref="string"/> detailing the <see cref="Indicator"/>'s ID, name, status, progress, and weight.</returns>
+            /// <returns>A pretty <see cref="string"/> detailing the <see cref="Indicator"/>'s ID, name, status,
+            /// progress, and weight.</returns>
             public override string ToString()
             {
                 if (!Exists)
                     throw
-                        new InvalidOperationException(string.Format("{0} no longer exists.", IndicatorClass));
+                        new InvalidOperationException(NoLongerExists);
                 return
-                    StepBased ? 
-                    string.Format("[ {0} | {1} | {2} | Progress: {3}% ({4}/{5} {6}) | Weight: {7} ]", 
+                    StepBased ?
+                    string.Format("[ {0} | {1} | {2} | Progress: {3}% ({4}/{5} {6}) | Weight: {7} ]",
                     ID, Name, Status, Math.Round(Progress * 100, 2), CurrentStep, TotalSteps, StepLabel, Weight)
                         : string.Format("[ {0} | {1} | {2} | Progress: {3}% | Weight: {4} ]",
                     ID, Name, Status, Math.Round(Progress * 100, 2), Weight);
@@ -825,18 +876,16 @@ namespace StephanHooft.ProgressIndicators
             {
                 if (!Exists)
                     throw
-                        new InvalidOperationException(string.Format("{0} no longer exists.", IndicatorClass));
+                        new InvalidOperationException(NoLongerExists);
                 FinishCallback = null;
             }
-
-            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             private void AddChild(Indicator indicator)
             {
                 if (childIndicators == null)
                     childIndicators = new List<Indicator>();
                 childIndicators.Add(indicator);
-                if(Progress > 0f)
+                if (Progress > 0f)
                     IThis.RecalculateProgress();
             }
 
@@ -848,6 +897,12 @@ namespace StephanHooft.ProgressIndicators
                 return
                     currentIndicator;
             }
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            #endregion
+            #region IIndicator Implementation
+
+            private IIndicator IParent => Parent;
+            private IIndicator IThis => this;
 
             void IIndicator.RecalculateProgress()
             {
@@ -875,10 +930,11 @@ namespace StephanHooft.ProgressIndicators
             {
                 if (parentID >= 0 && !Exists(parentID))
                     throw
-                        new ArgumentException(string.Format("No {0} with ID {1} exists.", IndicatorClass, parentID), "parentID");
+                        new ArgumentException
+                            (string.Format("No {0} with ID {1} exists.", IndicatorClass, parentID), "parentID");
                 if (parentID == ID)
                     throw
-                        new ArgumentException("The values for parentID and ID cannot be identical.", "parentID");
+                        new ArgumentException("parentID");
                 ParentID = parentID;
                 var parent = GetIndicatorById(parentID);
                 parent.AddChild(this);
@@ -888,16 +944,16 @@ namespace StephanHooft.ProgressIndicators
             {
                 if (Started)
                     throw
-                        new InvalidOperationException(string.Format("{0} cannot be started multiple times.", IndicatorClass));
-                if (id < 0) 
+                        new InvalidOperationException(AlreadyStarted);
+                if (id < 0)
                     throw
-                        new ArgumentOutOfRangeException("id", "id cannot be negative.");
-                if (Exists(id)) 
+                        new ArgumentOutOfRangeException("id");
+                if (Exists(id))
                     throw
-                        new ArgumentException(string.Format("A {0} with ID {1} already exists.", IndicatorClass, id));
-                if (weight < 1) 
+                        new ArgumentException(AlreadyExists(id));
+                if (weight < 1)
                     throw
-                        new ArgumentOutOfRangeException("weight", "weight must be 1 or higher.");
+                        new ArgumentOutOfRangeException("weight");
                 ID = id;
                 Name = string.IsNullOrEmpty(name) ? "" : name;
                 ParentID = -1;
@@ -913,21 +969,21 @@ namespace StephanHooft.ProgressIndicators
 
             void IIndicator.Start(int id, int totalSteps, string name, string stepLabel, int weight)
             {
-                if (Started) 
+                if (Started)
                     throw
-                        new InvalidOperationException(string.Format("{0} cannot be started multiple times.", IndicatorClass));
-                if (id < 0) 
+                        new InvalidOperationException(AlreadyStarted);
+                if (id < 0)
                     throw
-                        new ArgumentOutOfRangeException("id", "id cannot be negative.");
-                if (Exists(id)) 
+                        new ArgumentOutOfRangeException("id");
+                if (Exists(id))
                     throw
-                        new ArgumentException(string.Format("A {0} with ID {1} already exists.", IndicatorClass, id));
-                if (totalSteps < 1) 
+                        new ArgumentException(AlreadyExists(id));
+                if (totalSteps < 1)
                     throw
-                        new ArgumentOutOfRangeException("totalSteps", "totalSteps must be 1 or greater.");
-                if (weight < 1) 
+                        new ArgumentOutOfRangeException("totalSteps");
+                if (weight < 1)
                     throw
-                        new ArgumentOutOfRangeException("weight", "weight must be 1 or higher.");
+                        new ArgumentOutOfRangeException("weight");
                 ID = id;
                 Name = string.IsNullOrEmpty(name) ? "" : name;
                 ParentID = -1;
@@ -940,6 +996,24 @@ namespace StephanHooft.ProgressIndicators
                 TotalSteps = totalSteps;
                 StepLabel = stepLabel;
             }
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            #endregion
+            #region Exception Messages
+
+            private string AlreadyStarted => string.Format("{0} has already been started.", IndicatorClass);
+            private string AlreadyExists(int id) => 
+                string.Format("A {0} with ID {1} already exists.", IndicatorClass, id);
+            private string CannotReportOnParent =>
+                string.Format("Cannot report progress on a {0} that has one or more child {0}s.", IndicatorClass);
+            private string NoLongerExists => string.Format("{0} no longer exists.", IndicatorClass);
+            private string NotRunning =>
+                string.Format("Cannot report progress on a {0} that isn't running.", IndicatorClass);
+            private string NotStarted => string.Format("{0} was not started.", IndicatorClass);
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            #endregion
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

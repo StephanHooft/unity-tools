@@ -5,8 +5,13 @@ using UnityEngine;
 
 namespace StephanHooft.Extensions
 {
+    /// <summary>
+    /// Extension methods for <see cref="string"/>.
+    /// </summary>
     public static class StringExtensions
     {
+        #region Static Methods
+
         /// <summary>
         /// Returns <see cref="true"/> if the <see cref="string"/> is a <see cref="DateTime"/>.
         /// </summary>
@@ -108,16 +113,16 @@ namespace StephanHooft.Extensions
         public static string ToStringPretty<T>(this IEnumerable<T> source, string before, string delimiter, string after)
         {
             if (source == null)
-                return 
+                return
                     string.Empty;
             var result = new StringBuilder();
             result.Append(before);
             var firstElement = true;
             foreach (T elem in source)
             {
-                if (firstElement) 
+                if (firstElement)
                     firstElement = false;
-                else 
+                else
                     result.Append(delimiter);
                 result.Append(elem.ToString());
             }
@@ -131,7 +136,12 @@ namespace StephanHooft.Extensions
         /// </summary>
         /// <param name="colour">The colour to assign.</param>
         /// <returns>The <see cref="string"/>, with the assigned <paramref name="colour"/>.</returns>
-        public static string WithColour(this string text, Color colour) 
-            => $"<color=#{ColorUtility.ToHtmlStringRGB(colour)}>{text}</color>";
+        public static string WithColour(this string text, Color colour)
+        {
+            return
+                $"<color=#{ColorUtility.ToHtmlStringRGB(colour)}>{text}</color>";
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

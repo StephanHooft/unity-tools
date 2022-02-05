@@ -9,6 +9,8 @@ namespace StephanHooft.ManagedRayCasts
     /// </summary>
     public struct ColliderCast2D
     {
+        #region Properties
+
         /// <summary>
         /// The <see cref="ColliderCast2D"/>'s direction.
         /// </summary>
@@ -32,12 +34,18 @@ namespace StephanHooft.ManagedRayCasts
             : throw
                 new System.InvalidOperationException("No hits.");
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Fields
+
         private Vector2 direction;
         private readonly float distance;
         private readonly RaycastHit2D[] raycastHitBuffer;
         private readonly int nearestHitIndex;
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Constructors
 
         /// <summary>
         /// Create a new <see cref="ColliderCast2D"/>.
@@ -63,5 +71,7 @@ namespace StephanHooft.ManagedRayCasts
                         nearestHitIndex = i;
             }
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

@@ -8,6 +8,8 @@ namespace StephanHooft.ManagedRayCasts
     /// </summary>
     public struct LineCast2D
     {
+        #region Properties
+
         /// <summary>
         /// The <see cref="LineCast2D"/>'s direction.
         /// </summary>
@@ -33,7 +35,7 @@ namespace StephanHooft.ManagedRayCasts
         /// </summary>
         public RaycastHit2D NearestHit => HitSomething ?
             raycastHitBuffer[nearestHitIndex]
-            : throw 
+            : throw
                 new System.InvalidOperationException("No hits.");
 
         /// <summary>
@@ -55,12 +57,18 @@ namespace StephanHooft.ManagedRayCasts
             NearestHit.distance
             : Distance;
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Fields
+
         private readonly Vector2 start;
         private readonly Vector2 end;
         private readonly RaycastHit2D[] raycastHitBuffer;
         private readonly int nearestHitIndex;
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Constructors
 
         /// <summary>
         /// Create a new <see cref="LineCast2D"/>.
@@ -85,5 +93,7 @@ namespace StephanHooft.ManagedRayCasts
                         nearestHitIndex = i;
             }
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

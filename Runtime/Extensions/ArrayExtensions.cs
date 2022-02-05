@@ -3,8 +3,13 @@ using System.Collections.Generic;
 
 namespace StephanHooft.Extensions
 {
+    /// <summary>
+    /// Extension methods for <see cref="Array"/>.
+    /// </summary>
     public static class ArrayExtensions
     {
+        #region Static Methods
+
         /// <summary>
         /// Checks whether a specific <paramref name="item"/> appears in the <see cref="Array"/>.
         /// </summary>
@@ -14,9 +19,9 @@ namespace StephanHooft.Extensions
         {
             foreach (T entry in a)
                 if (entry.Equals(item))
-                    return 
+                    return
                         true;
-            return 
+            return
                 false;
         }
 
@@ -26,7 +31,7 @@ namespace StephanHooft.Extensions
         /// <returns><see cref="true"/> if the <see cref="Array"/> is empty.</returns>
         public static bool IsEmpty<T>(this T[] a)
         {
-            return 
+            return
                 a.Length == 0;
         }
 
@@ -36,7 +41,7 @@ namespace StephanHooft.Extensions
         /// <returns><see cref="true"/> if the <see cref="Array"/> is <see cref="null"/> or empty.</returns>
         public static bool IsNullOrEmpty<T>(this T[] a)
         {
-            return 
+            return
                 a.Length == 0 || a == null;
         }
 
@@ -51,7 +56,7 @@ namespace StephanHooft.Extensions
         {
             foreach (T entry in a)
                 if (entry.Equals(item))
-                    return 
+                    return
                         a;
             throw
                 new ArgumentException(string.Format("{0} must be present in {1}[] {2}.", item, typeof(T), arrayName));
@@ -82,8 +87,10 @@ namespace StephanHooft.Extensions
         {
             List<T> output = new List<T>();
             output.AddRange(a);
-            return 
+            return
                 output;
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

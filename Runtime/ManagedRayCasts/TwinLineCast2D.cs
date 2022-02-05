@@ -8,6 +8,8 @@ namespace StephanHooft.ManagedRayCasts
     /// </summary>
     public struct TwinLineCast2D
     {
+        #region Properties
+
         /// <summary>
         /// The <see cref="TwinLineCast2D"/>'s distance.
         /// </summary>
@@ -33,7 +35,7 @@ namespace StephanHooft.ManagedRayCasts
         /// </summary>
         public RaycastHit2D NearestForwardHit => nearestHitIndex[0] >= 0 ?
             raycastHitBuffer[0][nearestHitIndex[0]]
-            : throw 
+            : throw
                 new System.InvalidOperationException("No hits.");
 
         /// <summary>
@@ -41,7 +43,7 @@ namespace StephanHooft.ManagedRayCasts
         /// </summary>
         public RaycastHit2D NearestReverseHit => nearestHitIndex[1] >= 0 ?
             raycastHitBuffer[1][nearestHitIndex[1]]
-            : throw 
+            : throw
                 new System.InvalidOperationException("No hits.");
 
         /// <summary>
@@ -68,12 +70,18 @@ namespace StephanHooft.ManagedRayCasts
             NearestForwardHit.distance + NearestReverseHit.distance
             : Distance;
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Fields
+
         private readonly Vector2 start;
         private readonly Vector2 end;
         private readonly RaycastHit2D[][] raycastHitBuffer;
         private readonly int[] nearestHitIndex;
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Constructors
 
         /// <summary>
         /// Create a new <see cref="TwinLineCast2D"/>.
@@ -98,12 +106,13 @@ namespace StephanHooft.ManagedRayCasts
             };
             ProcessRaycastHitBuffers(ref collisions);
         }
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Methods
 
         private void ProcessRaycastHitBuffers(ref int[] collisions)
         {
-            for(int i = 0; i < collisions.Length; i++)
+            for (int i = 0; i < collisions.Length; i++)
             {
                 if (collisions[i] < 4)
                     System.Array.Resize(ref raycastHitBuffer[i], collisions[i]);
@@ -116,5 +125,7 @@ namespace StephanHooft.ManagedRayCasts
                 }
             }
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

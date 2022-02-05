@@ -7,14 +7,26 @@ namespace StephanHooft.Lines
     /// </summary>
     public abstract class SegmentedLine2D : MonoBehaviour, ISegmentedLine2D
     {
+        #region ISegmentedLine2D Properties
+
         public abstract bool Loop { get; set; }
         public abstract int NodeCount { get; }
         public abstract int SegmentCount { get; }
         public abstract Vector2 this[int index] { get; set; }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region ISegmentedLine2D Methods
+
         public abstract void AddNode();
         public abstract Vector2 GetDirectionOnLine(float t);
         public abstract Vector2 GetPositionOnLine(float t);
         public abstract Vector2 GetVelocityOnLine(float t);
         public abstract void RemoveNode();
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+
+
     }
 }

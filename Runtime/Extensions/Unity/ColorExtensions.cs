@@ -2,8 +2,13 @@ using UnityEngine;
 
 namespace StephanHooft.Extensions
 {
+    /// <summary>
+    /// Extension methods for <see cref="Color"/>.
+    /// </summary>
     public static class ColorExtensions
     {
+        #region Static Methods
+
         /// <summary>
         /// Returns the <see cref="Color"/> with one or more components set to a specific <see cref="float"/> value.
         /// </summary>
@@ -17,5 +22,7 @@ namespace StephanHooft.Extensions
             return
                 new Color(r ?? original.r, g ?? original.g, b ?? original.b, a ?? original.a);
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

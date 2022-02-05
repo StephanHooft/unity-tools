@@ -12,6 +12,8 @@ namespace StephanHooft.CustomAttributes.EditorScripts
     [CustomPropertyDrawer(typeof(TagSelectorAttribute))]
     public class TagSelectorPropertyDrawer : PropertyDrawer
     {
+        #region PropertyDrawer Implementation
+
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             if (property.propertyType == SerializedPropertyType.String)
@@ -51,5 +53,7 @@ namespace StephanHooft.CustomAttributes.EditorScripts
             else
                 EditorGUI.PropertyField(position, property, label);
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion        
     }
 }

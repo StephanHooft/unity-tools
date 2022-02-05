@@ -7,6 +7,8 @@ namespace StephanHooft.Lines
 	/// </summary>
 	public static class BezierMath
 	{
+		#region Static Methods
+
 		/// <summary>
 		/// Calculate the position of a point <paramref name="t"/> along a Bezier curve through quadratic interpolation. (One control point.)
 		/// </summary>
@@ -78,5 +80,7 @@ namespace StephanHooft.Lines
 				6f * oneMinusT * t * (p2 - p1) +
 				3f * t * t * (p3 - p2);
 		}
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		#endregion
 	}
 }

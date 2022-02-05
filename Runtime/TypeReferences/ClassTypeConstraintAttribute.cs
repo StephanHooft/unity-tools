@@ -9,8 +9,7 @@ namespace StephanHooft.TypeReferences
 	/// </summary>
 	public abstract class ClassTypeConstraintAttribute : PropertyAttribute
 	{
-		private ClassGrouping _grouping = ClassGrouping.ByNamespaceFlat;
-		private bool _allowAbstract = false;
+		#region Properties
 
 		/// <summary>
 		/// Gets or sets grouping of selectable classes. Defaults to <see cref="ClassGrouping.ByNamespaceFlat"/>
@@ -32,6 +31,17 @@ namespace StephanHooft.TypeReferences
 			set => _allowAbstract = value;
 		}
 
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		#endregion
+		#region Fields
+
+		private ClassGrouping _grouping = ClassGrouping.ByNamespaceFlat;
+		private bool _allowAbstract = false;
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		#endregion
+		#region Methods
+
 		/// <summary>
 		/// Determines whether the specified class <see cref="Type"/> satisfies filter constraint.
 		/// </summary>
@@ -42,5 +52,8 @@ namespace StephanHooft.TypeReferences
 		/// </returns>
 		public virtual bool IsConstraintSatisfied(Type type) =>
 			AllowAbstract || !type.IsAbstract;
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		#endregion
 	}
 }

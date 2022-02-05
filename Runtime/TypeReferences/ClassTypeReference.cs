@@ -93,7 +93,6 @@ namespace StephanHooft.TypeReferences
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		#endregion
-
 		#region ISerializationCallbackReceiver Implementation
 
 		void ISerializationCallbackReceiver.OnAfterDeserialize()
@@ -112,7 +111,6 @@ namespace StephanHooft.TypeReferences
 		{ }
 
 		#endregion
-
 	}
 
 }

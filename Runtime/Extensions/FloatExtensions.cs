@@ -2,15 +2,20 @@
 
 namespace StephanHooft.Extensions
 {
+    /// <summary>
+    /// Extension methods for <see cref="float"/>.
+    /// </summary>
     public static class FloatExtensions
     {
+        #region Static Methods
+
         /// <summary>
         /// Returns the absolute value of the <see cref="float"/>.
         /// </summary>
         /// <returns>The absolute value of the <see cref="float"/>.</returns>
         public static float Abs(this float f)
         {
-            return 
+            return
                 Mathf.Abs(f);
         }
 
@@ -23,7 +28,7 @@ namespace StephanHooft.Extensions
         /// <returns>The <see cref="float"/> result between the <paramref name="min"/> and <paramref name="max"/> values. </returns>
         public static float Clamp(this float f, float min, float max)
         {
-            return 
+            return
                 Mathf.Clamp(f, min, max);
         }
 
@@ -34,10 +39,10 @@ namespace StephanHooft.Extensions
         public static bool IsPositive(this float f)
         {
             if (f > 0)
-                return 
+                return
                     true;
             else
-                return 
+                return
                     false;
         }
 
@@ -48,10 +53,10 @@ namespace StephanHooft.Extensions
         public static bool IsNegative(this float f)
         {
             if (f < 0)
-                return 
+                return
                     true;
             else
-                return 
+                return
                     false;
         }
 
@@ -62,10 +67,10 @@ namespace StephanHooft.Extensions
         public static bool IsZero(this float f)
         {
             if (f == 0)
-                return 
+                return
                     true;
             else
-                return 
+                return
                     false;
         }
 
@@ -83,7 +88,7 @@ namespace StephanHooft.Extensions
         {
             if (clamp)
                 f = f.Clamp(inMin, inMax);
-            return 
+            return
                 (f - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
         }
 
@@ -109,7 +114,7 @@ namespace StephanHooft.Extensions
         /// <returns>The largest value between the <see cref="float"/> and <paramref name="other"/>.</returns>
         public static float Max(this float f, float other)
         {
-            return 
+            return
                 Mathf.Max(f, other);
         }
 
@@ -132,7 +137,7 @@ namespace StephanHooft.Extensions
         /// <returns>The largest value between the <see cref="float"/> and <paramref name="other"/>.</returns>
         public static float Min(this float f, float other)
         {
-            return 
+            return
                 Mathf.Min(f, other);
         }
 
@@ -275,7 +280,7 @@ namespace StephanHooft.Extensions
         /// <returns>The <see cref="float"/> raised to power <paramref name="p"/>.</returns>
         public static float Pow(this float f, float p)
         {
-            return 
+            return
                 Mathf.Pow(f, p);
         }
 
@@ -285,7 +290,7 @@ namespace StephanHooft.Extensions
         /// <returns>The <see cref="float"/> to the nearest integer.</returns>
         public static float Round(this float f)
         {
-            return 
+            return
                 Mathf.Round(f);
         }
 
@@ -295,7 +300,7 @@ namespace StephanHooft.Extensions
         /// <returns>The <see cref="float"/> to the nearest <see cref="int"/>.</returns>
         public static int RoundToInt(this float f)
         {
-            return 
+            return
                 Mathf.RoundToInt(f);
         }
 
@@ -315,8 +320,10 @@ namespace StephanHooft.Extensions
         /// <returns>The <see cref="float"/>'s square root.</returns>
         public static float Sqrt(this float f)
         {
-            return 
+            return
                 Mathf.Sqrt(f);
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

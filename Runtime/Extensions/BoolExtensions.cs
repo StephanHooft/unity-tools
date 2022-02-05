@@ -2,8 +2,13 @@ using UnityEngine;
 
 namespace StephanHooft.Extensions
 {
+    /// <summary>
+    /// Extension methods for <see cref="bool"/>.
+    /// </summary>
     public static class BoolExtensions
     {
+        #region Static Methods
+
         /// <summary>
         /// Converts the given <see cref="bool"/> value to a <see cref="float"/>.
         /// </summary>
@@ -84,5 +89,7 @@ namespace StephanHooft.Extensions
             return
                 b ? trueVector : falseVector;
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

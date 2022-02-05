@@ -8,6 +8,8 @@ namespace StephanHooft.Lines
     /// </summary>
     public class LineWalker2D : MonoBehaviour
     {
+        #region Fields
+
         public LineWalkerMode mode;
         public SegmentedLine2D line;
         public float duration;
@@ -15,7 +17,9 @@ namespace StephanHooft.Lines
         private float progress;
         private bool goingForward = true;
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region MonoBehaviour Implementation
 
         private void OnEnable()
         {
@@ -57,5 +61,7 @@ namespace StephanHooft.Lines
         {
             HybridUpdateManager.UnregisterUpdateCallback(HybridUpdate);
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

@@ -6,8 +6,13 @@ using UnityEngine;
 
 namespace StephanHooft.Extensions
 {
+    /// <summary>
+    /// Extension methods for <see cref="GameObject"/>.
+    /// </summary>
     public static class GameObjectExtensions
     {
+        #region Static Methods
+
         /// <summary>
         /// Creates a new <see cref="GameObject"/> with the current <see cref="GameObject"/> as its parent.
         /// </summary>
@@ -71,7 +76,7 @@ namespace StephanHooft.Extensions
         /// existing one if found.
         /// </summary>
         /// <returns>A <typeparamref name="TComponent"/>.</returns>
-        public static TComponent AddOrReplaceComponent<TComponent>(this GameObject gameObject) 
+        public static TComponent AddOrReplaceComponent<TComponent>(this GameObject gameObject)
             where TComponent : Component
         {
             if (gameObject.TryGetComponent(out TComponent component))
@@ -178,7 +183,7 @@ namespace StephanHooft.Extensions
         /// <returns>A <typeparamref name="TComponent"/>.</returns>
         public static TComponent GetEssentialComponent<TComponent>
             (this GameObject gameObject, bool destroyGameObjectOnFailure = false)
-            where TComponent: Component
+            where TComponent : Component
         {
             if (gameObject.TryGetComponent(out TComponent component))
                 return
@@ -201,7 +206,7 @@ namespace StephanHooft.Extensions
         /// <returns>A <typeparamref name="TComponent"/>.</returns>
         public static TComponent GetEssentialComponentInChildren<TComponent>
             (this GameObject gameObject, bool destroyGameObjectOnFailure = false)
-            where TComponent: Component
+            where TComponent : Component
         {
             var component = gameObject.GetComponentInChildren<TComponent>();
             if (component != null)
@@ -209,7 +214,7 @@ namespace StephanHooft.Extensions
                     component;
             else
             {
-                if(destroyGameObjectOnFailure)
+                if (destroyGameObjectOnFailure)
                     EditModeSafe.Destroy(gameObject);
                 throw
                     new ComponentNotFoundException<TComponent>();
@@ -248,7 +253,7 @@ namespace StephanHooft.Extensions
         ///  <see cref="GameObject"/> if no <typeparamref name="TComponent"/> is found.</param>
         /// <returns>A <typeparamref name="TComponent"/>.</returns>
         public static TComponent GetEssentialComponentInParent<TComponent>
-            (this GameObject gameObject, bool destroyGameObjectOnFailure = false) 
+            (this GameObject gameObject, bool destroyGameObjectOnFailure = false)
             where TComponent : Component
         {
             var component = gameObject.GetComponentInParent<TComponent>();
@@ -270,7 +275,7 @@ namespace StephanHooft.Extensions
         /// </summary>
         /// <returns>A <typeparamref name="TComponent"/>.</returns>
         public static TComponent GetOrAddComponent<TComponent>(this GameObject gameObject)
-            where TComponent: Component
+            where TComponent : Component
         {
             if (!gameObject.TryGetComponent(out TComponent component))
                 component = gameObject.AddComponent<TComponent>();
@@ -285,10 +290,12 @@ namespace StephanHooft.Extensions
         /// <returns><see cref="true"/> if the <see cref="GameObject"/> has a <see cref="Component"/> of
         /// <see cref="Type"/> <typeparamref name="TComponent"/>.</returns>
         public static bool HasComponent<TComponent>(this GameObject gameObject)
-            where TComponent: Component
+            where TComponent : Component
         {
             return
                 gameObject.GetComponent<TComponent>() != null;
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion        
     }
 }

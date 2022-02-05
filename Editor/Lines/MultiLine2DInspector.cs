@@ -1,6 +1,4 @@
-#if UNITY_EDITOR
 using UnityEditor;
-#endif
 using UnityEngine;
 
 namespace StephanHooft.Lines.EditorScripts
@@ -12,14 +10,20 @@ namespace StephanHooft.Lines.EditorScripts
     [CustomEditor(typeof(MultiLine2D))]
     public class MultiLine2DInspector : Editor
     {
+        #region Fields
+
         private MultiLine2D line;
         private Transform handleTransform;
         private Quaternion handleRotation;
 
         private int selectedIndex = -1;
 
-        private const float handleSize = 0.04f;
-        private const float pickSize = 0.06f;
+        private static readonly float handleSize = 0.04f;
+        private static readonly float pickSize = 0.06f;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Editor Implementation
 
         public override void OnInspectorGUI()
         {
@@ -59,6 +63,10 @@ namespace StephanHooft.Lines.EditorScripts
             DrawAllNodes();
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Methods
+
         private void SetLoop(bool loop)
         {
             line.Loop = loop;
@@ -70,7 +78,7 @@ namespace StephanHooft.Lines.EditorScripts
             for (int i = 1; i < line.NodeCount; i++)
             {
                 Handles.DrawLine(
-                    handleTransform.TransformPoint(line[i-1]),
+                    handleTransform.TransformPoint(line[i - 1]),
                     handleTransform.TransformPoint(line[i]),
                     2f);
             }
@@ -145,6 +153,8 @@ namespace StephanHooft.Lines.EditorScripts
                 line[index] = point;
             }
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 #endif
 }

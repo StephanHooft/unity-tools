@@ -9,6 +9,8 @@ namespace StephanHooft.Lines
     [Serializable]
     public struct BezierControlPoint2D
     {
+        #region Properties
+
         /// <summary>
         /// The control point mode enforced by the node.
         /// </summary>
@@ -21,11 +23,16 @@ namespace StephanHooft.Lines
                 EnforceMode(2, positions[2]);
             }
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Fields
 
         [SerializeField] private BezierControlPointMode mode;
         [SerializeField] private Vector2[] positions;
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Constructors
 
         /// <summary>
         /// Create a new <see cref="BezierControlPoint2D"/>.
@@ -41,7 +48,9 @@ namespace StephanHooft.Lines
             EnforceMode(2, positions[2]);
         }
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Methods
 
         /// <summary>
         /// Get the position of one of the <see cref="BezierControlPoint2D"/>'s points.
@@ -79,8 +88,6 @@ namespace StephanHooft.Lines
             positions[pointIndex] = position;
         }
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
         private void EnforceMode(int pointIndex, Vector2 position)
         {
             Vector2 offset = position - positions[0];
@@ -92,5 +99,7 @@ namespace StephanHooft.Lines
                 positions[pointIndex == 1 ? 2 : 1] = positions[0] - offset.normalized * distance;
             }
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

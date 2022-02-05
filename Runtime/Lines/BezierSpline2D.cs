@@ -8,6 +8,29 @@ namespace StephanHooft.Lines
     /// </summary>
     public class BezierSpline2D : SegmentedLine2D
     {
+        #region Fields
+
+        [SerializeField] private bool loop;
+        [SerializeField] private BezierControlPoint2D[] points;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region MonoBehaviour Implementation
+
+        public void Reset()
+        {
+            points = new BezierControlPoint2D[2]
+            {
+                new BezierControlPoint2D(Vector2.zero, Vector2.left, Vector2.right, BezierControlPointMode.Aligned),
+                new BezierControlPoint2D(new Vector2(3, 0), new Vector2(2, 0), new Vector2(4, 0), BezierControlPointMode.Aligned)
+            };
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region ISegmentedLine2D Implementation
+
+        #region Properties
+
         public override bool Loop
         {
             get => loop;
@@ -24,10 +47,84 @@ namespace StephanHooft.Lines
             set => SetControlPoint(0, index, value);
         }
 
-        [SerializeField] private bool loop;
-        [SerializeField] private BezierControlPoint2D[] points;
+        #endregion
+        #region Methods
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        public override Vector2 GetPositionOnLine(float t)
+        {
+            int i;
+            if (t >= 1f)
+            {
+                t = 1f;
+                i = SegmentCount - 1;
+            }
+            else
+            {
+                t = Mathf.Clamp01(t) * SegmentCount;
+                i = (int)t;
+                t -= i;
+            }
+            return
+                transform.TransformPoint(BezierMath.GetPoint(
+                    points[i].GetPosition(0),
+                    points[i].GetPosition(2),
+                    points[loop && i == NodeCount - 1 ? 0 : i + 1].GetPosition(1),
+                    points[loop && i == NodeCount - 1 ? 0 : i + 1].GetPosition(0), t));
+        }
+
+        public override Vector2 GetDirectionOnLine(float t)
+        {
+            return
+                GetVelocityOnLine(t).normalized;
+        }
+
+        public override Vector2 GetVelocityOnLine(float t)
+        {
+            int i;
+            if (t >= 1f)
+            {
+                t = 1f;
+                i = SegmentCount - 1;
+            }
+            else
+            {
+                t = Mathf.Clamp01(t) * SegmentCount;
+                i = (int)t;
+                t -= i;
+            }
+            return transform.TransformPoint(BezierMath.GetFirstDerivative(
+                points[i].GetPosition(0),
+                points[i].GetPosition(2),
+                points[loop && i == NodeCount - 1 ? 0 : i + 1].GetPosition(1),
+                points[loop && i == NodeCount - 1 ? 0 : i + 1].GetPosition(0), t))
+                - transform.position;
+        }
+
+        public override void AddNode()
+        {
+            var point = points[points.Length - 1].GetPosition(2);
+            var direction = GetDirectionOnLine(1f);
+            BezierControlPoint2D node = new BezierControlPoint2D(
+                point + (direction * 2),
+                point + (direction * 1),
+                point + (direction * 3),
+                points[points.Length - 1].ControlPointMode);
+            Array.Resize(ref points, points.Length + 1);
+            points[points.Length - 1] = node;
+        }
+
+        public override void RemoveNode()
+        {
+            if (NodeCount > 2)
+                Array.Resize(ref points, points.Length - 1);
+            else
+                Debug.LogWarning("Removing the last 2 spline nodes is not permitted.");
+        }
+        #endregion
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Methods
 
         /// <summary>
         /// Gets the control point mode of one of the <see cref="BezierSpline2D"/>'s nodes.
@@ -94,85 +191,7 @@ namespace StephanHooft.Lines
                     new ArgumentOutOfRangeException("pointIndex");
             points[nodeIndex].SetPosition(pointIndex, position);
         }
-
-        public override Vector2 GetPositionOnLine(float t)
-        {
-            int i;
-            if (t >= 1f)
-            {
-                t = 1f;
-                i = SegmentCount - 1;
-            }
-            else
-            {
-                t = Mathf.Clamp01(t) * SegmentCount;
-                i = (int)t;
-                t -= i;
-            }
-            return
-                transform.TransformPoint(BezierMath.GetPoint(
-                    points[i].GetPosition(0), 
-                    points[i].GetPosition(2), 
-                    points[loop && i == NodeCount - 1 ? 0 : i + 1].GetPosition(1), 
-                    points[loop && i == NodeCount - 1 ? 0 : i + 1].GetPosition(0), t));
-        }
-
-        public override Vector2 GetDirectionOnLine(float t)
-        {
-            return
-                GetVelocityOnLine(t).normalized;
-        }
-
-        public override Vector2 GetVelocityOnLine(float t)
-        {
-            int i;
-            if (t >= 1f)
-            {
-                t = 1f;
-                i = SegmentCount - 1;
-            }
-            else
-            {
-                t = Mathf.Clamp01(t) * SegmentCount;
-                i = (int)t;
-                t -= i;
-            }
-            return transform.TransformPoint(BezierMath.GetFirstDerivative(
-                points[i].GetPosition(0), 
-                points[i].GetPosition(2), 
-                points[loop && i == NodeCount - 1 ? 0 : i + 1].GetPosition(1), 
-                points[loop && i == NodeCount - 1 ? 0 : i + 1].GetPosition(0), t))
-                - transform.position;
-        }
-
-        public override void AddNode()
-        {
-            var point = points[points.Length - 1].GetPosition(2);
-            var direction = GetDirectionOnLine(1f);
-            BezierControlPoint2D node = new BezierControlPoint2D(
-                point + (direction * 2),
-                point + (direction * 1), 
-                point + (direction * 3), 
-                points[points.Length -1].ControlPointMode);
-            Array.Resize(ref points, points.Length + 1);
-            points[points.Length - 1] = node;
-        }
-
-        public override void RemoveNode()
-        {
-            if (NodeCount > 2)
-                Array.Resize(ref points, points.Length - 1);
-            else
-                Debug.LogWarning("Removing the last 2 spline nodes is not permitted.");
-        }
-
-        public void Reset()
-        {
-            points = new BezierControlPoint2D[2] 
-            { 
-                new BezierControlPoint2D(Vector2.zero, Vector2.left, Vector2.right, BezierControlPointMode.Aligned),
-                new BezierControlPoint2D(new Vector2(3, 0), new Vector2(2, 0), new Vector2(4, 0), BezierControlPointMode.Aligned)
-            };
-        }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

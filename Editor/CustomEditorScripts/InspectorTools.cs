@@ -4,8 +4,13 @@ using UnityEngine;
 
 namespace StephanHooft.CustomEditorScripts
 {
+    /// <summary>
+    /// A collection of helper methods for use in custom inspectors.
+    /// </summary>
     public static class InspectorTools
     {
+        #region Static Methods
+
         /// <summary>
         /// Draws a toggle based on a <see cref="bool"/> <paramref name="field"/> value in a custom inspector and
         /// returns whether its value was changed. The <paramref name="modified"/> out <see cref="bool"/> can be used
@@ -60,5 +65,7 @@ namespace StephanHooft.CustomEditorScripts
             layerMask.value = mask;
             return layerMask;
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

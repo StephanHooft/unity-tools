@@ -7,11 +7,20 @@ namespace StephanHooft.LineRendererUpdate
     /// </summary>
     public class LineRendererUpdater : MonoBehaviour
     {
-        private ILineRendererUpdateSource source;
-        private LineRenderer lineRenderer;
+        #region Properties
+
         private bool Set => source != null;
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Fields
+
+        private ILineRendererUpdateSource source;
+        private LineRenderer lineRenderer;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region MonoBehaviour Implementation
 
         private void OnEnable()
         {
@@ -22,13 +31,14 @@ namespace StephanHooft.LineRendererUpdate
         {
             if (Set)
             {
-                if(lineRenderer.positionCount != source.PositionCount)
+                if (lineRenderer.positionCount != source.PositionCount)
                     lineRenderer.positionCount = source.PositionCount;
                 lineRenderer.SetPositions(source.GetPositions());
             }
         }
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Methods
 
         /// <summary>
         /// Set the <see cref="ILineRendererUpdateSource"/> to consult for positions every frame.
@@ -39,5 +49,7 @@ namespace StephanHooft.LineRendererUpdate
             this.source = source;
             Update();
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

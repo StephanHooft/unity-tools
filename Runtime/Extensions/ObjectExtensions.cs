@@ -1,11 +1,16 @@
+using UnityEngine;
 using StephanHooft.EditorSafe;
 using System;
-using UnityEngine;
 
 namespace StephanHooft.Extensions
 {
+    /// <summary>
+    /// Extension methods for <see cref="Object"/>.
+    /// </summary>
     public static class ObjectExtensions
     {
+        #region Static Methods
+
         /// <summary>
         /// Checks whether the <see cref="object"/> is Null.
         /// </summary>
@@ -40,7 +45,21 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// <para>Throws an <see cref="Exception"/> if the <typeparamref name="T"/> is null.</para>
+        /// Throws an <see cref="ArgumentNullException"/> if the <typeparamref name="T"/> is null. Returns the <typeparamref name="T"/> otherwise.
+        /// </summary>
+        /// <param name="paramName">The parameter name to use if an <see cref="ArgumentNullException"/> is thrown.</param>
+        /// <returns>The <typeparamref name="T"/>.</returns>
+        public static T MustNotBeNull<T>(this T obj, string paramName)
+        {
+            if (obj == null)
+                throw
+                    new ArgumentNullException(paramName);
+            return
+                obj;
+        }
+
+        /// <summary>
+        /// Throws an <see cref="ArgumentNullException"/> if the <typeparamref name="T"/> is null.
         /// <para><paramref name="destroyIfNull"/> will also be destroyed if null.</para>
         /// </summary>
         /// <param name="destroyIfNull">The <see cref="GameObject"/> to destroy if the <typeparamref name="T"/> reference is null.</param>
@@ -54,10 +73,34 @@ namespace StephanHooft.Extensions
             {
                 EditModeSafe.Destroy(destroyIfNull);
                 throw
-                    new Exception(string.Format("{0} is null.", obj.GetType()));
+                    new ArgumentNullException(string.Format("{0} is null.", obj.GetType().ToString()));
             }
             return
                 obj;
         }
+
+        /// <summary>
+        /// Throws an <see cref="ArgumentNullException"/> if the <typeparamref name="T"/> is null.
+        /// <para><paramref name="destroyIfNull"/> will also be destroyed if null.</para>
+        /// </summary>
+        /// <param name="destroyIfNull">The <see cref="GameObject"/> to destroy if the <typeparamref name="T"/> reference is null.</param>
+        /// <param name="paramName">The parameter name to use if an <see cref="ArgumentNullException"/> is thrown.</param>
+        /// <returns>The <typeparamref name="T"/>.</returns>
+        public static T MustNotBeNull<T>(this T obj, GameObject destroyIfNull, string paramName)
+        {
+            if (destroyIfNull == null)
+                throw
+                    new ArgumentNullException("objectToDestroyIfNull");
+            if (obj == null)
+            {
+                EditModeSafe.Destroy(destroyIfNull);
+                throw
+                    new ArgumentNullException(string.Format("{0} is null.", paramName));
+            }
+            return
+                obj;
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

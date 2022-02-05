@@ -1,6 +1,4 @@
-#if UNITY_EDITOR
 using UnityEditor;
-#endif
 using UnityEngine;
 
 namespace StephanHooft.Lines.EditorScripts
@@ -12,6 +10,8 @@ namespace StephanHooft.Lines.EditorScripts
     [CustomEditor(typeof(BezierSpline2D))]
     public class BezierSpline2DInspector : Editor
     {
+        #region Fields
+
         private BezierSpline2D spline;
         private Transform handleTransform;
         private Quaternion handleRotation;
@@ -30,6 +30,10 @@ namespace StephanHooft.Lines.EditorScripts
             new Color(1f, 0.6f, 0f, 1f),
             new Color(1f, 1f, 0f, 1f)
         };
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Editor Implementation
 
         public override void OnInspectorGUI()
         {
@@ -69,11 +73,15 @@ namespace StephanHooft.Lines.EditorScripts
             DrawAllNodes();
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Methods
+
         private void SetLoop(bool loop)
         {
             if (!loop)
             {
-                if(selectedIndex == 0 && selectedPointIndex == 1 || selectedIndex == spline.NodeCount - 1 && selectedPointIndex == 2)
+                if (selectedIndex == 0 && selectedPointIndex == 1 || selectedIndex == spline.NodeCount - 1 && selectedPointIndex == 2)
                 {
                     selectedIndex = -1;
                     selectedPointIndex = -1;
@@ -90,7 +98,7 @@ namespace StephanHooft.Lines.EditorScripts
                     handleTransform.TransformPoint(spline.GetControlPoint(i - 1, 0)),
                     handleTransform.TransformPoint(spline.GetControlPoint(i, 0)),
                     handleTransform.TransformPoint(spline.GetControlPoint(i - 1, 2)),
-                    handleTransform.TransformPoint(spline.GetControlPoint(i, 1)), 
+                    handleTransform.TransformPoint(spline.GetControlPoint(i, 1)),
                     Color.white, null, 2f);
             }
             if (spline.Loop)
@@ -127,9 +135,9 @@ namespace StephanHooft.Lines.EditorScripts
             var controlPointPre = handleTransform.TransformPoint(spline.GetControlPoint(index, 1));
             var controlPointPost = handleTransform.TransformPoint(spline.GetControlPoint(index, 2));
             Handles.color = Color.gray;
-            if(spline.Loop || index > 0)
+            if (spline.Loop || index > 0)
                 Handles.DrawLine(point, controlPointPre);
-            if(spline.Loop || index < spline.NodeCount - 1)
+            if (spline.Loop || index < spline.NodeCount - 1)
                 Handles.DrawLine(point, controlPointPost);
             for (int i = 0; i <= 2; i++)
             {
@@ -207,6 +215,8 @@ namespace StephanHooft.Lines.EditorScripts
                 spline.SetControlPoint(selectedIndex, index, point);
             }
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 #endif
 }

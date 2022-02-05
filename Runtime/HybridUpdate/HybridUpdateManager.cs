@@ -5,40 +5,59 @@ using UnityEngine;
 namespace StephanHooft.HybridUpdate
 {
     /// <summary>
-    /// A class that invokes a C# event whenever FixedUpdate() is called, and whenever more than one Update() is called after the latest FixedUpdate().
-    /// <para>
-    /// The resulting event can be used to update something once per Update(), without actually falling out of sync with FixedUpdate().
-    /// </para>
+    /// A class that invokes a C# event whenever FixedUpdate() is called, and whenever more than one Update() is called
+    /// after the latest FixedUpdate().
+    /// <para>The resulting event can be used to update something once per Update(), without actually falling out of
+    /// sync with FixedUpdate().</para>
     /// </summary>
-    /// <remarks>When using the <see cref="HybridUpdateManager"/> to update a <see cref="MonoBehaviour"/>, you should replace the
-    /// <see cref="MonoBehaviour"/>'s Update() and FixedUpdate() with a single "HybridUpdate" method. This method should then be registered with 
-    /// <see cref="RegisterUpdateCallback(Action{float}, int)"/> in OnEnable() and unregistered with <see cref="UnregisterUpdateCallback(Action{float})"/>
-    /// in OnDisable().</remarks>
+    /// <remarks><para>When using the <see cref="HybridUpdateManager"/> to update a <see cref="MonoBehaviour"/>, you should
+    /// replace the <see cref="MonoBehaviour"/>'s Update() and FixedUpdate() with a single "HybridUpdate" method. This
+    /// method should then be registered with <see cref="RegisterUpdateCallback(Action{float}, int)"/> in OnEnable() and
+    /// unregistered with <see cref="UnregisterUpdateCallback(Action{float})"/> in OnDisable().</para></remarks>
     public class HybridUpdateManager : MonoBehaviour
     {
+        #region Properties
+
         private bool SkippedFixedUpdate => !fixedLast;
         private bool TimeStolen => totalStolenTime > 0f;
-        private float HybridDeltaTime => TimeStolen ? 
+        private float HybridDeltaTime => TimeStolen ?
             Mathf.Max(Time.fixedDeltaTime - totalStolenTime, 0f) : Time.fixedDeltaTime;
         private static HybridUpdateManager LazyInstance
         {
             get
             {
-                if(instance == null)
+                if (instance == null)
                 {
                     instance = new GameObject("[HybridUpdater]").AddComponent<HybridUpdateManager>();
                     instance.transform.SetAsFirstSibling();
                 }
-                return 
+                return
                     instance;
             }
         }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Fields
+
         private bool fixedLast;
         private float totalStolenTime = 0f;
         private readonly List<PriorityCallbackPair> callbacks = new List<PriorityCallbackPair>();
         private static HybridUpdateManager instance;
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region MonoBehaviour Implementation
+
+        private void Awake()
+        {
+            if (instance != null)
+            {
+                Destroy(this);
+                throw
+                    new InvalidOperationException(string.Format("Only one {0} may exist at once.", GetType().Name));
+            }
+        }
 
         private void FixedUpdate()
         {
@@ -53,7 +72,9 @@ namespace StephanHooft.HybridUpdate
             ClockUpdate(Time.deltaTime);
         }
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Methods
 
         /// <summary>
         /// Register a method to callback whenever <see cref="HybridUpdateManager"/> fires.
@@ -63,12 +84,12 @@ namespace StephanHooft.HybridUpdate
         /// <param name="callback">The method to register.</param>
         public static void RegisterUpdateCallback(Action<float> callback, int priority = 0)
         {
-            if (callback == null) 
-                throw 
+            if (callback == null)
+                throw
                     new ArgumentNullException("callback");
             PriorityCallbackPair existing = LazyInstance.callbacks.Find(pair => pair.Callback == callback);
-            if (existing != null) 
-                throw 
+            if (existing != null)
+                throw
                     new InvalidOperationException("Cannot register the same item twice.");
             LazyInstance.callbacks.Add(new PriorityCallbackPair(callback, priority));
             LazyInstance.callbacks.Sort();
@@ -80,17 +101,15 @@ namespace StephanHooft.HybridUpdate
         /// <param name="callback">The method to unregister.</param>
         public static void UnregisterUpdateCallback(Action<float> callback)
         {
-            if (callback == null) 
-                throw 
+            if (callback == null)
+                throw
                     new ArgumentNullException("callback");
-            if (instance == null) 
+            if (instance == null)
                 return;
             var existing = instance.callbacks.Find(pair => pair.Callback == callback);
             if (existing != null)
                 instance.callbacks.Remove(existing);
         }
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         private void InvokeCallbacks(float deltaTime)
         {
@@ -113,26 +132,45 @@ namespace StephanHooft.HybridUpdate
             fixedLast = false;
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region PriorityCallbackPair Subclass
+
         private class PriorityCallbackPair : IComparable
         {
+            #region Properties
             public Action<float> Callback { get; private set; }
             public int Priority { get; private set; }
 
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            #endregion
+            #region Constructors and Finaliser
             public PriorityCallbackPair(Action<float> callback, int priority)
             {
                 Callback = callback;
                 Priority = priority;
             }
 
+            ~PriorityCallbackPair()
+            { }
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            #endregion
+            #region Methods
+
             public int CompareTo(object obj)
             {
                 if (obj is PriorityCallbackPair p)
-                    return 
+                    return
                         Priority.CompareTo(p.Priority);
-                else 
-                    throw 
+                else
+                    throw
                         new NotImplementedException();
             }
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            #endregion
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

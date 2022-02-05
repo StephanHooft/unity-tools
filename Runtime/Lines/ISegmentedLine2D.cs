@@ -7,6 +7,8 @@ namespace StephanHooft.Lines
     /// </summary>
     public interface ISegmentedLine2D
     {
+        #region Interface Properties
+
         /// <summary>
         /// Whether or not the <see cref="ISegmentedLine2D"/> loops around.
         /// </summary>
@@ -27,6 +29,10 @@ namespace StephanHooft.Lines
         /// </summary>
         /// <param name="index">The <see cref="int "/> index of the node to set.</param>
         public Vector2 this[int index] { get; set; }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Interface Methods
 
         /// <summary>
         /// Add a node (and thus a line segment) to the <see cref="ISegmentedLine2D"/>.
@@ -58,5 +64,8 @@ namespace StephanHooft.Lines
         /// Remove a node (and thus a line segment) from the <see cref="ISegmentedLine2D"/>.
         /// </summary>
         public void RemoveNode();
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

@@ -10,6 +10,8 @@ namespace StephanHooft.CustomAttributes.EditorScripts
     [CustomPropertyDrawer(typeof(MinMaxAttribute))]
     public class MinMaxSliderDrawer : PropertyDrawer
     {
+        #region PropertyDrawer Implementation
+
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             var minMaxAttribute = (MinMaxAttribute)attribute;
@@ -56,11 +58,14 @@ namespace StephanHooft.CustomAttributes.EditorScripts
                 if (EditorGUI.EndChangeCheck())
                     property.vector2IntValue = vector;
             }
-            else 
+            else
                 throw
                     new System.Exception("MinMaxAttribute can only be assigned to Vector2 and Vector2Int.");
             EditorGUI.indentLevel = priorIndentLevel;
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Methods
 
         /// <summary>
         /// Split a <see cref="Rect"/> <paramref name="controlRect"/> into 3 <see cref="Rect"/>s.
@@ -93,5 +98,7 @@ namespace StephanHooft.CustomAttributes.EditorScripts
             return
                 rects;
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

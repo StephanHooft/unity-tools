@@ -9,6 +9,21 @@ namespace StephanHooft.TypeReferences
 	[AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
 	public sealed class ClassTypeImplementsAttribute : ClassTypeConstraintAttribute
 	{
+		#region Properties
+
+		/// <summary>
+		/// Gets the <see cref="Type"/> of interface that selectable classes must implement.
+		/// </summary>
+		public Type InterfaceType { get; private set; }
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		#endregion
+		#region Fields
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		#endregion
+		#region Constructors and Finaliser
+
 		/// <summary>
 		/// Creates a new <see cref="ClassTypeImplementsAttribute"/>.
 		/// </summary>
@@ -19,13 +34,15 @@ namespace StephanHooft.TypeReferences
 		/// Creates a new <see cref="ClassTypeImplementsAttribute"/>.
 		/// </summary>
 		/// <param name="interfaceType">Type of interface that selectable classes must implement.</param>
-		public ClassTypeImplementsAttribute(Type interfaceType) =>		
+		public ClassTypeImplementsAttribute(Type interfaceType) =>
 			InterfaceType = interfaceType;
 
-		/// <summary>
-		/// Gets the <see cref="Type"/> of interface that selectable classes must implement.
-		/// </summary>
-		public Type InterfaceType { get; private set; }
+		~ClassTypeImplementsAttribute()
+		{ }
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		#endregion
+		#region Methods
 
 		/// <inheritdoc/>
 		public override bool IsConstraintSatisfied(Type type)
@@ -38,5 +55,8 @@ namespace StephanHooft.TypeReferences
 			return
 				false;
 		}
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		#endregion
 	}
 }

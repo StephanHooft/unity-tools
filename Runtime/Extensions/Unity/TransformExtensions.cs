@@ -4,8 +4,13 @@ using UnityEngine;
 
 namespace StephanHooft.Extensions
 {
+    /// <summary>
+    /// Extension methods for <see cref="Transform"/>.
+    /// </summary>
     public static class TransformExtensions
     {
+        #region Static Methods
+
         /// <summary>
         /// Creates a new <see cref="GameObject"/> with the current <see cref="Transform"/> as its parent.
         /// </summary>
@@ -140,5 +145,7 @@ namespace StephanHooft.Extensions
             transform.localPosition = position;
             transform.localRotation = rotation;
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion        
     }
 }

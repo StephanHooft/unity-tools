@@ -3,15 +3,20 @@ using UnityEngine;
 
 namespace StephanHooft.Extensions
 {
+    /// <summary>
+    /// Extension methods for <see cref="int"/>.
+    /// </summary>
     public static class IntExtensions
     {
+        #region Static Methods
+
         /// <summary>
         /// Returns the absolute value of the <see cref="int"/>.
         /// </summary>
         /// <returns>The absolute value of the <see cref="int"/>.</returns>
         public static int Abs(this int i)
         {
-            return 
+            return
                 Math.Abs(i);
         }
 
@@ -24,7 +29,7 @@ namespace StephanHooft.Extensions
         /// <returns>The <see cref="int"/> result between the <paramref name="min"/> and <paramref name="max"/> values. </returns>
         public static int Clamp(this int i, int min, int max)
         {
-            return 
+            return
                 Mathf.Clamp(i, min, max);
         }
 
@@ -84,7 +89,7 @@ namespace StephanHooft.Extensions
         {
             if (clamp)
                 i = i.Clamp(inMin, inMax);
-            return 
+            return
                 (i - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
         }
 
@@ -287,18 +292,20 @@ namespace StephanHooft.Extensions
         public static int Wrap(this int i, int min, int max)
         {
             if (max <= min)
-                throw 
+                throw
                     new ArgumentException("Value of max must be greater than min.", "max");
             int radix = max - min + 1;
             if (i < min)
-                return 
+                return
                     i + ((max - i) / radix) * radix;
             else if (i > max)
-                return 
+                return
                     i - ((i - min) / radix) * radix;
             else
-                return 
+                return
                     i;
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

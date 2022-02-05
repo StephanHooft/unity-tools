@@ -3,8 +3,13 @@ using System.Collections.Generic;
 
 namespace StephanHooft.Extensions
 {
+    /// <summary>
+    /// Extension methods for <see cref="Dictionary{TKey, TValue}"/>.
+    /// </summary>
     public static class DictionaryExtensions
     {
+        #region Static Methods
+
         /// <summary>
         /// Adds the given <typeparamref name="TKey"/> and <typeparamref name="TValue"/> to the given
         /// <see cref="Dictionary{TKey, TValue}"/> if the <typeparamref name="TKey"/> is NOT present.
@@ -56,7 +61,7 @@ namespace StephanHooft.Extensions
                 throw
                     new ArgumentException(string.Format(
                         "Key {0} must be present in Dictionary<{1},{2}> {3}.",
-                        key, typeof(TKey), typeof(TValue),dictionaryName));
+                        key, typeof(TKey), typeof(TValue), dictionaryName));
         }
 
         /// <summary>
@@ -74,7 +79,7 @@ namespace StephanHooft.Extensions
             else
                 throw
                     new ArgumentException(string.Format(
-                        "Value {0} must be present in Dictionary<{1},{2}> {3}.", 
+                        "Value {0} must be present in Dictionary<{1},{2}> {3}.",
                         value, typeof(TKey), typeof(TValue), dictionaryName));
         }
 
@@ -132,5 +137,7 @@ namespace StephanHooft.Extensions
             return
                 true;
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

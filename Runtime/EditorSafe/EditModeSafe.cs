@@ -7,10 +7,17 @@ namespace StephanHooft.EditorSafe
     /// </summary>
     public static class EditModeSafe
     {
+        #region Properties
+
         private static bool InPlayMode => Application.isPlaying;
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Static Methods
+
         /// <summary>
-        /// A Destroy method that calls <see cref="Object.DestroyImmediate(Object)"/> instead if the application is not playing.
+        /// A Destroy method that calls <see cref="Object.DestroyImmediate(Object)"/> instead if the application is not
+        /// playing.
         /// </summary>
         /// <param name="obj">The <see cref="Object"/> to destroy.</param>
         public static void Destroy(Object obj)
@@ -20,5 +27,7 @@ namespace StephanHooft.EditorSafe
             else
                 Object.DestroyImmediate(obj);
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

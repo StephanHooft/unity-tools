@@ -5,6 +5,7 @@
     /// </summary>
     public interface IState
     {
+        #region Interface Methods
         /// <summary>
         /// Perform set-up behaviour for the <see cref="IState"/> upon being entered.
         /// </summary>
@@ -21,6 +22,9 @@
         /// Perform clean-up behaviour for the <see cref="IState"/> upon being exited.
         /// </summary>
         void ExitState();
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }
 

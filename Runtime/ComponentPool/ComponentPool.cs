@@ -18,6 +18,8 @@ namespace StephanHooft.ComponentPool
     /// </summary>
     public sealed class ComponentPool<T> where T : Component
     {
+        #region Properties
+
         /// <summary>
         /// The maximum amount of <typeparamref name="T"/>s the <see cref="ComponentPool{T}"/> will store before
         /// destroying excess <typeparamref name="T"/>s.
@@ -29,10 +31,16 @@ namespace StephanHooft.ComponentPool
         /// </summary>
         public int Count => componentQueue.Count;
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Fields
+
         private readonly List<T> ownedComponents = new List<T>();
         private readonly Queue<T> componentQueue = new Queue<T>();
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Constructors and Finaliser
 
         /// <summary>
         /// Create a new <see cref="ComponentPool{T}"/>.
@@ -41,12 +49,24 @@ namespace StephanHooft.ComponentPool
         /// should store before destroying excess <typeparamref name="T"/>s.</param>
         public ComponentPool(int limit = 10)
         {
-            if (limit <= 0) 
+            if (limit <= 0)
                 throw new ArgumentOutOfRangeException("queueLimit", "queueLimit must be greater than 0.");
             Limit = limit;
         }
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>
+        /// Finaliser.
+        /// </summary>
+        ~ComponentPool()
+        { }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Static Methods
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Methods
 
         /// <summary>
         /// Create a new <see cref="GameObject"/> with a <typeparamref name="T"/> attached to it, and add it to the
@@ -62,7 +82,7 @@ namespace StephanHooft.ComponentPool
                 ownedComponents.Add(newComponent);
                 componentQueue.Enqueue(newComponent);
             }
-            else 
+            else
                 Debug.LogWarning("Cannot add Components in excess of the ComponentPool's QueueLimit.");
         }
 
@@ -78,13 +98,13 @@ namespace StephanHooft.ComponentPool
         /// <param name="component">The <typeparamref name="T"/> to add to the <see cref="ComponentPool{T}"/>.</param>
         public void Add(T component)
         {
-            if (component == null) 
-                throw 
+            if (component == null)
+                throw
                     new ArgumentNullException("component");
             if (ownedComponents.Contains(component))
-                throw 
+                throw
                     new InvalidOperationException(
-                        string.Format("Component of {0} already added to ComponentPool.",component.name));
+                        string.Format("Component of {0} already added to ComponentPool.", component.name));
             component.gameObject.SetActive(false);
             ownedComponents.Add(component);
             componentQueue.Enqueue(component);
@@ -288,7 +308,7 @@ namespace StephanHooft.ComponentPool
             if (parent == null)
                 throw
                     new ArgumentNullException("parent");
-            component.name = name ?? 
+            component.name = name ??
                 throw
                     new ArgumentNullException("name");
             if (componentQueue.Count >= Limit)
@@ -329,7 +349,7 @@ namespace StephanHooft.ComponentPool
                 throw
                     new ArgumentNullException("parent");
             foreach (T component in ownedComponents)
-                if (component != null && !componentQueue.Contains(component)) 
+                if (component != null && !componentQueue.Contains(component))
                     Return(component, parent);
             ownedComponents.RemoveAll(item => item == null);
         }
@@ -391,8 +411,6 @@ namespace StephanHooft.ComponentPool
                 EditModeSafe.Destroy(componentQueue.Dequeue().gameObject);
         }
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
         /// <summary>
         /// Destroy the <see cref="GameObject"/> of a <typeparamref name="T"/> that came from this
         /// <see cref="ComponentPool{T}"/>.
@@ -405,7 +423,7 @@ namespace StephanHooft.ComponentPool
                     new InvalidOperationException("ComponentPool may not destroy a Component while it's in a Queue.");
             if (FromThisPool(componentToDestroy))
                 ownedComponents.Remove(componentToDestroy);
-            else 
+            else
                 throw
                     new InvalidOperationException("ComponentPool may only destroy Components that it has created.");
             EditModeSafe.Destroy(componentToDestroy.gameObject);
@@ -422,5 +440,7 @@ namespace StephanHooft.ComponentPool
             return
                 ownedComponents.Contains(component);
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

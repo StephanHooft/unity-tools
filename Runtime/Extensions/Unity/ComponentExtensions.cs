@@ -5,14 +5,19 @@ using UnityEngine;
 
 namespace StephanHooft.Extensions
 {
+    /// <summary>
+    /// Extension methods for <see cref="Component"/>.
+    /// </summary>
     public static class ComponentExtensions
     {
+        #region Static Methods
+
         /// <summary>
         /// Adds a <typeparamref name="TComponent"/> to the <see cref="Component"/>'s <see cref="GameObject"/>,
         /// and replaces an existing one if found.
         /// </summary>
         /// <returns>A <typeparamref name="TComponent"/>.</returns>
-        public static TComponent AddComponent<TComponent>(this Component component) where TComponent: Component
+        public static TComponent AddComponent<TComponent>(this Component component) where TComponent : Component
         {
             return
                 component.gameObject.AddComponent<TComponent>();
@@ -232,5 +237,7 @@ namespace StephanHooft.Extensions
             return
                 component;
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion        
     }
 }

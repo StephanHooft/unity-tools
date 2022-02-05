@@ -2,8 +2,12 @@
 
 namespace StephanHooft.Extensions
 {
+    /// <summary>
+    /// Extension methods for <see cref="Vector3"/>.
+    /// </summary>
     public static class Vector3Extensions
     {
+        #region Static Methods
         /// <summary>
         /// Returns the normalised direction towards another <see cref="Vector3"/> destination.
         /// </summary>
@@ -11,7 +15,7 @@ namespace StephanHooft.Extensions
         /// <returns>The direction from the source <see cref="Vector3"/> to the destination <see cref="Vector3"/>.</returns>
         public static Vector3 DirectionTo(this Vector3 source, Vector3 destination)
         {
-            return 
+            return
                 Vector3.Normalize(destination - source);
         }
 
@@ -22,7 +26,7 @@ namespace StephanHooft.Extensions
         /// <returns>The <see cref="float"/> distance from the <paramref name="source"/> to the <paramref name="destination"/>.</returns>
         public static float DistanceTo(this Vector3 source, Vector3 destination)
         {
-            return 
+            return
                 Vector3.Distance(source, destination);
         }
 
@@ -32,7 +36,7 @@ namespace StephanHooft.Extensions
         /// <returns>A modified <see cref="Vector3"/> with y component set to 0.</returns>
         public static Vector3 Flat(this Vector3 source)
         {
-            return 
+            return
                 new Vector3(source.x, 0, source.z);
         }
 
@@ -42,7 +46,7 @@ namespace StephanHooft.Extensions
         /// <returns>A <see cref="Vector2"/>[].</returns>
         public static Vector2[] ToVector2Array(this Vector3[] array)
         {
-            return 
+            return
                 System.Array.ConvertAll(array, (Vector3 v3) => new Vector2(v3.x, v3.y));
         }
 
@@ -55,7 +59,7 @@ namespace StephanHooft.Extensions
         /// <returns>A <see cref="Vector3"/> with the modified component values.</returns>
         public static Vector3 With(this Vector3 source, float? x = null, float? y = null, float? z = null)
         {
-            return 
+            return
                 new Vector3(x ?? source.x, y ?? source.y, z ?? source.z);
         }
 
@@ -69,5 +73,7 @@ namespace StephanHooft.Extensions
             return
                 Vector3.Normalize(source) * magnitude;
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

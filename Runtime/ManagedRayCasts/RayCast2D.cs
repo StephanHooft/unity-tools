@@ -9,6 +9,8 @@ namespace StephanHooft.ManagedRayCasts
     /// </summary>
     public struct RayCast2D
     {
+        #region Properties
+
         /// <summary>
         /// The <see cref="RayCast2D"/>'s direction.
         /// </summary>
@@ -34,14 +36,14 @@ namespace StephanHooft.ManagedRayCasts
         /// </summary>
         public RaycastHit2D NearestHit => HitSomething ?
             raycastHitBuffer[nearestHitIndex]
-            : throw 
+            : throw
                 new System.InvalidOperationException("No hits.");
 
         /// <summary>
         /// The length of the distance along the <see cref="RayCast2D"/> that is obscured by colliders, (if any).
         /// </summary>
-        public float ObscuredDistance => HitSomething ? 
-            Distance - NearestHit.distance 
+        public float ObscuredDistance => HitSomething ?
+            Distance - NearestHit.distance
             : 0f;
 
         /// <summary>
@@ -52,9 +54,13 @@ namespace StephanHooft.ManagedRayCasts
         /// <summary>
         /// The length of the distance along the <see cref="RayCast2D"/> that is not obscured by colliders, (if any).
         /// </summary>
-        public float UnobscuredDistance => HitSomething ? 
-            NearestHit.distance 
+        public float UnobscuredDistance => HitSomething ?
+            NearestHit.distance
             : Distance;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Fields
 
         private readonly Vector2 origin;
         private readonly Vector2 direction;
@@ -62,7 +68,9 @@ namespace StephanHooft.ManagedRayCasts
         private readonly RaycastHit2D[] raycastHitBuffer;
         private readonly int nearestHitIndex;
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Constructors
 
         /// <summary>
         /// Create a new <see cref="RayCast2D"/>.
@@ -79,7 +87,7 @@ namespace StephanHooft.ManagedRayCasts
             nearestHitIndex = -1;
             raycastHitBuffer = new RaycastHit2D[4];
             var collisions = Physics2D.Raycast(origin, direction, filter, raycastHitBuffer, distance);
-            if(collisions < 4)
+            if (collisions < 4)
                 System.Array.Resize(ref raycastHitBuffer, collisions);
             if (collisions > 0)
             {
@@ -89,5 +97,7 @@ namespace StephanHooft.ManagedRayCasts
                         nearestHitIndex = i;
             }
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

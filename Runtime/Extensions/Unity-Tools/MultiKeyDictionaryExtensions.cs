@@ -3,8 +3,13 @@ using System;
 
 namespace StephanHooft.Extensions
 {
+    /// <summary>
+    /// Extension methods for <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>.
+    /// </summary>
     public static class MultiKeyDictionaryExtensions
     {
+        #region Static Methods
+
         /// <summary>
         /// Adds the given <typeparamref name="TPrimaryKey"/> and <typeparamref name="TValue"/> to the given
         /// <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> if the <typeparamref name="TPrimaryKey"/> is NOT present.
@@ -232,5 +237,7 @@ namespace StephanHooft.Extensions
             return
                 true;
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

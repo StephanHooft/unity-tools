@@ -13,12 +13,18 @@ namespace StephanHooft.TypeReferences.EditorScripts
 	[CustomPropertyDrawer(typeof(ClassTypeConstraintAttribute), true)]
 	public sealed class ClassTypeReferencePropertyDrawer : PropertyDrawer
 	{
+		#region Fields
+
 		private static readonly Dictionary<string, Type> s_TypeMap = new Dictionary<string, Type>();
 		private static readonly int s_ControlHint = typeof(ClassTypeReferencePropertyDrawer).GetHashCode();
 		private static readonly GUIContent s_TempContent = new GUIContent();
 		private static int s_SelectionControlID;
 		private static string s_SelectedClassRef;
 		private static readonly GenericMenu.MenuFunction2 s_OnSelectedTypeName = OnSelectedTypeName;
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		#endregion
+		#region PropertyDrawer Implementation
 
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) =>
 			EditorStyles.popup.CalcHeight(GUIContent.none, 0);
@@ -27,6 +33,10 @@ namespace StephanHooft.TypeReferences.EditorScripts
 		{
 			DrawTypeSelectionControl(position, property.FindPropertyRelative("typeRef"), label, attribute as ClassTypeConstraintAttribute);
 		}
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		#endregion
+		#region Static Properties
 
 		/// <summary>
 		/// Gets or sets a function that returns a collection of types that are to be excluded from drop-down.
@@ -42,17 +52,21 @@ namespace StephanHooft.TypeReferences.EditorScripts
 		/// </remarks>
 		public static Func<ICollection<Type>> ExcludedTypeCollectionGetter { get; set; }
 
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		#endregion
+		#region Static Methods
+
 		private static List<Type> GetFilteredTypes(ClassTypeConstraintAttribute filter)
 		{
 			var types = new List<Type>();
 			var excludedTypes = (ExcludedTypeCollectionGetter != null ? ExcludedTypeCollectionGetter() : null);
 			foreach (var referencedAssembly in AppDomain.CurrentDomain.GetAssemblies())
 			{
-				try 
-				{ 
+				try
+				{
 					FilterTypes(Assembly.Load(referencedAssembly.GetName()), filter, excludedTypes, types);
 				}
-				catch 
+				catch
 				{
 					continue;
 				}
@@ -78,12 +92,12 @@ namespace StephanHooft.TypeReferences.EditorScripts
 
 		private static Type ResolveType(string classRef)
 		{
-            if (!s_TypeMap.TryGetValue(classRef, out Type type))
-            {
-                type = !string.IsNullOrEmpty(classRef) ? Type.GetType(classRef) : null;
-                s_TypeMap[classRef] = type;
-            }
-            return
+			if (!s_TypeMap.TryGetValue(classRef, out Type type))
+			{
+				type = !string.IsNullOrEmpty(classRef) ? Type.GetType(classRef) : null;
+				s_TypeMap[classRef] = type;
+			}
+			return
 				type;
 		}
 
@@ -217,5 +231,7 @@ namespace StephanHooft.TypeReferences.EditorScripts
 			var typeReferenceUpdatedEvent = EditorGUIUtility.CommandEvent("TypeReferenceUpdated");
 			EditorWindow.focusedWindow.SendEvent(typeReferenceUpdatedEvent);
 		}
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		#endregion
 	}
 }

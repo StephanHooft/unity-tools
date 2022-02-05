@@ -2,8 +2,13 @@ using UnityEngine;
 
 namespace StephanHooft.Extensions
 {
+    /// <summary>
+    /// Extension methods for <see cref="Vector2"/>.
+    /// </summary>
     public static class Vector2Extensions
     {
+        #region Static Methods
+
         /// <summary>
         /// Returns direction toward another <see cref="Vector2"/> destination.
         /// </summary>
@@ -58,5 +63,7 @@ namespace StephanHooft.Extensions
             return
                 source.normalized * magnitude;
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

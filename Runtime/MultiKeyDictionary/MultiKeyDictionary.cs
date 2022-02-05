@@ -13,6 +13,8 @@ namespace StephanHooft.MultiKeyDictionary
 	/// <typeparam name="TValue">The type of the values in the dictionary.</typeparam>
 	public class MultiKeyDictionary<TPrimaryKey, TSubKey, TValue>
 	{
+		#region Properties
+
 		/// <summary>
 		/// Gets the number of key/value pairs contained in the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>.
 		/// </summary>
@@ -37,7 +39,7 @@ namespace StephanHooft.MultiKeyDictionary
 		/// Gets a collection containing the <typeparamref name="TPrimaryKey"/>s in the 
 		/// <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>.
 		/// </summary>
-		public Dictionary<TPrimaryKey,TValue>.KeyCollection PrimaryKeys
+		public Dictionary<TPrimaryKey, TValue>.KeyCollection PrimaryKeys
 		{
 			get
 			{
@@ -109,8 +111,8 @@ namespace StephanHooft.MultiKeyDictionary
 				throw
 					new KeyNotFoundException(string.Format("Sub key {0} not found.", subKey.ToString()));
 			}
-            set
-            {
+			set
+			{
 				readerWriterLock.EnterWriteLock();
 				try
 				{
@@ -150,13 +152,18 @@ namespace StephanHooft.MultiKeyDictionary
 				}
 			}
 		}
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		#endregion
+		#region Fields
 
 		internal readonly Dictionary<TPrimaryKey, TValue> baseDictionary = new Dictionary<TPrimaryKey, TValue>();
 		internal readonly Dictionary<TSubKey, TPrimaryKey> subDictionary = new Dictionary<TSubKey, TPrimaryKey>();
 		internal readonly Dictionary<TPrimaryKey, TSubKey> primaryToSubkeyMapping = new Dictionary<TPrimaryKey, TSubKey>();
 		readonly ReaderWriterLockSlim readerWriterLock = new ReaderWriterLockSlim();
 
-		///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		#endregion
+		#region Constructors and Finaliser
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MultiKeyDictionary{K, L, V}"/> class.
@@ -164,7 +171,12 @@ namespace StephanHooft.MultiKeyDictionary
 		public MultiKeyDictionary()
 		{ }
 
-		///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ~MultiKeyDictionary()
+		{ }
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		#endregion
+		#region Methods
 
 		/// <summary>
 		/// Adds the specified <typeparamref name="TPrimaryKey"/>, <typeparamref name="TSubKey"/>, and <typeparamref name="TValue"/>
@@ -314,7 +326,7 @@ namespace StephanHooft.MultiKeyDictionary
 		/// <returns><see cref="true"/> if the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> contains
 		/// an element with the specified <typeparamref name="TValue"/>; otherwise, <see cref="false"/>.</returns>
 		public bool ContainsValue(TValue value)
-        {
+		{
 			readerWriterLock.EnterReadLock();
 			try
 			{
@@ -405,7 +417,7 @@ namespace StephanHooft.MultiKeyDictionary
 			try
 			{
 				if (subDictionary.TryGetValue(subKey, out TPrimaryKey primaryKey))
-					return 
+					return
 						baseDictionary.TryGetValue(primaryKey, out val);
 			}
 			finally
@@ -429,7 +441,7 @@ namespace StephanHooft.MultiKeyDictionary
 			readerWriterLock.EnterReadLock();
 			try
 			{
-				return 
+				return
 					baseDictionary.TryGetValue(primaryKey, out val);
 			}
 			finally
@@ -437,5 +449,7 @@ namespace StephanHooft.MultiKeyDictionary
 				readerWriterLock.ExitReadLock();
 			}
 		}
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		#endregion
 	}
 }

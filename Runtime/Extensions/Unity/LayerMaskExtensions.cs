@@ -2,8 +2,13 @@ using UnityEngine;
 
 namespace StephanHooft.Extensions
 {
+    /// <summary>
+    /// Extension methods for <see cref="LayerMask"/>.
+    /// </summary>
     public static class LayerMaskExtensions
     {
+        #region Static Methods
+
         /// <summary>
         /// Checks whether a <see cref="GameObject"/>'s layer is included in the <see cref="LayerMask"/>.
         /// </summary>
@@ -51,5 +56,7 @@ namespace StephanHooft.Extensions
         {
             return mask.value == 0;
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }

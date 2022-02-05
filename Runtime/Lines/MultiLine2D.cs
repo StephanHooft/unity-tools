@@ -8,6 +8,26 @@ namespace StephanHooft.Lines
     /// </summary>
     public class MultiLine2D : SegmentedLine2D
     {
+        #region Fields
+
+        [SerializeField] private bool loop;
+        [SerializeField] private Vector2[] points;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region MonoBehaviour Implementation
+
+        public void Reset()
+        {
+            points = new Vector2[2] { Vector2.zero, Vector2.right };
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region ISegmentedLine2D Implementation
+
+        #region Properties
+
         public override bool Loop
         {
             get => loop;
@@ -35,11 +55,8 @@ namespace StephanHooft.Lines
                 points[index] = value;
             }
         }
-
-        [SerializeField] private bool loop;
-        [SerializeField] private Vector2[] points;
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Methods
 
         public override void AddNode()
         {
@@ -71,8 +88,8 @@ namespace StephanHooft.Lines
             }
             return transform.TransformPoint(
                 Vector2.Lerp(
-                    points[i], 
-                    points[loop && i == NodeCount - 1 ? 0 : i + 1], 
+                    points[i],
+                    points[loop && i == NodeCount - 1 ? 0 : i + 1],
                     t)
                 );
         }
@@ -99,10 +116,8 @@ namespace StephanHooft.Lines
             else
                 Debug.LogWarning("Removing the last 2 spline nodes is not permitted.");
         }
-
-        public void Reset()
-        {
-            points = new Vector2[2] { Vector2.zero, Vector2.right };
-        }
+        #endregion
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
     }
 }
