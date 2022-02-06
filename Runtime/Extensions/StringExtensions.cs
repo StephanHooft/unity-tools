@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -13,17 +12,17 @@ namespace StephanHooft.Extensions
         #region Static Methods
 
         /// <summary>
-        /// Returns <see cref="true"/> if the <see cref="string"/> is a <see cref="DateTime"/>.
+        /// Returns <see cref="true"/> if the <see cref="string"/> is a <see cref="System.DateTime"/>.
         /// </summary>
-        /// <returns><see cref="true"/> if the <see cref="string"/> is a <see cref="DateTime"/>.</returns>
+        /// <returns><see cref="true"/> if the <see cref="string"/> is a <see cref="System.DateTime"/>.</returns>
         public static bool IsDateTime(this string value)
         {
             try
             {
                 return
-                    DateTime.TryParse(value, out DateTime tempDate);
+                    System.DateTime.TryParse(value, out System.DateTime tempDate);
             }
-            catch (Exception)
+            catch (System.Exception)
             {
                 return
                     false;
@@ -41,7 +40,7 @@ namespace StephanHooft.Extensions
                 return
                     int.TryParse(value, out int tempInt);
             }
-            catch (Exception)
+            catch (System.Exception)
             {
                 return
                     false;
@@ -65,7 +64,7 @@ namespace StephanHooft.Extensions
         public static string Reverse(this string input)
         {
             var chars = input.ToCharArray();
-            Array.Reverse(chars);
+            System.Array.Reverse(chars);
             return
                 new string(chars);
         }
@@ -107,10 +106,12 @@ namespace StephanHooft.Extensions
         /// returns: From 0 to 9: [0,1,2,3,4,5,6,7,8,9].</para>
         /// </summary>
         /// <param name="before">A <see cref="string"/> to enter before the enumeration.</param>
-        /// <param name="delimiter">Delimiter <see cref="string"/> to enter in between elements of the enumeration.</param>
+        /// <param name="delimiter">Delimiter <see cref="string"/> to enter in between elements of the enumeration.
+        /// </param>
         /// <param name="after">A <see cref="string"/> to enter after the enumeration.</param>
         /// <returns>A delimited <see cref="string"/>.</returns>
-        public static string ToStringPretty<T>(this IEnumerable<T> source, string before, string delimiter, string after)
+        public static string ToStringPretty<T>
+            (this IEnumerable<T> source, string before, string delimiter, string after)
         {
             if (source == null)
                 return

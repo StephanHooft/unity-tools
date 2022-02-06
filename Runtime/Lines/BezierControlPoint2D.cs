@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace StephanHooft.Lines
@@ -6,7 +5,7 @@ namespace StephanHooft.Lines
     /// <summary>
     /// A control node for a <see cref="BezierSpline2D"/> with one main position and two control points.
     /// </summary>
-    [Serializable]
+    [System.Serializable]
     public struct BezierControlPoint2D
     {
         #region Properties
@@ -61,7 +60,7 @@ namespace StephanHooft.Lines
         {
             if (pointIndex < 0 || pointIndex > 2)
                 throw
-                    new ArgumentOutOfRangeException("index");
+                    new System.ArgumentOutOfRangeException("index");
             return
                 positions[pointIndex];
         }
@@ -76,7 +75,7 @@ namespace StephanHooft.Lines
         {
             if (pointIndex < 0 || pointIndex > 2)
                 throw
-                    new ArgumentOutOfRangeException("index");
+                    new System.ArgumentOutOfRangeException("index");
             if (pointIndex == 0)
             {
                 Vector2 delta = position - positions[pointIndex];

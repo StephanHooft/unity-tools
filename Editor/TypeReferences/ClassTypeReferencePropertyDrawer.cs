@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
@@ -15,7 +14,7 @@ namespace StephanHooft.TypeReferences.EditorScripts
 	{
 		#region Fields
 
-		private static readonly Dictionary<string, Type> s_TypeMap = new Dictionary<string, Type>();
+		private static readonly Dictionary<string, System.Type> s_TypeMap = new Dictionary<string, System.Type>();
 		private static readonly int s_ControlHint = typeof(ClassTypeReferencePropertyDrawer).GetHashCode();
 		private static readonly GUIContent s_TempContent = new GUIContent();
 		private static int s_SelectionControlID;
@@ -31,7 +30,8 @@ namespace StephanHooft.TypeReferences.EditorScripts
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
-			DrawTypeSelectionControl(position, property.FindPropertyRelative("typeRef"), label, attribute as ClassTypeConstraintAttribute);
+			DrawTypeSelectionControl
+				(position, property.FindPropertyRelative("typeRef"), label, attribute as ClassTypeConstraintAttribute);
 		}
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,17 +50,17 @@ namespace StephanHooft.TypeReferences.EditorScripts
 		/// to use a collection that is optimized for fast lookups such as <see cref="HashSet{Type}"/> for better
 		/// performance.</para>
 		/// </remarks>
-		public static Func<ICollection<Type>> ExcludedTypeCollectionGetter { get; set; }
+		public static System.Func<ICollection<System.Type>> ExcludedTypeCollectionGetter { get; set; }
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		#endregion
 		#region Static Methods
 
-		private static List<Type> GetFilteredTypes(ClassTypeConstraintAttribute filter)
+		private static List<System.Type> GetFilteredTypes(ClassTypeConstraintAttribute filter)
 		{
-			var types = new List<Type>();
+			var types = new List<System.Type>();
 			var excludedTypes = (ExcludedTypeCollectionGetter != null ? ExcludedTypeCollectionGetter() : null);
-			foreach (var referencedAssembly in AppDomain.CurrentDomain.GetAssemblies())
+			foreach (var referencedAssembly in System.AppDomain.CurrentDomain.GetAssemblies())
 			{
 				try
 				{
@@ -76,7 +76,9 @@ namespace StephanHooft.TypeReferences.EditorScripts
 				types;
 		}
 
-		private static void FilterTypes(Assembly assembly, ClassTypeConstraintAttribute filter, ICollection<Type> excludedTypes, List<Type> output)
+		private static void FilterTypes
+			(Assembly assembly, ClassTypeConstraintAttribute filter,ICollection<System.Type> excludedTypes,
+			List<System.Type> output)
 		{
 			foreach (var type in assembly.GetTypes())
 			{
@@ -90,18 +92,19 @@ namespace StephanHooft.TypeReferences.EditorScripts
 			}
 		}
 
-		private static Type ResolveType(string classRef)
+		private static System.Type ResolveType(string classRef)
 		{
-			if (!s_TypeMap.TryGetValue(classRef, out Type type))
+			if (!s_TypeMap.TryGetValue(classRef, out System.Type type))
 			{
-				type = !string.IsNullOrEmpty(classRef) ? Type.GetType(classRef) : null;
+				type = !string.IsNullOrEmpty(classRef) ? System.Type.GetType(classRef) : null;
 				s_TypeMap[classRef] = type;
 			}
 			return
 				type;
 		}
 
-		private static string DrawTypeSelectionControl(Rect position, GUIContent label, string classRef, ClassTypeConstraintAttribute filter)
+		private static string DrawTypeSelectionControl
+			(Rect position, GUIContent label, string classRef, ClassTypeConstraintAttribute filter)
 		{
 			if (label != null && label != GUIContent.none)
 				position = EditorGUI.PrefixLabel(position, label);
@@ -164,7 +167,8 @@ namespace StephanHooft.TypeReferences.EditorScripts
 				classRef;
 		}
 
-		private static void DrawTypeSelectionControl(Rect position, SerializedProperty property, GUIContent label, ClassTypeConstraintAttribute filter)
+		private static void DrawTypeSelectionControl
+			(Rect position, SerializedProperty property, GUIContent label, ClassTypeConstraintAttribute filter)
 		{
 			try
 			{
@@ -179,7 +183,8 @@ namespace StephanHooft.TypeReferences.EditorScripts
 			}
 		}
 
-		private static void DisplayDropDown(Rect position, List<Type> types, Type selectedType, ClassGrouping grouping)
+		private static void DisplayDropDown
+			(Rect position, List<System.Type> types, System.Type selectedType, ClassGrouping grouping)
 		{
 			var menu = new GenericMenu();
 			menu.AddItem(new GUIContent("(None)"), selectedType == null, s_OnSelectedTypeName, null);
@@ -196,7 +201,7 @@ namespace StephanHooft.TypeReferences.EditorScripts
 			menu.DropDown(position);
 		}
 
-		private static string FormatGroupedTypeName(Type type, ClassGrouping grouping)
+		private static string FormatGroupedTypeName(System.Type type, ClassGrouping grouping)
 		{
 			string name = type.FullName;
 			switch (grouping)
@@ -226,7 +231,7 @@ namespace StephanHooft.TypeReferences.EditorScripts
 
 		private static void OnSelectedTypeName(object userData)
 		{
-			var selectedType = userData as Type;
+			var selectedType = userData as System.Type;
 			s_SelectedClassRef = ClassTypeReference.GetClassTypeRef(selectedType);
 			var typeReferenceUpdatedEvent = EditorGUIUtility.CommandEvent("TypeReferenceUpdated");
 			EditorWindow.focusedWindow.SendEvent(typeReferenceUpdatedEvent);

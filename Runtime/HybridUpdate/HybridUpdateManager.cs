@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,10 +9,11 @@ namespace StephanHooft.HybridUpdate
     /// <para>The resulting event can be used to update something once per Update(), without actually falling out of
     /// sync with FixedUpdate().</para>
     /// </summary>
-    /// <remarks><para>When using the <see cref="HybridUpdateManager"/> to update a <see cref="MonoBehaviour"/>, you should
-    /// replace the <see cref="MonoBehaviour"/>'s Update() and FixedUpdate() with a single "HybridUpdate" method. This
-    /// method should then be registered with <see cref="RegisterUpdateCallback(Action{float}, int)"/> in OnEnable() and
-    /// unregistered with <see cref="UnregisterUpdateCallback(Action{float})"/> in OnDisable().</para></remarks>
+    /// <remarks><para>When using the <see cref="HybridUpdateManager"/> to update a <see cref="MonoBehaviour"/>, you
+    /// should replace the <see cref="MonoBehaviour"/>'s Update() and FixedUpdate() with a single "HybridUpdate" method.
+    /// This method should then be registered with <see cref="RegisterUpdateCallback(System.Action{float}, int)"/> in
+    /// OnEnable() and unregistered with <see cref="UnregisterUpdateCallback(System.Action{float})"/> in OnDisable().
+    /// </para></remarks>
     public class HybridUpdateManager : MonoBehaviour
     {
         #region Properties
@@ -55,7 +55,8 @@ namespace StephanHooft.HybridUpdate
             {
                 Destroy(this);
                 throw
-                    new InvalidOperationException(string.Format("Only one {0} may exist at once.", GetType().Name));
+                    new System.InvalidOperationException(
+                        string.Format("Only one {0} may exist at once.", GetType().Name));
             }
         }
 
@@ -82,15 +83,15 @@ namespace StephanHooft.HybridUpdate
         /// that the method must use for any time-sensitive matters.
         /// </summary>
         /// <param name="callback">The method to register.</param>
-        public static void RegisterUpdateCallback(Action<float> callback, int priority = 0)
+        public static void RegisterUpdateCallback(System.Action<float> callback, int priority = 0)
         {
             if (callback == null)
                 throw
-                    new ArgumentNullException("callback");
+                    new System.ArgumentNullException("callback");
             PriorityCallbackPair existing = LazyInstance.callbacks.Find(pair => pair.Callback == callback);
             if (existing != null)
                 throw
-                    new InvalidOperationException("Cannot register the same item twice.");
+                    new System.InvalidOperationException("Cannot register the same item twice.");
             LazyInstance.callbacks.Add(new PriorityCallbackPair(callback, priority));
             LazyInstance.callbacks.Sort();
         }
@@ -99,11 +100,11 @@ namespace StephanHooft.HybridUpdate
         /// Unregister a callback method that was previously registered to <see cref="HybridUpdateManager"/>.
         /// </summary>
         /// <param name="callback">The method to unregister.</param>
-        public static void UnregisterUpdateCallback(Action<float> callback)
+        public static void UnregisterUpdateCallback(System.Action<float> callback)
         {
             if (callback == null)
                 throw
-                    new ArgumentNullException("callback");
+                    new System.ArgumentNullException("callback");
             if (instance == null)
                 return;
             var existing = instance.callbacks.Find(pair => pair.Callback == callback);
@@ -136,16 +137,16 @@ namespace StephanHooft.HybridUpdate
         #endregion
         #region PriorityCallbackPair Subclass
 
-        private class PriorityCallbackPair : IComparable
+        private class PriorityCallbackPair : System.IComparable
         {
             #region Properties
-            public Action<float> Callback { get; private set; }
+            public System.Action<float> Callback { get; private set; }
             public int Priority { get; private set; }
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             #endregion
             #region Constructors and Finaliser
-            public PriorityCallbackPair(Action<float> callback, int priority)
+            public PriorityCallbackPair(System.Action<float> callback, int priority)
             {
                 Callback = callback;
                 Priority = priority;
@@ -165,7 +166,7 @@ namespace StephanHooft.HybridUpdate
                         Priority.CompareTo(p.Priority);
                 else
                     throw
-                        new NotImplementedException();
+                        new System.NotImplementedException();
             }
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             #endregion

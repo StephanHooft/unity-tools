@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace StephanHooft.Extensions
@@ -59,7 +58,7 @@ namespace StephanHooft.Extensions
                     d;
             else
                 throw
-                    new ArgumentException(string.Format(
+                    new System.ArgumentException(string.Format(
                         "Key {0} must be present in Dictionary<{1},{2}> {3}.",
                         key, typeof(TKey), typeof(TValue), dictionaryName));
         }
@@ -78,7 +77,7 @@ namespace StephanHooft.Extensions
                     d;
             else
                 throw
-                    new ArgumentException(string.Format(
+                    new System.ArgumentException(string.Format(
                         "Value {0} must be present in Dictionary<{1},{2}> {3}.",
                         value, typeof(TKey), typeof(TValue), dictionaryName));
         }
@@ -97,7 +96,7 @@ namespace StephanHooft.Extensions
                     d;
             else
                 throw
-                    new ArgumentException(string.Format(
+                    new System.ArgumentException(string.Format(
                         "Key {0} must not be present in Dictionary<{1},{2}> {3}.",
                         key, typeof(TKey), typeof(TValue), dictionaryName));
         }
@@ -116,7 +115,7 @@ namespace StephanHooft.Extensions
                     d;
             else
                 throw
-                    new ArgumentException(string.Format(
+                    new System.ArgumentException(string.Format(
                         "Value {0} must not be present in Dictionary<{1},{2}> {3}.",
                         value, typeof(TKey), typeof(TValue), dictionaryName));
         }

@@ -1,5 +1,4 @@
 using StephanHooft.MultiKeyDictionary;
-using System;
 
 namespace StephanHooft.Extensions
 {
@@ -12,8 +11,9 @@ namespace StephanHooft.Extensions
 
         /// <summary>
         /// Adds the given <typeparamref name="TPrimaryKey"/> and <typeparamref name="TValue"/> to the given
-        /// <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> if the <typeparamref name="TPrimaryKey"/> is NOT present.
-        /// If present, the <typeparamref name="TValue"/> will be replaced with the new <typeparamref name="TValue"/>.
+        /// <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> if the <typeparamref name="TPrimaryKey"/>
+        /// is NOT present. If present, the <typeparamref name="TValue"/> will be replaced with the new
+        /// <typeparamref name="TValue"/>.
         /// </summary>
         /// <param name="primaryKey">The given <typeparamref name="TPrimaryKey"/>.</param>
         /// <param name="value">The given <typeparamref name="TValue"/>.</param>
@@ -27,15 +27,17 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// Adds the given <typeparamref name="TPrimaryKey"/>, <typeparamref name="TSubKey"/>, and <typeparamref name="TValue"/> to the
-        /// given <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> if the <typeparamref name="TPrimaryKey"/> is NOT present.
+        /// Adds the given <typeparamref name="TPrimaryKey"/>, <typeparamref name="TSubKey"/>, and
+        /// <typeparamref name="TValue"/> to the given <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> if
+        /// the <typeparamref name="TPrimaryKey"/> is NOT present.
         /// If present, the <typeparamref name="TValue"/> will be replaced with the new <typeparamref name="TValue"/>.
         /// </summary>
         /// <param name="primaryKey">The given <typeparamref name="TPrimaryKey"/>.</param>
         /// <param name="subKey">The given <typeparamref name="TSubKey"/>.</param>
         /// <param name="value">The given <typeparamref name="TValue"/>.</param>
         public static void AddOrReplace<TPrimaryKey, TSubKey, TValue>
-            (this MultiKeyDictionary<TPrimaryKey, TSubKey, TValue> d, TPrimaryKey primaryKey, TSubKey subKey, TValue value)
+            (this MultiKeyDictionary<TPrimaryKey, TSubKey, TValue> d,
+            TPrimaryKey primaryKey, TSubKey subKey, TValue value)
         {
             if (d.ContainsKey(primaryKey))
                 d[primaryKey] = value;
@@ -46,20 +48,25 @@ namespace StephanHooft.Extensions
         /// <summary>
         /// Returns <see cref="true"/> if the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> is empty.
         /// </summary>
-        /// <returns><see cref="true"/> if the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> is empty.</returns>
-        public static bool IsEmpty<TPrimaryKey, TSubKey, TValue>(this MultiKeyDictionary<TPrimaryKey, TSubKey, TValue> d)
+        /// <returns><see cref="true"/> if the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> is empty.
+        /// </returns>
+        public static bool IsEmpty<TPrimaryKey, TSubKey, TValue>
+            (this MultiKeyDictionary<TPrimaryKey, TSubKey, TValue> d)
         {
             return
                 d.Count == 0;
         }
 
         /// <summary>
-        /// Returns <see cref="true"/> if the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> is <see cref="null"/>
+        /// Returns <see cref="true"/> if the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> is
+        /// <see cref="null"/>
         /// or empty.
         /// </summary>
-        /// <returns><see cref="true"/> if the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> is <see cref="null"/>
+        /// <returns><see cref="true"/> if the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> is
+        /// <see cref="null"/>
         /// or empty.</returns>
-        public static bool IsNullOrEmpty<TPrimaryKey, TSubKey, TValue>(this MultiKeyDictionary<TPrimaryKey, TSubKey, TValue> d)
+        public static bool IsNullOrEmpty<TPrimaryKey, TSubKey, TValue>
+            (this MultiKeyDictionary<TPrimaryKey, TSubKey, TValue> d)
         {
             return
                 d == null || d.Count == 0;
@@ -68,7 +75,6 @@ namespace StephanHooft.Extensions
         /// <summary>
         /// Ensures that the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> contains a set 
         /// <typeparamref name="TPrimaryKey"/>.
-        /// <para>An <see cref="ArgumentException"/> featuring <paramref name="dictionaryName"/> is thrown otherwise.</para>
         /// </summary>
         /// <param name="primaryKey">The <typeparamref name="TPrimaryKey"/> to check for.</param>
         /// <param name="dictionaryName">The <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> name to use
@@ -82,7 +88,7 @@ namespace StephanHooft.Extensions
                     d;
             else
                 throw
-                    new ArgumentException(string.Format(
+                    new System.ArgumentException(string.Format(
                         "Primary Key {0} must be present in MultiKeyDictionary<{1},{2},{3}> {4}.",
                     primaryKey, typeof(TPrimaryKey), typeof(TSubKey), typeof(TValue), dictionaryName));
         }
@@ -90,7 +96,6 @@ namespace StephanHooft.Extensions
         /// <summary>
         /// Ensures that the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> contains a set 
         /// <typeparamref name="TSubKey"/>.
-        /// <para>An <see cref="ArgumentException"/> featuring <paramref name="dictionaryName"/> is thrown otherwise.</para>
         /// </summary>
         /// <param name="subKey">The <typeparamref name="TSubKey"/> to check for.</param>
         /// <param name="dictionaryName">The <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> name to use
@@ -104,7 +109,7 @@ namespace StephanHooft.Extensions
                     d;
             else
                 throw
-                    new ArgumentException(string.Format(
+                    new System.ArgumentException(string.Format(
                         "Sub Key {0} must be present in MultiKeyDictionary<{1},{2},{3}> {4}.",
                     subKey, typeof(TPrimaryKey), typeof(TSubKey), typeof(TValue), dictionaryName));
         }
@@ -112,7 +117,6 @@ namespace StephanHooft.Extensions
         /// <summary>
         /// Ensures that the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> contains a set 
         /// <typeparamref name="TValue"/>.
-        /// <para>An <see cref="ArgumentException"/> featuring <paramref name="dictionaryName"/> is thrown otherwise.</para>
         /// </summary>
         /// <param name="value">The <typeparamref name="TValue"/> to check for.</param>
         /// <param name="dictionaryName">The <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> name to use
@@ -126,7 +130,7 @@ namespace StephanHooft.Extensions
                     d;
             else
                 throw
-                    new ArgumentException(string.Format(
+                    new System.ArgumentException(string.Format(
                         "Value {0} must be present in MultiKeyDictionary<{1},{2},{3}> {4}.",
                     value, typeof(TPrimaryKey), typeof(TSubKey), typeof(TValue), dictionaryName));
         }
@@ -137,7 +141,6 @@ namespace StephanHooft.Extensions
         /// <summary>
         /// Ensures that the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> does not contain a set 
         /// <typeparamref name="TPrimaryKey"/>.
-        /// <para>An <see cref="ArgumentException"/> featuring <paramref name="dictionaryName"/> is thrown if it does.</para>
         /// </summary>
         /// <param name="primaryKey">The <typeparamref name="TPrimaryKey"/> to check against.</param>
         /// <param name="dictionaryName">The <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> name to use
@@ -151,7 +154,7 @@ namespace StephanHooft.Extensions
                     d;
             else
                 throw
-                    new ArgumentException(string.Format(
+                    new System.ArgumentException(string.Format(
                         "Primary Key {0} must not be present in MultiKeyDictionary<{1},{2},{3}> {4}.",
                     primaryKey, typeof(TPrimaryKey), typeof(TSubKey), typeof(TValue), dictionaryName));
         }
@@ -159,7 +162,6 @@ namespace StephanHooft.Extensions
         /// <summary>
         /// Ensures that the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> does not contain a set 
         /// <typeparamref name="TSubKey"/>.
-        /// <para>An <see cref="ArgumentException"/> featuring <paramref name="dictionaryName"/> is thrown if it does.</para>
         /// </summary>
         /// <param name="subKey">The <typeparamref name="TSubKey"/> to check against.</param>
         /// <param name="dictionaryName">The <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> name to use
@@ -173,7 +175,7 @@ namespace StephanHooft.Extensions
                     d;
             else
                 throw
-                    new ArgumentException(string.Format(
+                    new System.ArgumentException(string.Format(
                         "Sub Key {0} must not be present in MultiKeyDictionary<{1},{2},{3}> {4}.",
                     subKey, typeof(TPrimaryKey), typeof(TSubKey), typeof(TValue), dictionaryName));
         }
@@ -181,7 +183,6 @@ namespace StephanHooft.Extensions
         /// <summary>
         /// Ensures that the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> does not contain a set 
         /// <typeparamref name="TValue"/>.
-        /// <para>An <see cref="ArgumentException"/> featuring <paramref name="dictionaryName"/> is thrown if it does.</para>
         /// </summary>
         /// <param name="value">The <typeparamref name="TValue"/> to check against.</param>
         /// <param name="dictionaryName">The <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> name to use
@@ -195,14 +196,15 @@ namespace StephanHooft.Extensions
                     d;
             else
                 throw
-                    new ArgumentException(string.Format(
+                    new System.ArgumentException(string.Format(
                         "Value {0} must not be present in MultiKeyDictionary<{1},{2},{3}> {4}.",
                     value, typeof(TPrimaryKey), typeof(TSubKey), typeof(TValue), dictionaryName));
         }
 
         /// <summary>
         /// Adds the given <typeparamref name="TPrimaryKey"/> and <typeparamref name="TValue"/> to the given 
-        /// <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> only if the <typeparamref name="TPrimaryKey"/> is NOT present.
+        /// <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> only if the
+        /// <typeparamref name="TPrimaryKey"/> is NOT present.
         /// </summary>
         /// <param name="key">The given <typeparamref name="TPrimaryKey"/>.</param>
         /// <param name="value">The given <typeparamref name="TValue"/>.</param>
@@ -219,16 +221,17 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// Adds the given <typeparamref name="TPrimaryKey"/>, <typeparamref name="TSubKey"/> and <typeparamref name="TValue"/>
-        /// to the given <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> only if the <typeparamref name="TPrimaryKey"/> 
-        /// is NOT present.
+        /// Adds the given <typeparamref name="TPrimaryKey"/>, <typeparamref name="TSubKey"/> and
+        /// <typeparamref name="TValue"/> to the given <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>
+        /// only if the <typeparamref name="TPrimaryKey"/> is NOT present.
         /// </summary>
         /// <param name="primaryKey">The given <typeparamref name="TPrimaryKey"/>.</param>
         /// <param name="subKey">The given <typeparamref name="TSubKey"/>.</param>
         /// <param name="value">The given <typeparamref name="TValue"/>.</param>
         /// <returns><see cref="true"/> if added successfully, <see cref="false"/> otherwise.</returns>
         public static bool TryAdd<TPrimaryKey, TSubKey, TValue>
-            (this MultiKeyDictionary<TPrimaryKey, TSubKey, TValue> d, TPrimaryKey primaryKey, TSubKey subKey, TValue value)
+            (this MultiKeyDictionary<TPrimaryKey, TSubKey, TValue> d, 
+            TPrimaryKey primaryKey, TSubKey subKey, TValue value)
         {
             if (d.ContainsKey(primaryKey))
                 return

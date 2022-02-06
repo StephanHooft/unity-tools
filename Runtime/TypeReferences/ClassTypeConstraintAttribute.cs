@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace StephanHooft.TypeReferences
@@ -50,7 +49,7 @@ namespace StephanHooft.TypeReferences
 		/// A <see cref="bool"/> value indicating if the <see cref="Type"/> specified by <paramref name="type"/>
 		/// satisfies this constraint and should thus be selectable.
 		/// </returns>
-		public virtual bool IsConstraintSatisfied(Type type) =>
+		public virtual bool IsConstraintSatisfied(System.Type type) =>
 			AllowAbstract || !type.IsAbstract;
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////

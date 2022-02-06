@@ -1,5 +1,4 @@
 ﻿using StephanHooft.EditorSafe;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -50,7 +49,7 @@ namespace StephanHooft.ComponentPool
         public ComponentPool(int limit = 10)
         {
             if (limit <= 0)
-                throw new ArgumentOutOfRangeException("queueLimit", "queueLimit must be greater than 0.");
+                throw new System.ArgumentOutOfRangeException("limit");
             Limit = limit;
         }
 
@@ -83,7 +82,7 @@ namespace StephanHooft.ComponentPool
                 componentQueue.Enqueue(newComponent);
             }
             else
-                Debug.LogWarning("Cannot add Components in excess of the ComponentPool's QueueLimit.");
+                Debug.LogWarning("Cannot add Components in excess of the ComponentPool's Limit.");
         }
 
         /// <summary>
@@ -100,10 +99,10 @@ namespace StephanHooft.ComponentPool
         {
             if (component == null)
                 throw
-                    new ArgumentNullException("component");
+                    new System.ArgumentNullException("component");
             if (ownedComponents.Contains(component))
                 throw
-                    new InvalidOperationException(
+                    new System.InvalidOperationException(
                         string.Format("Component of {0} already added to ComponentPool.", component.name));
             component.gameObject.SetActive(false);
             ownedComponents.Add(component);
@@ -135,7 +134,7 @@ namespace StephanHooft.ComponentPool
         {
             if (parent == null)
                 throw
-                    new ArgumentNullException("parent");
+                    new System.ArgumentNullException("parent");
             if (componentQueue.Count == 0)
                 Add();
             var component = componentQueue.Dequeue();
@@ -158,7 +157,7 @@ namespace StephanHooft.ComponentPool
         {
             if (name == null || name == "")
                 throw
-                    new ArgumentNullException("name");
+                    new System.ArgumentNullException("name");
             if (componentQueue.Count == 0)
                 Add();
             var component = componentQueue.Dequeue();
@@ -181,10 +180,10 @@ namespace StephanHooft.ComponentPool
         {
             if (parent == null)
                 throw
-                    new ArgumentNullException("parent");
+                    new System.ArgumentNullException("parent");
             if (name == null || name == "")
                 throw
-                    new ArgumentNullException("name");
+                    new System.ArgumentNullException("name");
             if (componentQueue.Count == 0)
                 Add();
             var component = componentQueue.Dequeue();
@@ -207,11 +206,10 @@ namespace StephanHooft.ComponentPool
         {
             if (component == null)
                 throw
-                    new ArgumentNullException("component");
+                    new System.ArgumentNullException("component");
             if (!FromThisPool(component))
                 throw
-                    new ArgumentException("Cannot return a component to a ComponentPool that didn't dispense it.",
-                    "component");
+                    new System.InvalidOperationException(NotFromThisPool(component));
             if (componentQueue.Count >= Limit)
                 DestroyComponentObject(component);
             else
@@ -234,14 +232,13 @@ namespace StephanHooft.ComponentPool
         {
             if (component == null)
                 throw
-                    new ArgumentNullException("component");
+                    new System.ArgumentNullException("component");
             if (!FromThisPool(component))
                 throw
-                    new ArgumentException("Cannot return a component to a ComponentPool that didn't dispense it.",
-                    "component");
+                    new System.InvalidOperationException(NotFromThisPool(component));
             if (parent == null)
                 throw
-                    new ArgumentNullException("parent");
+                    new System.ArgumentNullException("parent");
             if (componentQueue.Count >= Limit)
                 DestroyComponentObject(component);
             else
@@ -267,14 +264,13 @@ namespace StephanHooft.ComponentPool
         {
             if (component == null)
                 throw
-                    new ArgumentNullException("component");
+                    new System.ArgumentNullException("component");
             if (!FromThisPool(component))
                 throw
-                    new ArgumentException("Cannot return a component to a ComponentPool that didn't dispense it.",
-                    "component");
+                    new System.InvalidOperationException(NotFromThisPool(component));
             component.name = name ??
                 throw
-                    new ArgumentNullException("name");
+                    new System.ArgumentNullException("name");
             if (componentQueue.Count >= Limit)
                 DestroyComponentObject(component);
             else
@@ -300,17 +296,16 @@ namespace StephanHooft.ComponentPool
         {
             if (component == null)
                 throw
-                    new ArgumentNullException("component");
+                    new System.ArgumentNullException("component");
             if (!FromThisPool(component))
                 throw
-                    new ArgumentException("Cannot return a component to a ComponentPool that didn't dispense it.",
-                    "component");
+                    new System.InvalidOperationException(NotFromThisPool(component));
             if (parent == null)
                 throw
-                    new ArgumentNullException("parent");
+                    new System.ArgumentNullException("parent");
             component.name = name ??
                 throw
-                    new ArgumentNullException("name");
+                    new System.ArgumentNullException("name");
             if (componentQueue.Count >= Limit)
                 DestroyComponentObject(component);
             else
@@ -347,7 +342,7 @@ namespace StephanHooft.ComponentPool
         {
             if (parent == null)
                 throw
-                    new ArgumentNullException("parent");
+                    new System.ArgumentNullException("parent");
             foreach (T component in ownedComponents)
                 if (component != null && !componentQueue.Contains(component))
                     Return(component, parent);
@@ -365,7 +360,7 @@ namespace StephanHooft.ComponentPool
         {
             if (name == null || name == "")
                 throw
-                    new ArgumentNullException("name");
+                    new System.ArgumentNullException("name");
             foreach (T component in ownedComponents)
                 if (component != null && !componentQueue.Contains(component))
                     Return(component, name);
@@ -385,10 +380,10 @@ namespace StephanHooft.ComponentPool
         {
             if (parent == null)
                 throw
-                    new ArgumentNullException("parent");
+                    new System.ArgumentNullException("parent");
             if (name == null || name == "")
                 throw
-                    new ArgumentNullException("name");
+                    new System.ArgumentNullException("name");
             foreach (T component in ownedComponents)
                 if (component != null && !componentQueue.Contains(component))
                     Return(component, parent, name);
@@ -405,7 +400,8 @@ namespace StephanHooft.ComponentPool
         {
             if (limit <= 0)
                 throw
-                    new ArgumentOutOfRangeException("limit", "The passed value for limit needs to be 1 or higher.");
+                    new System.ArgumentOutOfRangeException("limit", 
+                    "The passed value for limit needs to be 1 or higher.");
             Limit = limit;
             while (componentQueue.Count > limit)
                 EditModeSafe.Destroy(componentQueue.Dequeue().gameObject);
@@ -415,18 +411,19 @@ namespace StephanHooft.ComponentPool
         /// Destroy the <see cref="GameObject"/> of a <typeparamref name="T"/> that came from this
         /// <see cref="ComponentPool{T}"/>.
         /// </summary>
-        /// <param name="componentToDestroy"></param>
-        private void DestroyComponentObject(T componentToDestroy)
+        /// <param name="component">The <see cref="Component"/> to destroy.</param>
+        private void DestroyComponentObject(T component)
         {
-            if (componentQueue.Contains(componentToDestroy))
+            if (componentQueue.Contains(component))
                 throw
-                    new InvalidOperationException("ComponentPool may not destroy a Component while it's in a Queue.");
-            if (FromThisPool(componentToDestroy))
-                ownedComponents.Remove(componentToDestroy);
+                    new System.InvalidOperationException(
+                        "ComponentPool may not destroy a Component while it's in a Queue.");
+            if (FromThisPool(component))
+                ownedComponents.Remove(component);
             else
                 throw
-                    new InvalidOperationException("ComponentPool may only destroy Components that it has created.");
-            EditModeSafe.Destroy(componentToDestroy.gameObject);
+                    new System.InvalidOperationException(NotFromThisPool(component));
+            EditModeSafe.Destroy(component.gameObject);
         }
 
         /// <summary>
@@ -440,6 +437,13 @@ namespace StephanHooft.ComponentPool
             return
                 ownedComponents.Contains(component);
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Exception Messages
+
+        private string NotFromThisPool(Component component)
+            => string.Format("The {0} was not generated by this ComponentPool.", component.GetType().Name);
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
     }

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace StephanHooft.Lines
@@ -109,14 +108,14 @@ namespace StephanHooft.Lines
                 point + (direction * 1),
                 point + (direction * 3),
                 points[points.Length - 1].ControlPointMode);
-            Array.Resize(ref points, points.Length + 1);
+            System.Array.Resize(ref points, points.Length + 1);
             points[points.Length - 1] = node;
         }
 
         public override void RemoveNode()
         {
             if (NodeCount > 2)
-                Array.Resize(ref points, points.Length - 1);
+                System.Array.Resize(ref points, points.Length - 1);
             else
                 Debug.LogWarning("Removing the last 2 spline nodes is not permitted.");
         }
@@ -135,7 +134,7 @@ namespace StephanHooft.Lines
         {
             if (nodeIndex < 0 || nodeIndex > points.Length - 1)
                 throw
-                    new ArgumentOutOfRangeException("nodeIndex");
+                    new System.ArgumentOutOfRangeException("nodeIndex");
             return
                 points[nodeIndex].ControlPointMode;
         }
@@ -151,7 +150,7 @@ namespace StephanHooft.Lines
         {
             if (nodeIndex < 0 || nodeIndex > points.Length - 1)
                 throw
-                    new ArgumentOutOfRangeException("nodeIndex");
+                    new System.ArgumentOutOfRangeException("nodeIndex");
             points[nodeIndex].ControlPointMode = mode;
         }
 
@@ -166,10 +165,10 @@ namespace StephanHooft.Lines
         {
             if (nodeIndex < 0 || nodeIndex > points.Length - 1)
                 throw
-                    new ArgumentOutOfRangeException("nodeIndex");
+                    new System.ArgumentOutOfRangeException("nodeIndex");
             if (pointIndex < 0 || pointIndex > 2)
                 throw
-                    new ArgumentOutOfRangeException("pointIndex");
+                    new System.ArgumentOutOfRangeException("pointIndex");
             return
                 points[nodeIndex].GetPosition(pointIndex);
         }
@@ -185,10 +184,10 @@ namespace StephanHooft.Lines
         {
             if (nodeIndex < 0 || nodeIndex > points.Length - 1)
                 throw
-                    new ArgumentOutOfRangeException("nodeIndex");
+                    new System.ArgumentOutOfRangeException("nodeIndex");
             if (pointIndex < 0 || pointIndex > 2)
                 throw
-                    new ArgumentOutOfRangeException("pointIndex");
+                    new System.ArgumentOutOfRangeException("pointIndex");
             points[nodeIndex].SetPosition(pointIndex, position);
         }
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////

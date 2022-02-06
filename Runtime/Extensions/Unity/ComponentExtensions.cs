@@ -1,6 +1,5 @@
 using StephanHooft.EditorSafe;
 using StephanHooft.Exceptions;
-using System;
 using UnityEngine;
 
 namespace StephanHooft.Extensions
@@ -212,11 +211,10 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// Returns the <see cref="Component"/>, but only if it's the only one of its <see cref="Type"/> 
-        /// in the hierarchy of the <see cref="GameObject"/> it's attached to.
+        /// Returns the <see cref="Component"/>, but only if it's the only one of its <see cref="Type"/> in the
+        /// hierarchy of the <see cref="GameObject"/> it's attached to.
         /// <para>If another <see cref="Component"/> of the same <see cref="Type"/> is found in the
-        /// <see cref="GameObject"/>'s hierarchy, an <see cref="InvalidOperationException"/>
-        ///is thrown.</para>
+        /// <see cref="GameObject"/>'s hierarchy, an exception is thrown.</para>
         /// </summary>
         /// <returns>The <see cref="Component"/>.</returns>
         public static Component OnlyComponentOfTypeInHierarchy
@@ -229,7 +227,7 @@ namespace StephanHooft.Extensions
                         component.GetType().Name, component.gameObject.name);
                 if (Application.isPlaying)
                     throw
-                        new InvalidOperationException(errorMessage);
+                        new System.InvalidOperationException(errorMessage);
                 else
                     UnityEditor.EditorUtility.DisplayDialog("Invalid operation.", errorMessage, "Ok");
                 EditModeSafe.Destroy(component);

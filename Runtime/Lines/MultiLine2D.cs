@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace StephanHooft.Lines
@@ -44,14 +43,14 @@ namespace StephanHooft.Lines
             {
                 if (index < 0 || index > points.Length - 1)
                     throw
-                        new ArgumentOutOfRangeException("nodeIndex");
+                        new System.ArgumentOutOfRangeException("nodeIndex");
                 return points[index];
             }
             set
             {
                 if (index < 0 || index > points.Length - 1)
                     throw
-                        new ArgumentOutOfRangeException("nodeIndex");
+                        new System.ArgumentOutOfRangeException("nodeIndex");
                 points[index] = value;
             }
         }
@@ -63,7 +62,7 @@ namespace StephanHooft.Lines
             var point = points[points.Length - 1];
             var direction = GetDirectionOnLine(1f);
             var node = point + direction;
-            Array.Resize(ref points, points.Length + 1);
+            System.Array.Resize(ref points, points.Length + 1);
             points[points.Length - 1] = node;
         }
 
@@ -112,7 +111,7 @@ namespace StephanHooft.Lines
         public override void RemoveNode()
         {
             if (NodeCount > 2)
-                Array.Resize(ref points, points.Length - 1);
+                System.Array.Resize(ref points, points.Length - 1);
             else
                 Debug.LogWarning("Removing the last 2 spline nodes is not permitted.");
         }

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace StephanHooft.TypeReferences
@@ -8,7 +7,7 @@ namespace StephanHooft.TypeReferences
 	/// <remarks><para>Liberally adapted from the work found at:
 	/// https://bitbucket.org/rotorz/classtypereference-for-unity/ .</para></remarks>
 	/// </summary>
-	[Serializable]
+	[System.Serializable]
 	public struct ClassTypeReference : ISerializationCallbackReceiver
 	{
 		#region Properties
@@ -16,13 +15,13 @@ namespace StephanHooft.TypeReferences
 		/// <summary>
 		/// The class <see cref="System.Type"/> of the <see cref="ClassTypeReference"/>.
 		/// </summary>
-		public Type Type => type;
+		public System.Type Type => type;
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		#endregion
 		#region Fields
 
-		private Type type;
+		private System.Type type;
 
 		[SerializeField]
 		private string typeRef;
@@ -40,10 +39,10 @@ namespace StephanHooft.TypeReferences
 		/// </exception>
 		public ClassTypeReference(string assemblyQualifiedClassName)
 		{
-			var type = Type.GetType(assemblyQualifiedClassName);
+			var type = System.Type.GetType(assemblyQualifiedClassName);
 			if (type != null && !type.IsClass)
 				throw
-					new ArgumentException(string.Format("'{0}' is not a class type.",
+					new System.ArgumentException(string.Format("'{0}' is not a class type.",
 					assemblyQualifiedClassName), "assemblyQualifiedClassName");
 			this.type = type;
 			typeRef = GetClassTypeRef(type);
@@ -56,11 +55,11 @@ namespace StephanHooft.TypeReferences
 		/// <exception cref="ArgumentException">
 		/// If <paramref name="type"/> is not a <see cref="System.Type"/>.
 		/// </exception>
-		public ClassTypeReference(Type type)
+		public ClassTypeReference(System.Type type)
 		{
 			if (type != null && !type.IsClass)
 				throw
-					new ArgumentException(string.Format("'{0}' is not a class type.",
+					new System.ArgumentException(string.Format("'{0}' is not a class type.",
 					type.FullName), "type");
 			this.type = type;
 			typeRef = GetClassTypeRef(type);
@@ -73,10 +72,10 @@ namespace StephanHooft.TypeReferences
 		public static implicit operator string(ClassTypeReference typeReference) =>
 			typeReference.typeRef;
 
-		public static implicit operator Type(ClassTypeReference typeReference) =>
+		public static implicit operator System.Type(ClassTypeReference typeReference) =>
 			typeReference.Type;
 		
-		public static implicit operator ClassTypeReference(Type type) =>
+		public static implicit operator ClassTypeReference(System.Type type) =>
 			new ClassTypeReference(type);
 		
 		public override string ToString() =>
@@ -86,7 +85,7 @@ namespace StephanHooft.TypeReferences
 		#endregion
 		#region Static Methods
 
-		public static string GetClassTypeRef(Type type) =>
+		public static string GetClassTypeRef(System.Type type) =>
 			type != null
 				? type.FullName + ", " + type.Assembly.GetName().Name
 				: "";
@@ -99,7 +98,7 @@ namespace StephanHooft.TypeReferences
 		{
 			if (!string.IsNullOrEmpty(typeRef))
 			{
-				type = Type.GetType(typeRef);
+				type = System.Type.GetType(typeRef);
 				if (type == null)
 					Debug.LogWarning(string.Format("'{0}' was referenced but class type was not found.", typeRef));
 			}
