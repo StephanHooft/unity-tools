@@ -108,6 +108,21 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
+        /// Returns the <see cref="float"/> with a sign matching a <see cref="double"/>.
+        /// </summary>
+        /// <param name="other">The <see cref="double"/> whose sign to match.</param>
+        /// <returns>The <see cref="float"/> with its sign matching <paramref name="other"/>.</returns>
+        public static float MatchingSign(this float f, double other)
+        {
+            if (System.Math.Sign(f) == System.Math.Sign(other))
+                return
+                    f;
+            else
+                return
+                    -f;
+        }
+
+        /// <summary>
         /// Returns the largest of two <see cref="float"/>s.
         /// </summary>
         /// <param name="other">The other <see cref="float"/> to compare against.</param>
@@ -262,10 +277,25 @@ namespace StephanHooft.Extensions
         /// Returns the <see cref="float"/> with a sign opposite to an <paramref name="other"/> <see cref="float"/>.
         /// </summary>
         /// <param name="other">The other <see cref="float"/> whose sign to oppose.</param>
-        /// <returns>The <see cref="float"/> with its sign oppisite to that of <paramref name="other"/>.</returns>
+        /// <returns>The <see cref="float"/> with its sign opposite to that of <paramref name="other"/>.</returns>
         public static float OppositeSign(this float f, float other)
         {
             if (Mathf.Sign(f) != Mathf.Sign(other))
+                return
+                    f;
+            else
+                return
+                    -f;
+        }
+
+        /// <summary>
+        /// Returns the <see cref="float"/> with a sign opposite to a <see cref="double"/>.
+        /// </summary>
+        /// <param name="other">The <see cref="double"/> whose sign to oppose.</param>
+        /// <returns>The <see cref="float"/> with its sign opposite to that of <paramref name="other"/>.</returns>
+        public static float OppositeSign(this float f, double other)
+        {
+            if (System.Math.Sign(f) != System.Math.Sign(other))
                 return
                     f;
             else
