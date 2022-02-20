@@ -14,9 +14,10 @@
         /// <summary>
         /// Perform the behaviour belonging to the active <see cref="IState"/>.
         /// </summary>
+        /// <param name="deltaTime">The amount of time that has passed since the prior update.</param>
         /// <returns>A <see cref="IState"/> if a transition to said <see cref="IState"/> is required. Null if no <see cref="IState"/>
         /// transition is required.</returns>
-        IState UpdateState();
+        IState UpdateState(float deltaTime);
 
         /// <summary>
         /// Perform clean-up behaviour for the <see cref="IState"/> upon being exited.

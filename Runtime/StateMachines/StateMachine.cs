@@ -92,7 +92,7 @@
         /// Tell the <see cref="CurrentState"/> to call its <see cref="IState.UpdateState"/> member.
         /// This may cause a state transition.
         /// </summary>
-        /// <param name="deltaTime">The time differential since the previous time that this method was called.</param>
+        /// <param name="deltaTime">The time difference since the previous update.</param>
         /// <returns>True if the <see cref="IState.UpdateState"/> was allowed to proceed without a state transition.
         /// False if a state transition has been called during this update.</returns>
         public void UpdateCurrentState(float deltaTime)
@@ -101,7 +101,7 @@
                 throw
                     new System.InvalidOperationException("StateMachine has no set state to update.");
             TimeCurrentStateActive += deltaTime;
-            var nextState = CurrentState.UpdateState();
+            var nextState = CurrentState.UpdateState(deltaTime);
             if (nextState != null)
                 SetState(nextState);
         }
