@@ -28,29 +28,29 @@ namespace StephanHooft.ManagedRayCasts
         /// <summary>
         /// Whether or not the <see cref="TwinLineCast2D"/> hit a collider.
         /// </summary>
-        public bool HitSomething => (nearestHitIndex[0] >= 0) || (nearestHitIndex[1] >= 0);
+        public bool HitSomething => (nearestHitIndex[0] >= 0) && (nearestHitIndex[1] >= 0);
 
         /// <summary>
         /// The <see cref="TwinLineCast2D"/>'s nearest collision (if any) from the direction of the start point.
         /// </summary>
-        public RaycastHit2D NearestForwardHit => nearestHitIndex[0] >= 0 ?
-            raycastHitBuffer[0][nearestHitIndex[0]]
+        public RaycastHit2D NearestForwardHit => nearestHitIndex[0] >= 0
+            ? raycastHitBuffer[0][nearestHitIndex[0]]
             : throw
                 new System.InvalidOperationException("No hits.");
 
         /// <summary>
         /// The <see cref="TwinLineCast2D"/>'s nearest collision (if any) from the direction of the end point.
         /// </summary>
-        public RaycastHit2D NearestReverseHit => nearestHitIndex[1] >= 0 ?
-            raycastHitBuffer[1][nearestHitIndex[1]]
+        public RaycastHit2D NearestReverseHit => nearestHitIndex[1] >= 0
+            ? raycastHitBuffer[1][nearestHitIndex[1]]
             : throw
                 new System.InvalidOperationException("No hits.");
 
         /// <summary>
         /// The length of the distance along the <see cref="TwinLineCast2D"/> that is obscured by colliders, (if any).
         /// </summary>
-        public float ObscuredDistance => HitSomething ?
-            Distance - (NearestForwardHit.distance + NearestReverseHit.distance)
+        public float ObscuredDistance => HitSomething
+            ? Distance - (NearestForwardHit.distance + NearestReverseHit.distance)
             : 0f;
 
         /// <summary>
@@ -66,8 +66,8 @@ namespace StephanHooft.ManagedRayCasts
         /// <summary>
         /// The length of the distance along the <see cref="TwinLineCast2D"/> that is not obscured by colliders, (if any).
         /// </summary>
-        public float UnobscuredDistance => HitSomething ?
-            NearestForwardHit.distance + NearestReverseHit.distance
+        public float UnobscuredDistance => HitSomething
+            ? NearestForwardHit.distance + NearestReverseHit.distance
             : Distance;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
