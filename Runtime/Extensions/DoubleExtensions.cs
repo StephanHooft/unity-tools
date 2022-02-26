@@ -212,6 +212,23 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
+        /// Ensures that the <see cref="double"/> value is equal to a certain <paramref name="value"/>.
+        /// <para>An <see cref="System.ArgumentOutOfRangeException"/> will be thrown if the <see cref="double"/> does not equal the <paramref name="value"/>.</para>
+        /// </summary>
+        /// <param name="value">The <see cref="double"/> value to check against.</param>
+        /// <param name="paramName">The parameter name to use if an <see cref="System.ArgumentOutOfRangeException"/> is thrown.</param>
+        /// <returns>The original <see cref="double"/> value, assuming no <see cref="System.ArgumentOutOfRangeException"/> was thrown.</returns>
+        public static double MustBeEqualTo(this double d, double value, string paramName)
+        {
+            if (d == value)
+                return
+                    d;
+            else
+                throw
+                    new System.ArgumentOutOfRangeException(paramName);
+        }
+
+        /// <summary>
         /// Ensures that the <see cref="double"/> value is below a set <paramref name="upper"/> <see cref="double"/> value.
         /// <para>An <see cref="System.ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown otherwise.</para>
         /// </summary>

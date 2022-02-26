@@ -190,6 +190,23 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
+        /// Ensures that the <see cref="int"/> value is equal to a certain <paramref name="value"/>.
+        /// <para>An <see cref="System.ArgumentOutOfRangeException"/> will be thrown if the <see cref="int"/> does not equal the <paramref name="value"/>.</para>
+        /// </summary>
+        /// <param name="value">The <see cref="int"/> value to check against.</param>
+        /// <param name="paramName">The parameter name to use if an <see cref="System.ArgumentOutOfRangeException"/> is thrown.</param>
+        /// <returns>The original <see cref="int"/> value, assuming no <see cref="System.ArgumentOutOfRangeException"/> was thrown.</returns>
+        public static int MustBeEqualTo(this int i, int value, string paramName)
+        {
+            if (i == value)
+                return
+                    i;
+            else
+                throw
+                    new System.ArgumentOutOfRangeException(paramName);
+        }
+
+        /// <summary>
         /// Ensures that the <see cref="int"/> value is below a set <paramref name="upper"/> <see cref="int"/> value.
         /// </summary>
         /// <param name="upper">The value that the <see cref="int"/> must remain below.</param>
