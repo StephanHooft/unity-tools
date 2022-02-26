@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
-namespace StephanHooft.CustomAttributes
+namespace StephanHooft.Attributes
 {
     /// <summary>
     /// Class to add a min-max <see cref="PropertyAttribute"/> to a <see cref="Vector2"/> or a <see cref="Vector2Int"/>.
-    /// <para>Heavily based on code from: https://github.com/GucioDevs/SimpleMinMaxSlider .</para>
+    /// <remarks><para>Heavily based on code from: https://github.com/GucioDevs/SimpleMinMaxSlider .</para></remarks>
     /// </summary>
     public class MinMaxAttribute : PropertyAttribute
     {
@@ -15,19 +15,16 @@ namespace StephanHooft.CustomAttributes
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
-        #region Constructors and Finaliser
+        #region Constructor
 
         /// <summary>
-        /// Add a min-max <see cref="PropertyAttribute"/> to a <see cref="Vector2"/> or a <see cref="Vector2Int"/>.
+        /// Adds a min-max <see cref="PropertyAttribute"/> to a <see cref="Vector2"/> or a <see cref="Vector2Int"/>.
         /// </summary>
         public MinMaxAttribute(float min, float max)
         {
             this.min = min;
             this.max = max;
         }
-
-        ~MinMaxAttribute()
-        { }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion

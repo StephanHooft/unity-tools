@@ -3,7 +3,7 @@ using UnityEditor;
 using System.Collections.Generic;
 using UnityEditorInternal;
 
-namespace StephanHooft.CustomAttributes.EditorScripts
+namespace StephanHooft.Attributes.EditorScripts
 {
     /// <summary>
     /// A <see cref="CustomPropertyDrawer"/> for the <see cref="TagSelectorAttribute"/>.

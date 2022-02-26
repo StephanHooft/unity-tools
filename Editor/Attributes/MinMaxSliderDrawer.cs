@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-namespace StephanHooft.CustomAttributes.EditorScripts
+namespace StephanHooft.Attributes.EditorScripts
 {
     /// <summary>
     /// A <see cref="CustomPropertyDrawer"/> for the <see cref="MinMaxAttribute"/>.
     /// <remarks><para>Heavily based on code from: https://github.com/GucioDevs/SimpleMinMaxSlider .</para></remarks>
     /// </summary>
     [CustomPropertyDrawer(typeof(MinMaxAttribute))]
-    public class MinMaxSliderDrawer : PropertyDrawer
+    public class MinMaxDrawer : PropertyDrawer
     {
         #region PropertyDrawer Implementation
 
