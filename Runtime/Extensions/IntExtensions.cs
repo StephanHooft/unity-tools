@@ -162,6 +162,8 @@ namespace StephanHooft.Extensions
         /// <param name="lower">The value that the <see cref="int"/> must remain above.</param>
         /// <param name="paramName">The parameter name to use if an exception is thrown.</param>
         /// <returns>The original <see cref="int"/> value.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="int"/> is lower than or equal to
+        /// <paramref name="lower"/>.</exception>
         public static int MustBeAbove(this int i, int lower, string paramName)
         {
             if (i > lower)
@@ -179,6 +181,8 @@ namespace StephanHooft.Extensions
         /// <param name="lower">The value that the <see cref="int"/> must remain above or equal to.</param>
         /// <param name="paramName">The parameter name to use if an exception is thrown.</param>
         /// <returns>The original <see cref="int"/> value.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="int"/> is lower than
+        /// <paramref name="lower"/>.</exception>
         public static int MustBeAboveOrEqualTo(this int i, int lower, string paramName)
         {
             if (i >= lower)
@@ -191,11 +195,13 @@ namespace StephanHooft.Extensions
 
         /// <summary>
         /// Ensures that the <see cref="int"/> value is equal to a certain <paramref name="value"/>.
-        /// <para>An <see cref="System.ArgumentOutOfRangeException"/> will be thrown if the <see cref="int"/> does not equal the <paramref name="value"/>.</para>
+        /// <para>An exception will be thrown if the <see cref="int"/> does not equal the <paramref name="value"/>.</para>
         /// </summary>
         /// <param name="value">The <see cref="int"/> value to check against.</param>
-        /// <param name="paramName">The parameter name to use if an <see cref="System.ArgumentOutOfRangeException"/> is thrown.</param>
-        /// <returns>The original <see cref="int"/> value, assuming no <see cref="System.ArgumentOutOfRangeException"/> was thrown.</returns>
+        /// <param name="paramName">The parameter name to use if an exception is thrown.</param>
+        /// <returns>The original <see cref="int"/> value, assuming no exception was thrown.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="int"/> is not equal to
+        /// <paramref name="value"/>.</exception>
         public static int MustBeEqualTo(this int i, int value, string paramName)
         {
             if (i == value)
@@ -212,6 +218,8 @@ namespace StephanHooft.Extensions
         /// <param name="upper">The value that the <see cref="int"/> must remain below.</param>
         /// <param name="paramName">The parameter name to use if an exception is thrown.</param>
         /// <returns>The original <see cref="int"/> value.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="int"/> is greater than or equal to
+        /// <paramref name="upper"/>.</exception>
         public static int MustBeLowerThan(this int i, int upper, string paramName)
         {
             if (i < upper)
@@ -229,6 +237,8 @@ namespace StephanHooft.Extensions
         /// <param name="upper">The value that the <see cref="int"/> must remain below or equal to.</param>
         /// <param name="paramName">The parameter name to use if an exceptionis thrown.</param>
         /// <returns>The original <see cref="int"/> value.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="int"/> is greater than
+        /// <paramref name="upper"/>.</exception>
         public static int MustBeLowerThanOrEqualTo(this int i, int upper, string paramName)
         {
             if (i <= upper)
@@ -247,6 +257,8 @@ namespace StephanHooft.Extensions
         /// <param name="upper">The value that the <see cref="int"/> must remain below or equal to.</param>
         /// <param name="paramName">The parameter name to use if an exception is thrown.</param>
         /// <returns>The original <see cref="int"/> value.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="int"/> is lower than
+        /// <paramref name="lower"/> or greater than <paramref name="upper"/>.</exception>
         public static int MustBeWithinRange(this int i, int lower, int upper, string paramName)
         {
             if (i >= lower && i <= upper)
@@ -263,6 +275,8 @@ namespace StephanHooft.Extensions
         /// <param name="value">The <see cref="int"/> value to check against.</param>
         /// <param name="paramName">The parameter name to use if an exception is thrown.</param>
         /// <returns>The original <see cref="int"/> value.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="int"/> is not equal to
+        /// <paramref name="value"/>.</exception>
         public static int MustNotBeEqualTo(this int i, int value, string paramName)
         {
             if (i != value)
@@ -277,7 +291,7 @@ namespace StephanHooft.Extensions
         /// Returns the <see cref="int"/> with a sign opposite to an<paramref name="other"/> <see cref="int"/>.
         /// </summary>
         /// <param name="other">The other <see cref="int"/> whose sign to oppose.</param>
-        /// <returns>The <see cref="int"/> with its sign oppisite to that of <paramref name="other"/>.</returns>
+        /// <returns>The <see cref="int"/> with its sign opposite to that of <paramref name="other"/>.</returns>
         public static int OppositeSign(this int i, int other)
         {
             if (System.Math.Sign(i) != System.Math.Sign(other))
@@ -304,12 +318,15 @@ namespace StephanHooft.Extensions
         /// </summary>
         /// <param name="min">The minimum <see cref="int"/> value of the range to wrap to.</param>
         /// <param name="max">The maximum <see cref="int"/> value of the range to wrap to.</param>
+        /// <returns>An <see cref="int"/>.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">If <paramref name="min"/> is greater than or equal to
+        /// <paramref name="max"/>.</exception>
         public static int Wrap(this int i, int min, int max)
         {
             if (max <= min)
                 throw
-                    new System.ArgumentException("Value of max must be greater than min.", "max");
-            int radix = max - min + 1;
+                    new System.ArgumentOutOfRangeException("Value of max must be greater than min.", "max");
+            var radix = max - min + 1;
             if (i < min)
                 return
                     i + ((max - i) / radix) * radix;

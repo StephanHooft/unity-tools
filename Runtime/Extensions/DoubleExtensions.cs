@@ -18,12 +18,16 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// <para>Clamps the given <see cref="double"/> value between the given minimum <see cref="double"/> and maximum <see cref="double"/> values. 
+        /// <para>Clamps the given <see cref="double"/> value between the given minimum <see cref="double"/> and maximum
+        /// <see cref="double"/> values. 
         /// Returns the given value if it is within the <paramref name="min"/> and <paramref name="max"/> range.</para>
         /// </summary>
         /// <param name="min">The minimum value of the range to clamp to.</param>
         /// <param name="max">The maximum value of the range to clamp to.</param>
-        /// <returns>The <see cref="double"/> result between the <paramref name="min"/> and <paramref name="max"/> values. </returns>
+        /// <returns>The <see cref="double"/> result between the <paramref name="min"/> and <paramref name="max"/>
+        /// values.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">If <paramref name="min"/> is greater than
+        /// <paramref name="max"/>.</exception>
         public static double Clamp(this double d, double min, double max)
         {
             if (max <= min)
@@ -81,7 +85,8 @@ namespace StephanHooft.Extensions
 
         /// <summary>
         /// <para>Re-maps a <see cref="double"/> from one range to another.</para>
-        /// <para>Does not clamp values within the range by default, because out-of-range values are sometimes intended and useful.
+        /// <para>Does not clamp values within the range by default, because out-of-range values are sometimes intended
+        /// and useful.
         /// </summary>
         /// <param name="inMin">The lower bound of the <see cref="double"/>'s current range.</param>
         /// <param name="inMax">The upper bound of the <see cref="double"/>'s current range.</param>
@@ -89,7 +94,8 @@ namespace StephanHooft.Extensions
         /// <param name="outMax">The upper bound of the <see cref="double"/>'s target range </param>
         /// <param name="clamp">Set to true to clamp the <see cref="double"/>.</param>
         /// <returns>The mapped <see cref="double"/> value.</returns>
-        public static double Map(this double d, double inMin, double inMax, double outMin, double outMax, bool clamp = false)
+        public static double Map
+            (this double d, double inMin, double inMax, double outMin, double outMax, bool clamp = false)
         {
             if (clamp)
                 d = d.Clamp(inMin, inMax);
@@ -178,12 +184,15 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// Ensures that the <see cref="double"/> value is above a set <paramref name="lower"/> <see cref="double"/> value.
-        /// <para>An <see cref="System.ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown otherwise.</para>
+        /// Ensures that the <see cref="double"/> value is above a set <paramref name="lower"/> <see cref="double"/>
+        /// value.
+        /// <para>An exception with <paramref name="paramName"/> is thrown otherwise.</para>
         /// </summary>
         /// <param name="lower">The value that the <see cref="double"/> must remain above.</param>
-        /// <param name="paramName">The parameter name to use if an <see cref="System.ArgumentOutOfRangeException"/> is thrown.</param>
-        /// <returns>The original <see cref="double"/> value, assuming no <see cref="System.ArgumentOutOfRangeException"/> was thrown.</returns>
+        /// <param name="paramName">The parameter name to use if an exception is thrown.</param>
+        /// <returns>The original <see cref="double"/> value, assuming no exception was thrown.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="double"/> is lower than or equal to
+        /// <paramref name="lower"/>.</exception>
         public static double MustBeAbove(this double d, double lower, string paramName)
         {
             if (d > lower)
@@ -195,12 +204,15 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// Ensures that the <see cref="double"/> value is above or equal to a set <paramref name="lower"/> <see cref="double"/> value.
-        /// <para>An <see cref="System.ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown otherwise.</para>
+        /// Ensures that the <see cref="double"/> value is above or equal to a set <paramref name="lower"/>
+        /// <see cref="double"/> value.
+        /// <para>An exception with <paramref name="paramName"/> is thrown otherwise.</para>
         /// </summary>
         /// <param name="lower">The value that the <see cref="double"/> must remain above or equal to.</param>
-        /// <param name="paramName">The parameter name to use if an <see cref="System.ArgumentOutOfRangeException"/> is thrown.</param>
-        /// <returns>The original <see cref="double"/> value, assuming no <see cref="System.ArgumentOutOfRangeException"/> was thrown.</returns>
+        /// <param name="paramName">The parameter name to use if an exception is thrown.</param>
+        /// <returns>The original <see cref="double"/> value, assuming no exception was thrown.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="double"/> is lower than
+        /// <paramref name="lower"/>.</exception>
         public static double MustBeAboveOrEqualTo(this double d, double lower, string paramName)
         {
             if (d >= lower)
@@ -213,11 +225,13 @@ namespace StephanHooft.Extensions
 
         /// <summary>
         /// Ensures that the <see cref="double"/> value is equal to a certain <paramref name="value"/>.
-        /// <para>An <see cref="System.ArgumentOutOfRangeException"/> will be thrown if the <see cref="double"/> does not equal the <paramref name="value"/>.</para>
+        /// <para>An exception will be thrown if the <see cref="double"/> does not equal the <paramref name="value"/>.</para>
         /// </summary>
         /// <param name="value">The <see cref="double"/> value to check against.</param>
-        /// <param name="paramName">The parameter name to use if an <see cref="System.ArgumentOutOfRangeException"/> is thrown.</param>
-        /// <returns>The original <see cref="double"/> value, assuming no <see cref="System.ArgumentOutOfRangeException"/> was thrown.</returns>
+        /// <param name="paramName">The parameter name to use if an exception is thrown.</param>
+        /// <returns>The original <see cref="double"/> value, assuming no exception was thrown.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="double"/> is not equal to
+        /// <paramref name="value"/>.</exception>
         public static double MustBeEqualTo(this double d, double value, string paramName)
         {
             if (d == value)
@@ -230,11 +244,13 @@ namespace StephanHooft.Extensions
 
         /// <summary>
         /// Ensures that the <see cref="double"/> value is below a set <paramref name="upper"/> <see cref="double"/> value.
-        /// <para>An <see cref="System.ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown otherwise.</para>
+        /// <para>An exception with <paramref name="paramName"/> is thrown otherwise.</para>
         /// </summary>
         /// <param name="upper">The value that the <see cref="double"/> must remain below.</param>
-        /// <param name="paramName">The parameter name to use if an <see cref="System.ArgumentOutOfRangeException"/> is thrown.</param>
-        /// <returns>The original <see cref="double"/> value, assuming no <see cref="System.ArgumentOutOfRangeException"/> was thrown.</returns>
+        /// <param name="paramName">The parameter name to use if an exception is thrown.</param>
+        /// <returns>The original <see cref="double"/> value, assuming no exception was thrown.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="double"/> is greater than or equal to
+        /// <paramref name="upper"/>.</exception>
         public static double MustBeLowerThan(this double d, double upper, string paramName)
         {
             if (d < upper)
@@ -247,11 +263,13 @@ namespace StephanHooft.Extensions
 
         /// <summary>
         /// Ensures that the <see cref="double"/> value is below or equal to a set <paramref name="upper"/> <see cref="double"/> value.
-        /// <para>An <see cref="System.ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown otherwise.</para>
+        /// <para>An exception with <paramref name="paramName"/> is thrown otherwise.</para>
         /// </summary>
         /// <param name="upper">The value that the <see cref="double"/> must remain below or equal to.</param>
-        /// <param name="paramName">The parameter name to use if an <see cref="System.ArgumentOutOfRangeException"/> is thrown.</param>
-        /// <returns>The original <see cref="double"/> value, assuming no <see cref="System.ArgumentOutOfRangeException"/> was thrown.</returns>
+        /// <param name="paramName">The parameter name to use if an exception is thrown.</param>
+        /// <returns>The original <see cref="double"/> value, assuming no exception was thrown.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="double"/> is greater than
+        /// <paramref name="upper"/>.</exception>
         public static double MustBeLowerThanOrEqualTo(this double d, double upper, string paramName)
         {
             if (d <= upper)
@@ -265,13 +283,15 @@ namespace StephanHooft.Extensions
         /// <summary>
         /// Ensures that the <see cref="double"/> value is within a range determined by a <paramref name="lower"/> 
         /// and an <paramref name="upper"/> <see cref="double"/> value.
-        /// <para>An <see cref="System.ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown if the <see cref="double"/>
+        /// <para>An exception with <paramref name="paramName"/> is thrown if the <see cref="double"/>
         /// goes outside of this range.</para>
         /// </summary>
         /// <param name="lower">The value that the <see cref="double"/> must remain above or equal to.</param>
         /// <param name="upper">The value that the <see cref="double"/> must remain below or equal to.</param>
-        /// <param name="paramName">The parameter name to use if an <see cref="System.ArgumentOutOfRangeException"/> is thrown.</param>
-        /// <returns>The original <see cref="double"/> value, assuming no <see cref="System.ArgumentOutOfRangeException"/> was thrown.</returns>
+        /// <param name="paramName">The parameter name to use if an exception is thrown.</param>
+        /// <returns>The original <see cref="double"/> value, assuming no exception was thrown.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="double"/> is lower than
+        /// <paramref name="lower"/> or greater than <paramref name="upper"/>.</exception>
         public static double MustBeWithinRange(this double d, double lower, double upper, string paramName)
         {
             if (d >= lower && d <= upper)
@@ -284,11 +304,13 @@ namespace StephanHooft.Extensions
 
         /// <summary>
         /// Ensures that the <see cref="double"/> value is not equal to a certain <paramref name="value"/>.
-        /// <para>An <see cref="System.ArgumentOutOfRangeException"/> will be thrown if the <see cref="double"/> equals the <paramref name="value"/>.</para>
+        /// <para>An exception will be thrown if the <see cref="double"/> equals the <paramref name="value"/>.</para>
         /// </summary>
         /// <param name="value">The <see cref="double"/> value to check against.</param>
-        /// <param name="paramName">The parameter name to use if an <see cref="System.ArgumentOutOfRangeException"/> is thrown.</param>
-        /// <returns>The original <see cref="double"/> value, assuming no <see cref="System.ArgumentOutOfRangeException"/> was thrown.</returns>
+        /// <param name="paramName">The parameter name to use if an exception is thrown.</param>
+        /// <returns>The original <see cref="double"/> value, assuming no exception was thrown.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="double"/> is not equal to
+        /// <paramref name="value"/>.</exception>
         public static double MustNotBeEqualTo(this double d, double value, string paramName)
         {
             if (d != value)

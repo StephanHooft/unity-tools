@@ -37,7 +37,8 @@ namespace StephanHooft.Extensions
         /// <summary>
         /// Returns <see cref="true"/> if the <see cref="Dictionary{TKey, TValue}"/> is <see cref="null"/> or empty.
         /// </summary>
-        /// <returns><see cref="true"/> if the <see cref="Dictionary{TKey, TValue}"/> is <see cref="null"/> or empty.</returns>
+        /// <returns><see cref="true"/> if the <see cref="Dictionary{TKey, TValue}"/> is <see cref="null"/> or empty.
+        /// </returns>
         public static bool IsNullOrEmpty<TKey, TValue>(this Dictionary<TKey, TValue> d)
         {
             return
@@ -46,12 +47,15 @@ namespace StephanHooft.Extensions
 
         /// <summary>
         /// Ensures that the <see cref="Dictionary{TKey, TValue}"/> contains a set <typeparamref name="TKey"/>.
-        /// <para>An <see cref="ArgumentException"/> featuring <paramref name="dictionaryName"/> is thrown otherwise.</para>
+        /// <para>An exception featuring <paramref name="dictionaryName"/> is thrown otherwise.</para>
         /// </summary>
         /// <param name="key">The <typeparamref name="TKey"/> to check for.</param>
-        /// <param name="dictionaryName">The <see cref="Dictionary{TKey, TValue}"/> name to use if an <see cref="ArgumentException"/> is thrown.</param>
+        /// <param name="dictionaryName">The <see cref="Dictionary{TKey, TValue}"/> name to use if an exception is
+        /// thrown.</param>
         /// <returns>The original <see cref="Dictionary{TKey, TValue}"/>.</returns>
-        public static Dictionary<TKey, TValue> MustContainKey<TKey, TValue>(this Dictionary<TKey, TValue> d, TKey key, string dictionaryName)
+        /// <exception cref="System.ArgumentException">If the <typeparamref name="TKey"/> is not present.</exception>
+        public static Dictionary<TKey, TValue> MustContainKey<TKey, TValue>
+            (this Dictionary<TKey, TValue> d, TKey key, string dictionaryName)
         {
             if (d.ContainsKey(key))
                 return
@@ -65,12 +69,15 @@ namespace StephanHooft.Extensions
 
         /// <summary>
         /// Ensures that the <see cref="Dictionary{TKey, TValue}"/> contains a set <typeparamref name="TValue"/>.
-        /// <para>An <see cref="ArgumentException"/> featuring <paramref name="dictionaryName"/> is thrown otherwise.</para>
+        /// <para>An exceptionfeaturing <paramref name="dictionaryName"/> is thrown otherwise.</para>
         /// </summary>
         /// <param name="value">The <typeparamref name="TValue"/> to check for.</param>
-        /// <param name="dictionaryName">The <see cref="Dictionary{TKey, TValue}"/> name to use if an <see cref="ArgumentException"/> is thrown.</param>
+        /// <param name="dictionaryName">The <see cref="Dictionary{TKey, TValue}"/> name to use if an exception is
+        /// thrown.</param>
         /// <returns>The original <see cref="Dictionary{TKey, TValue}"/>.</returns>
-        public static Dictionary<TKey, TValue> MustContainValue<TKey, TValue>(this Dictionary<TKey, TValue> d, TValue value, string dictionaryName)
+        /// <exception cref="System.ArgumentException">If the <typeparamref name="TValue"/> is not present.</exception>
+        public static Dictionary<TKey, TValue> MustContainValue<TKey, TValue>
+            (this Dictionary<TKey, TValue> d, TValue value, string dictionaryName)
         {
             if (d.ContainsValue(value))
                 return
@@ -84,12 +91,15 @@ namespace StephanHooft.Extensions
 
         /// <summary>
         /// Ensures that the <see cref="Dictionary{TKey, TValue}"/> does not contain a set <typeparamref name="TKey"/>.
-        /// <para>An <see cref="ArgumentException"/> featuring <paramref name="dictionaryName"/> is thrown if it does.</para>
+        /// <para>An exceptionfeaturing <paramref name="dictionaryName"/> is thrown if it does.</para>
         /// </summary>
         /// <param name="key">The <typeparamref name="TKey"/> to check against.</param>
-        /// <param name="dictionaryName">The <see cref="Dictionary{TKey, TValue}"/> name to use if an <see cref="ArgumentException"/> is thrown.</param>
+        /// <param name="dictionaryName">The <see cref="Dictionary{TKey, TValue}"/> name to use if an exceptionis
+        /// thrown.</param>
         /// <returns>The original <see cref="Dictionary{TKey, TValue}"/>.</returns>
-        public static Dictionary<TKey, TValue> MustNotContainKey<TKey, TValue>(this Dictionary<TKey, TValue> d, TKey key, string dictionaryName)
+        /// <exception cref="System.ArgumentException">If the <typeparamref name="TKey"/> is present.</exception>
+        public static Dictionary<TKey, TValue> MustNotContainKey<TKey, TValue>
+            (this Dictionary<TKey, TValue> d, TKey key, string dictionaryName)
         {
             if (!d.ContainsKey(key))
                 return
@@ -102,13 +112,17 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// Ensures that the <see cref="Dictionary{TKey, TValue}"/> does not contain a set <typeparamref name="TValue"/>.
-        /// <para>An <see cref="ArgumentException"/> featuring <paramref name="dictionaryName"/> is thrown if it does.</para>
+        /// Ensures that the <see cref="Dictionary{TKey, TValue}"/> does not contain a set 
+        /// <typeparamref name="TValue"/>.
+        /// <para>An exceptionfeaturing <paramref name="dictionaryName"/> is thrown if it does.</para>
         /// </summary>
         /// <param name="value">The <typeparamref name="TValue"/> to check against.</param>
-        /// <param name="dictionaryName">The <see cref="Dictionary{TKey, TValue}"/> name to use if an <see cref="ArgumentException"/> is thrown.</param>
+        /// <param name="dictionaryName">The <see cref="Dictionary{TKey, TValue}"/> name to use if an exceptionis
+        /// thrown.</param>
         /// <returns>The original <see cref="Dictionary{TKey, TValue}"/>.</returns>
-        public static Dictionary<TKey, TValue> MustNotContainValue<TKey, TValue>(this Dictionary<TKey, TValue> d, TValue value, string dictionaryName)
+        /// <exception cref="System.ArgumentException">If the <typeparamref name="TValue"/> is present.</exception>
+        public static Dictionary<TKey, TValue> MustNotContainValue<TKey, TValue>
+            (this Dictionary<TKey, TValue> d, TValue value, string dictionaryName)
         {
             if (!d.ContainsValue(value))
                 return
@@ -122,7 +136,7 @@ namespace StephanHooft.Extensions
 
         /// <summary>
         /// Adds the given <typeparamref name="TKey"/> and <typeparamref name="TValue"/> to the given 
-        /// <see cref="Dictionary{TKey, TValue}"/> only if the <typeparamref name="TKey"/> is NOT present.
+        /// <see cref="Dictionary{TKey, TValue}"/> only if the <typeparamref name="TKey"/> is NOT already present.
         /// </summary>
         /// <param name="key">The given <typeparamref name="TKey"/>.</param>
         /// <param name="value">The given <typeparamref name="TValue"/>.</param>

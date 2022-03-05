@@ -65,9 +65,10 @@ namespace StephanHooft.Extensions
         /// Ensures that the <see cref="List{T}"/> contains a set <typeparamref name="T"/>.
         /// </summary>
         /// <param name="item">The <typeparamref name="T"/> to check for.</param>
-        /// <param name="listName">The <see cref="List{T}"/> name to use if an <see cref="ArgumentException"/> is
-        /// thrown.</param>
+        /// <param name="listName">The <see cref="List{T}"/> name to use if an exception is thrown.</param>
         /// <returns>The original <see cref="List{T}"/>.</returns>
+        /// <exception cref="System.ArgumentException">If the <see cref="List{T}"/> does not contain
+        /// <paramref name="item"/>.</exception>"
         public static List<T> MustContain<T>(this List<T> l, T item, string listName)
         {
             if (l.Contains(item))
@@ -85,6 +86,8 @@ namespace StephanHooft.Extensions
         /// <param name="item">The <typeparamref name="T"/> to check against.</param>
         /// <param name="listName">The <see cref="List{T}"/> name to use if an exception is thrown.</param>
         /// <returns>The original <see cref="List{T}"/>.</returns>
+        /// <exception cref="System.ArgumentException">If the <see cref="List{T}"/> contains
+        /// <paramref name="item"/>.</exception>"
         public static List<T> MustNotContain<T>(this List<T> l, T item, string listName)
         {
             if (!l.Contains(item))

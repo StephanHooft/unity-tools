@@ -66,6 +66,7 @@ namespace StephanHooft.Extensions
         /// <param name="item">The <typeparamref name="T"/> to check for.</param>
         /// <param name="arrayName">The array name to use if an exception is thrown.</param>
         /// <returns>The original array.</returns>
+        /// <exception cref="System.ArgumentException">If no <typeparamref name="T"/> is contained.</exception>
         public static T[] MustContain<T>(this T[] a, T item, string arrayName)
         {
             foreach (T entry in a)
@@ -83,6 +84,7 @@ namespace StephanHooft.Extensions
         /// <param name="item">The <typeparamref name="T"/> to check against.</param>
         /// <param name="arrayName">The array name to use if an exception is thrown.</param>
         /// <returns>The original array.</returns>
+        /// <exception cref="System.ArgumentException">If a <typeparamref name="T"/> is contained.</exception>
         public static T[] MustNotContain<T>(this T[] a, T item, string arrayName)
         {
             foreach (T entry in a)

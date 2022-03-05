@@ -170,11 +170,13 @@ namespace StephanHooft.Extensions
 
         /// <summary>
         /// Ensures that the <see cref="float"/> value is above a set <paramref name="lower"/> <see cref="float"/> value.
-        /// <para>An <see cref="System.ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown otherwise.</para>
+        /// <para>An exception with <paramref name="paramName"/> is thrown otherwise.</para>
         /// </summary>
         /// <param name="lower">The value that the <see cref="float"/> must remain above.</param>
-        /// <param name="paramName">The parameter name to use if an <see cref="System.ArgumentOutOfRangeException"/> is thrown.</param>
-        /// <returns>The original <see cref="float"/> value, assuming no <see cref="System.ArgumentOutOfRangeException"/> was thrown.</returns>
+        /// <param name="paramName">The parameter name to use if an exception is thrown.</param>
+        /// <returns>The original <see cref="float"/> value, assuming no exception was thrown.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="float"/> is lower than or equal to
+        /// <paramref name="lower"/>.</exception>
         public static float MustBeAbove(this float f, float lower, string paramName)
         {
             if (f > lower)
@@ -187,11 +189,13 @@ namespace StephanHooft.Extensions
 
         /// <summary>
         /// Ensures that the <see cref="float"/> value is above or equal to a set <paramref name="lower"/> <see cref="float"/> value.
-        /// <para>An <see cref="System.ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown otherwise.</para>
+        /// <para>An exception with <paramref name="paramName"/> is thrown otherwise.</para>
         /// </summary>
         /// <param name="lower">The value that the <see cref="float"/> must remain above or equal to.</param>
-        /// <param name="paramName">The parameter name to use if an <see cref="System.ArgumentOutOfRangeException"/> is thrown.</param>
-        /// <returns>The original <see cref="float"/> value, assuming no <see cref="System.ArgumentOutOfRangeException"/> was thrown.</returns>
+        /// <param name="paramName">The parameter name to use if an exception is thrown.</param>
+        /// <returns>The original <see cref="float"/> value, assuming no exception was thrown.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="float"/> is lower than
+        /// <paramref name="lower"/>.</exception>
         public static float MustBeAboveOrEqualTo(this float f, float lower, string paramName)
         {
             if (f >= lower)
@@ -204,11 +208,13 @@ namespace StephanHooft.Extensions
 
         /// <summary>
         /// Ensures that the <see cref="float"/> value is equal to a certain <paramref name="value"/>.
-        /// <para>An <see cref="System.ArgumentOutOfRangeException"/> will be thrown if the <see cref="float"/> does not equal the <paramref name="value"/>.</para>
+        /// <para>An exception will be thrown if the <see cref="float"/> does not equal the <paramref name="value"/>.</para>
         /// </summary>
         /// <param name="value">The <see cref="float"/> value to check against.</param>
-        /// <param name="paramName">The parameter name to use if an <see cref="System.ArgumentOutOfRangeException"/> is thrown.</param>
-        /// <returns>The original <see cref="float"/> value, assuming no <see cref="System.ArgumentOutOfRangeException"/> was thrown.</returns>
+        /// <param name="paramName">The parameter name to use if an exception is thrown.</param>
+        /// <returns>The original <see cref="float"/> value, assuming no exception was thrown.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="float"/> is not equal to
+        /// <paramref name="value"/>.</exception>
         public static float MustBeEqualTo(this float f,float value, string paramName)
         {
             if (f == value)
@@ -221,11 +227,13 @@ namespace StephanHooft.Extensions
 
         /// <summary>
         /// Ensures that the <see cref="float"/> value is below a set <paramref name="upper"/> <see cref="float"/> value.
-        /// <para>An <see cref="System.ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown otherwise.</para>
+        /// <para>An exception with <paramref name="paramName"/> is thrown otherwise.</para>
         /// </summary>
         /// <param name="upper">The value that the <see cref="float"/> must remain below.</param>
-        /// <param name="paramName">The parameter name to use if an <see cref="System.ArgumentOutOfRangeException"/> is thrown.</param>
-        /// <returns>The original <see cref="float"/> value, assuming no <see cref="System.ArgumentOutOfRangeException"/> was thrown.</returns>
+        /// <param name="paramName">The parameter name to use if an exception is thrown.</param>
+        /// <returns>The original <see cref="float"/> value, assuming no exception was thrown.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="float"/> is greater than or equal to
+        /// <paramref name="upper"/>.</exception>
         public static float MustBeLowerThan(this float f, float upper, string paramName)
         {
             if (f < upper)
@@ -238,11 +246,13 @@ namespace StephanHooft.Extensions
 
         /// <summary>
         /// Ensures that the <see cref="float"/> value is below or equal to a set <paramref name="upper"/> <see cref="float"/> value.
-        /// <para>An <see cref="System.ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown otherwise.</para>
+        /// <para>An exception with <paramref name="paramName"/> is thrown otherwise.</para>
         /// </summary>
         /// <param name="upper">The value that the <see cref="float"/> must remain below or equal to.</param>
-        /// <param name="paramName">The parameter name to use if an <see cref="System.ArgumentOutOfRangeException"/> is thrown.</param>
-        /// <returns>The original <see cref="float"/> value, assuming no <see cref="System.ArgumentOutOfRangeException"/> was thrown.</returns>
+        /// <param name="paramName">The parameter name to use if an exception is thrown.</param>
+        /// <returns>The original <see cref="float"/> value, assuming no exception was thrown.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="float"/> is greater than
+        /// <paramref name="upper"/>.</exception>
         public static float MustBeLowerThanOrEqualTo(this float f, float upper, string paramName)
         {
             if (f <= upper)
@@ -256,13 +266,15 @@ namespace StephanHooft.Extensions
         /// <summary>
         /// Ensures that the <see cref="float"/> value is within a range determined by a <paramref name="lower"/> 
         /// and an <paramref name="upper"/> <see cref="float"/> value.
-        /// <para>An <see cref="System.ArgumentOutOfRangeException"/> with <paramref name="paramName"/> is thrown if the <see cref="float"/>
+        /// <para>An exception with <paramref name="paramName"/> is thrown if the <see cref="float"/>
         /// goes outside of this range.</para>
         /// </summary>
         /// <param name="lower">The value that the <see cref="float"/> must remain above or equal to.</param>
         /// <param name="upper">The value that the <see cref="float"/> must remain below or equal to.</param>
-        /// <param name="paramName">The parameter name to use if an <see cref="System.ArgumentOutOfRangeException"/> is thrown.</param>
-        /// <returns>The original <see cref="float"/> value, assuming no <see cref="System.ArgumentOutOfRangeException"/> was thrown.</returns>
+        /// <param name="paramName">The parameter name to use if an exception is thrown.</param>
+        /// <returns>The original <see cref="float"/> value, assuming no exception was thrown.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="float"/> is lower than
+        /// <paramref name="lower"/> or greater than <paramref name="upper"/>.</exception>
         public static float MustBeWithinRange(this float f, float lower, float upper, string paramName)
         {
             if (f >= lower && f <= upper)
@@ -275,11 +287,13 @@ namespace StephanHooft.Extensions
 
         /// <summary>
         /// Ensures that the <see cref="float"/> value is not equal to a certain <paramref name="value"/>.
-        /// <para>An <see cref="System.ArgumentOutOfRangeException"/> will be thrown if the <see cref="float"/> equals the <paramref name="value"/>.</para>
+        /// <para>An exception will be thrown if the <see cref="float"/> equals the <paramref name="value"/>.</para>
         /// </summary>
         /// <param name="value">The <see cref="float"/> value to check against.</param>
-        /// <param name="paramName">The parameter name to use if an <see cref="System.ArgumentOutOfRangeException"/> is thrown.</param>
-        /// <returns>The original <see cref="float"/> value, assuming no <see cref="System.ArgumentOutOfRangeException"/> was thrown.</returns>
+        /// <param name="paramName">The parameter name to use if an exception is thrown.</param>
+        /// <returns>The original <see cref="float"/> value, assuming no exception was thrown.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="float"/> is not equal to
+        /// <paramref name="value"/>.</exception>
         public static float MustNotBeEqualTo(this float f, float value, string paramName)
         {
             if (f != value)

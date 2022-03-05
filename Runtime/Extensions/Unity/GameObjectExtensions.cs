@@ -180,6 +180,8 @@ namespace StephanHooft.Extensions
         /// <param name="destroyGameObjectOnFailure">Set to <see cref="true"/> to destroy the 
         ///  <see cref="GameObject"/> if no <typeparamref name="TComponent"/> is found.</param>
         /// <returns>A <typeparamref name="TComponent"/>.</returns>
+        /// <exception cref="ComponentNotFoundException{TComponent}"> If no <typeparamref name="TComponent"/> was found.
+        /// </exception>
         public static TComponent GetEssentialComponent<TComponent>
             (this GameObject gameObject, bool destroyGameObjectOnFailure = false)
             where TComponent : Component
@@ -203,6 +205,8 @@ namespace StephanHooft.Extensions
         /// <param name="destroyGameObjectOnFailure">Set to <see cref="true"/> to destroy the 
         ///  <see cref="GameObject"/> if no <typeparamref name="TComponent"/> is found.</param>
         /// <returns>A <typeparamref name="TComponent"/>.</returns>
+        /// <exception cref="ComponentNotFoundException{TComponent}"> If no <typeparamref name="TComponent"/> was found.
+        /// </exception>
         public static TComponent GetEssentialComponentInChildren<TComponent>
             (this GameObject gameObject, bool destroyGameObjectOnFailure = false)
             where TComponent : Component
@@ -227,6 +231,8 @@ namespace StephanHooft.Extensions
         /// <param name="destroyGameObjectOnFailure">Set to <see cref="true"/> to destroy the 
         ///  <see cref="GameObject"/> if no <typeparamref name="TComponent"/> is found.</param>
         /// <returns>A <typeparamref name="TComponent"/>.</returns>
+        /// <exception cref="ComponentNotFoundException{TComponent}"> If no <typeparamref name="TComponent"/> was found.
+        /// </exception>
         public static TComponent GetEssentialComponentInHierarchy<TComponent>
             (this GameObject gameObject, bool destroyGameObjectOnFailure = false)
             where TComponent : Component
@@ -251,6 +257,8 @@ namespace StephanHooft.Extensions
         /// <param name="destroyGameObjectOnFailure">Set to <see cref="true"/> to destroy the 
         ///  <see cref="GameObject"/> if no <typeparamref name="TComponent"/> is found.</param>
         /// <returns>A <typeparamref name="TComponent"/>.</returns>
+        /// <exception cref="ComponentNotFoundException{TComponent}"> If no <typeparamref name="TComponent"/> was found.
+        /// </exception>
         public static TComponent GetEssentialComponentInParent<TComponent>
             (this GameObject gameObject, bool destroyGameObjectOnFailure = false)
             where TComponent : Component

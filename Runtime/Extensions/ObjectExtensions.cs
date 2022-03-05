@@ -34,6 +34,9 @@ namespace StephanHooft.Extensions
         /// Throws an exception if the <typeparamref name="T"/> is null. Returns the <typeparamref name="T"/> otherwise.
         /// </summary>
         /// <returns>The <typeparamref name="T"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// If the <typeparamref name="T"/> is <see cref="null"/>.
+        /// </exception>"
         public static T MustNotBeNull<T>(this T obj)
         {
             if (obj == null) 
@@ -48,6 +51,9 @@ namespace StephanHooft.Extensions
         /// </summary>
         /// <param name="paramName">The parameter name to use if an exception is thrown.</param>
         /// <returns>The <typeparamref name="T"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// If the <typeparamref name="T"/> is not <see cref="null"/>.
+        /// </exception>"
         public static T MustNotBeNull<T>(this T obj, string paramName)
         {
             if (obj == null)
@@ -64,6 +70,10 @@ namespace StephanHooft.Extensions
         /// <param name="destroyIfNull">The <see cref="GameObject"/> to destroy if the <typeparamref name="T"/>
         /// reference is null.</param>
         /// <returns>The <typeparamref name="T"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// If the <typeparamref name="T"/> is <see cref="null"/>, or if <paramref name="destroyIfNull"/> is
+        /// <see cref="null"/>.
+        /// </exception>"
         public static T MustNotBeNull<T>(this T obj, GameObject destroyIfNull)
         {
             if (destroyIfNull == null) 
@@ -87,6 +97,10 @@ namespace StephanHooft.Extensions
         /// reference is null.</param>
         /// <param name="paramName">The parameter name to use if an exception is thrown.</param>
         /// <returns>The <typeparamref name="T"/>.</returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// If the <typeparamref name="T"/> is <see cref="null"/>, or if <paramref name="destroyIfNull"/> is
+        /// <see cref="null"/>.
+        /// </exception>"
         public static T MustNotBeNull<T>(this T obj, GameObject destroyIfNull, string paramName)
         {
             if (destroyIfNull == null)

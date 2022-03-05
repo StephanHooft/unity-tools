@@ -78,8 +78,10 @@ namespace StephanHooft.Extensions
         /// </summary>
         /// <param name="primaryKey">The <typeparamref name="TPrimaryKey"/> to check for.</param>
         /// <param name="dictionaryName">The <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> name to use
-        /// if an <see cref="ArgumentException"/> is thrown.</param>
+        /// if an exception is thrown.</param>
         /// <returns>The original <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>.</returns>
+        /// <exception cref="System.ArgumentException">If the <typeparamref name="TPrimaryKey"/> is not present.
+        /// </exception>
         public static MultiKeyDictionary<TPrimaryKey, TSubKey, TValue> MustContainKey<TPrimaryKey, TSubKey, TValue>
             (this MultiKeyDictionary<TPrimaryKey, TSubKey, TValue> d, TPrimaryKey primaryKey, string dictionaryName)
         {
@@ -99,8 +101,10 @@ namespace StephanHooft.Extensions
         /// </summary>
         /// <param name="subKey">The <typeparamref name="TSubKey"/> to check for.</param>
         /// <param name="dictionaryName">The <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> name to use
-        /// if an <see cref="ArgumentException"/> is thrown.</param>
+        /// if an exception is thrown.</param>
         /// <returns>The original <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>.</returns>
+        /// <exception cref="System.ArgumentException">If the <typeparamref name="TSubKey"/> is not present.
+        /// </exception>
         public static MultiKeyDictionary<TPrimaryKey, TSubKey, TValue> MustContainKey<TPrimaryKey, TSubKey, TValue>
             (this MultiKeyDictionary<TPrimaryKey, TSubKey, TValue> d, TSubKey subKey, string dictionaryName)
         {
@@ -120,8 +124,10 @@ namespace StephanHooft.Extensions
         /// </summary>
         /// <param name="value">The <typeparamref name="TValue"/> to check for.</param>
         /// <param name="dictionaryName">The <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> name to use
-        /// if an <see cref="ArgumentException"/> is thrown.</param>
+        /// if an exception is thrown.</param>
         /// <returns>The original <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>.</returns>
+        /// <exception cref="System.ArgumentException">If the <typeparamref name="TValue"/> is not present.
+        /// </exception>
         public static MultiKeyDictionary<TPrimaryKey, TSubKey, TValue> MustContainValue<TPrimaryKey, TSubKey, TValue>
             (this MultiKeyDictionary<TPrimaryKey, TSubKey, TValue> d, TValue value, string dictionaryName)
         {
@@ -144,8 +150,9 @@ namespace StephanHooft.Extensions
         /// </summary>
         /// <param name="primaryKey">The <typeparamref name="TPrimaryKey"/> to check against.</param>
         /// <param name="dictionaryName">The <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> name to use
-        /// if an <see cref="ArgumentException"/> is thrown.</param>
+        /// if an exception is thrown.</param>
         /// <returns>The original <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>.</returns>
+        /// <exception cref="System.ArgumentException">If the <typeparamref name="TPrimaryKey"/> is present.</exception>
         public static MultiKeyDictionary<TPrimaryKey, TSubKey, TValue> MustNotContainKey<TPrimaryKey, TSubKey, TValue>
             (this MultiKeyDictionary<TPrimaryKey, TSubKey, TValue> d, TPrimaryKey primaryKey, string dictionaryName)
         {
@@ -165,8 +172,9 @@ namespace StephanHooft.Extensions
         /// </summary>
         /// <param name="subKey">The <typeparamref name="TSubKey"/> to check against.</param>
         /// <param name="dictionaryName">The <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> name to use
-        /// if an <see cref="ArgumentException"/> is thrown.</param>
+        /// if an exception is thrown.</param>
         /// <returns>The original <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>.</returns>
+        /// <exception cref="System.ArgumentException">If the <typeparamref name="TSubKey"/> is present.</exception>
         public static MultiKeyDictionary<TPrimaryKey, TSubKey, TValue> MustNotContainKey<TPrimaryKey, TSubKey, TValue>
             (this MultiKeyDictionary<TPrimaryKey, TSubKey, TValue> d, TSubKey subKey, string dictionaryName)
         {
@@ -186,8 +194,9 @@ namespace StephanHooft.Extensions
         /// </summary>
         /// <param name="value">The <typeparamref name="TValue"/> to check against.</param>
         /// <param name="dictionaryName">The <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> name to use
-        /// if an <see cref="ArgumentException"/> is thrown.</param>
+        /// if an exception is thrown.</param>
         /// <returns>The original <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/>.</returns>
+        /// <exception cref="System.ArgumentException">If the <typeparamref name="TValue"/> is present.</exception>
         public static MultiKeyDictionary<TPrimaryKey, TSubKey, TValue> MustNotContainValue<TPrimaryKey, TSubKey, TValue>
             (this MultiKeyDictionary<TPrimaryKey, TSubKey, TValue> d, TValue value, string dictionaryName)
         {

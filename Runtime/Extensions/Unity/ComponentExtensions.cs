@@ -38,7 +38,7 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// Destroys all other <see cref="Component"/>s of the same <see cref="Type"/> in the
+        /// Destroys all other <see cref="Component"/>s of the same <see cref="System.Type"/> in the
         /// hierarchy of the <see cref="GameObject"/> that the <see cref="Component"/> is attached to.
         /// </summary>
         public static void DestroyOtherComponentsOfSameTypeInHierarchy(this Component component)
@@ -82,6 +82,8 @@ namespace StephanHooft.Extensions
         /// <param name="destroyGameObjectOnFailure">Set to true to destroy the <see cref="Component"/>'s 
         /// <see cref="GameObject"/> if no <typeparamref name="TComponent"/> is found.</param>
         /// <returns>A <typeparamref name="TComponent"/>.</returns>
+        /// <exception cref="ComponentNotFoundException{TComponent}">If no <typeparamref name="TComponent"/> was found.
+        /// </exception>
         public static TComponent GetEssentialComponent<TComponent>
             (this Component component, bool destroyGameObjectOnFailure = false) where TComponent : Component
         {
@@ -105,6 +107,8 @@ namespace StephanHooft.Extensions
         /// <see cref="Component"/>'s <see cref="GameObject"/> if no <typeparamref name="TComponent"/>
         /// is found.</param>
         /// <returns>A <typeparamref name="TComponent"/>.</returns>
+        /// <exception cref="ComponentNotFoundException{TComponent}">If no <typeparamref name="TComponent"/> was found.
+        /// </exception>
         public static TComponent GetEssentialComponentInChildren<TComponent>
             (this Component component, bool destroyGameObjectOnFailure = false) where TComponent : Component
         {
@@ -129,6 +133,8 @@ namespace StephanHooft.Extensions
         /// <see cref="Component"/>'s <see cref="GameObject"/> if no <typeparamref name="TComponent"/>
         /// is found.</param>
         /// <returns>A <typeparamref name="TComponent"/>.</returns>
+        /// <exception cref="ComponentNotFoundException{TComponent}">If no <typeparamref name="TComponent"/> was found.
+        /// </exception>
         public static TComponent GetEssentialComponentInHierarchy<TComponent>
             (this Component component, bool destroyGameObjectOnFailure = false)
             where TComponent : Component
@@ -154,6 +160,8 @@ namespace StephanHooft.Extensions
         /// <see cref="Component"/>'s <see cref="GameObject"/> if no <typeparamref name="TComponent"/>
         /// is found.</param>
         /// <returns>A <typeparamref name="TComponent"/>.</returns>
+        /// <exception cref="ComponentNotFoundException{TComponent}">If no <typeparamref name="TComponent"/> was found.
+        /// </exception>
         public static TComponent GetEssentialComponentInParent<TComponent>
             (this Component component, bool destroyGameObjectOnFailure = false) where TComponent : Component
         {
@@ -189,7 +197,7 @@ namespace StephanHooft.Extensions
         /// <typeparamref name="TComponent"/>.
         /// </summary>
         /// <returns>True if the <see cref="Component"/>'s <see cref="GameObject"/> has a
-        /// <see cref="Component"/> of <see cref="Type"/> <typeparamref name="TComponent"/>.</returns>
+        /// <see cref="Component"/> of <see cref="System.Type"/> <typeparamref name="TComponent"/>.</returns>
         public static bool HasComponent<TComponent>(this Component component) where TComponent : Component
         {
             return
@@ -198,10 +206,10 @@ namespace StephanHooft.Extensions
 
         /// <summary>
         /// Returns <see cref="true"/> if the <see cref="Component"/> is the only one of its
-        /// <see cref="Type"/> in the hierarchy of the <see cref="GameObject"/> it's attached to.
+        /// <see cref="System.Type"/> in the hierarchy of the <see cref="GameObject"/> it's attached to.
         /// </summary>
         /// <returns><see cref="true"/> if the <see cref="Component"/> is the only one of its
-        /// <see cref="Type"/>.</returns>
+        /// <see cref="System.Type"/>.</returns>
         public static bool IsOnlyComponentOfTypeInHierarchy(this Component component)
         {
             var type = component.GetType();
@@ -211,12 +219,15 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// Returns the <see cref="Component"/>, but only if it's the only one of its <see cref="Type"/> in the
+        /// Returns the <see cref="Component"/>, but only if it's the only one of its <see cref="System.Type"/> in the
         /// hierarchy of the <see cref="GameObject"/> it's attached to.
-        /// <para>If another <see cref="Component"/> of the same <see cref="Type"/> is found in the
+        /// <para>If another <see cref="Component"/> of the same <see cref="System.Type"/> is found in the
         /// <see cref="GameObject"/>'s hierarchy, an exception is thrown.</para>
         /// </summary>
         /// <returns>The <see cref="Component"/>.</returns>
+        /// <exception cref="System.InvalidOperationException">If more than one <see cref="Component"/> of the same
+        /// <see cref="System.Type"/> are present in the <see cref="GameObject"/>'s hierarchy.
+        /// </exception>
         public static Component OnlyComponentOfTypeInHierarchy
             (this Component component)
         {
