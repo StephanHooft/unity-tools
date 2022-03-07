@@ -75,91 +75,91 @@ namespace StephanHooft.Extensions
         /// <summary>
         /// Ensures that the <see cref="SortedList{TKey, TValue}"/> contains a certain <typeparamref name="TKey"/>.
         /// </summary>
-        /// <param name="item">The <typeparamref name="TKey"/> to check for.</param>
+        /// <param name="key">The <typeparamref name="TKey"/> to check for.</param>
         /// <param name="listName">The <see cref="SortedList{TKey, TValue}"/> name to use if an exception is thrown.
         /// </param>
         /// <returns>The original <see cref="SortedList{TKey, TValue}"/>.</returns>
         /// <exception cref="System.ArgumentException">If the <see cref="SortedList{TKey, TValue}"/> does not contain
-        /// <paramref name="item"/>.</exception>"
-        public static SortedList<TKey, TValue> MustContain<TKey, TValue>
-            (this SortedList<TKey, TValue> l, TKey item, string listName)
+        /// the <paramref name="key"/>.</exception>"
+        public static SortedList<TKey, TValue> MustContainKey<TKey, TValue>
+            (this SortedList<TKey, TValue> l, TKey key, string listName)
         {
-            if (l.ContainsKey(item))
+            if (l.ContainsKey(key))
                 return
                     l;
             else
                 throw
                     new System.ArgumentException(string.Format(
                         "{1} {0} must be present in SortedList<{1}, {2}> {3}.",
-                        item, typeof(TKey), typeof(TValue), listName));
+                        key, typeof(TKey), typeof(TValue), listName));
         }
 
         /// <summary>
         /// Ensures that the <see cref="SortedList{TKey, TValue}"/> contains a certain <typeparamref name="TValue"/>.
         /// </summary>
-        /// <param name="item">The <typeparamref name="TValue"/> to check for.</param>
+        /// <param name="value">The <typeparamref name="TValue"/> to check for.</param>
         /// <param name="listName">The <see cref="SortedList{TKey, TValue}"/> name to use if an exception is thrown.
         /// </param>
         /// <returns>The original <see cref="SortedList{TKey, TValue}"/>.</returns>
         /// <exception cref="System.ArgumentException">If the <see cref="SortedList{TKey, TValue}"/> does not contain
-        /// <paramref name="item"/>.</exception>"
-        public static SortedList<TKey, TValue> MustContain<TKey, TValue>
-            (this SortedList<TKey, TValue> l, TValue item, string listName)
+        /// the <paramref name="value"/>.</exception>"
+        public static SortedList<TKey, TValue> MustContainValue<TKey, TValue>
+            (this SortedList<TKey, TValue> l, TValue value, string listName)
         {
-            if (l.ContainsValue(item))
+            if (l.ContainsValue(value))
                 return
                     l;
             else
                 throw
                     new System.ArgumentException(string.Format(
                         "{2} {0} must be present in SortedList<{1}, {2}> {3}.",
-                        item, typeof(TKey), typeof(TValue), listName));
+                        value, typeof(TKey), typeof(TValue), listName));
         }
 
         /// <summary>
         /// Ensures that the <see cref="SortedList{TKey, TValue}"/> does not contain a certain
         /// <typeparamref name="TKey"/>.
         /// </summary>
-        /// <param name="item">The <typeparamref name="TKey"/> to check against.</param>
+        /// <param name="key">The <typeparamref name="TKey"/> to check against.</param>
         /// <param name="listName">The <see cref="SortedList{TKey, TValue}"/> name to use if an exception is thrown.
         /// </param>
         /// <returns>The original <see cref="SortedList{TKey, TValue}"/>.</returns>
         /// <exception cref="System.ArgumentException">If the <see cref="SortedList{TKey, TValue}"/> contains
-        /// <paramref name="item"/>.</exception>"
-        public static SortedList<TKey, TValue> MustNotContain<TKey, TValue>
-            (this SortedList<TKey, TValue> l, TKey item, string listName)
+        /// the <paramref name="key"/>.</exception>"
+        public static SortedList<TKey, TValue> MustNotContainKey<TKey, TValue>
+            (this SortedList<TKey, TValue> l, TKey key, string listName)
         {
-            if (!l.ContainsKey(item))
+            if (!l.ContainsKey(key))
                 return
                     l;
             else
                 throw
                     new System.ArgumentException(string.Format(
                         "{1} {0} must not be present in SortedList<{1}, {2}> {3}.",
-                        item, typeof(TKey), typeof(TValue), listName));
+                        key, typeof(TKey), typeof(TValue), listName));
         }
 
         /// <summary>
         /// Ensures that the <see cref="SortedList{TKey, TValue}"/> does not contain a certain
         /// <typeparamref name="TValue"/>.
         /// </summary>
-        /// <param name="item">The <typeparamref name="TValue"/> to check against.</param>
+        /// <param name="value">The <typeparamref name="TValue"/> to check against.</param>
         /// <param name="listName">The <see cref="SortedList{TKey, TValue}"/> name to use if an exception is thrown.
         /// </param>
         /// <returns>The original <see cref="SortedList{TKey, TValue}"/>.</returns>
         /// <exception cref="System.ArgumentException">If the <see cref="SortedList{TKey, TValue}"/> contains
-        /// <paramref name="item"/>.</exception>"
-        public static SortedList<TKey, TValue> MustNotContain<TKey, TValue>
-            (this SortedList<TKey, TValue> l, TValue item, string listName)
+        /// the <paramref name="value"/>.</exception>"
+        public static SortedList<TKey, TValue> MustNotContainValue<TKey, TValue>
+            (this SortedList<TKey, TValue> l, TValue value, string listName)
         {
-            if (!l.ContainsValue(item))
+            if (!l.ContainsValue(value))
                 return
                     l;
             else
                 throw
                     new System.ArgumentException(string.Format(
                         "{2} {0} must not be present in SortedList<{1}, {2}> {3}.",
-                        item, typeof(TKey), typeof(TValue), listName));
+                        value, typeof(TKey), typeof(TValue), listName));
         }
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
