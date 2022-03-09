@@ -6,7 +6,7 @@ namespace StephanHooft.Lines
     /// <summary>
     /// Class that allows a <see cref="GameObject"/> to move along an <see cref="ISegmentedLine2D"/>.
     /// </summary>
-    public class LineWalker2D : MonoBehaviour
+    public class LineWalker2D : HybridUpdater.Behaviour
     {
         #region Fields
 
@@ -19,14 +19,11 @@ namespace StephanHooft.Lines
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
-        #region MonoBehaviour Implementation
+        #region HybridUpdater.Behaviour Implementation
 
-        private void OnEnable()
-        {
-            HybridUpdateManager.RegisterUpdateCallback(HybridUpdate, -1);
-        }
+        protected override int UpdatePriority => 100;
 
-        private void HybridUpdate(float deltaTime)
+        protected override void HybridUpdate(float deltaTime)
         {
             if (goingForward)
             {
@@ -57,10 +54,6 @@ namespace StephanHooft.Lines
             transform.localPosition = position;
         }
 
-        private void OnDisable()
-        {
-            HybridUpdateManager.UnregisterUpdateCallback(HybridUpdate);
-        }
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
     }
