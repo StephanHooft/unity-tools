@@ -138,25 +138,10 @@ namespace StephanHooft.HybridUpdate
                     iUpdater = updater;
                     callback = iUpdater.Register(GetType(), UpdatePriority, HybridUpdate);
                 }
-            }
-
-            /// <summary>
-            /// When overriding Start(), be sure to call base.Start() as well.
-            /// </summary>
-            protected virtual void Start()
-            {
-                if(callback == null)
+                else
                 {
-                    if (updater != null)
-                    {
-                        iUpdater = updater;
-                        callback = iUpdater.Register(GetType(), UpdatePriority, HybridUpdate);
-                    }
-                    else
-                    {
-                        Debug.LogWarning(string.Format("A {0} cannot update without setting a {1} reference."
-                            , typeof(Behaviour).Name, typeof(HybridUpdater).Name));
-                    }
+                    Debug.LogWarning(string.Format("A {0} cannot update without setting a {1} reference."
+                        , typeof(Behaviour).Name, typeof(HybridUpdater).Name));
                 }
             }
 
