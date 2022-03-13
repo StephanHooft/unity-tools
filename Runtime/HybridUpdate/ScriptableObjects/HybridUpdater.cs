@@ -223,8 +223,11 @@ namespace StephanHooft.HybridUpdate
                         return
                             false;
                     case HybridUpdatePhase.None:
-                        phase = HybridUpdatePhase.FixedUpdate;
-                        callersProcessed = 1;
+                        if (callers > 1)
+                        {
+                            phase = HybridUpdatePhase.FixedUpdate;
+                            callersProcessed = 1;
+                        }
                         return
                             true;
                     default:
@@ -258,8 +261,11 @@ namespace StephanHooft.HybridUpdate
                         return
                             false;
                     case HybridUpdatePhase.None:
-                        phase = HybridUpdatePhase.Update;
-                        callersProcessed = 1;
+                        if (callers > 1)
+                        {
+                            phase = HybridUpdatePhase.Update;
+                            callersProcessed = 1;
+                        }
                         return
                             true;
                     default:
