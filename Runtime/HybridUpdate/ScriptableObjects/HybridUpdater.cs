@@ -132,16 +132,21 @@ namespace StephanHooft.HybridUpdate
             /// When overriding OnEnable(), be sure to call base.OnEnable() as well as it registers the object to its
             /// assigned <see cref="HybridUpdater"/>.
             /// </summary>
-            protected  virtual void OnEnable()
+            protected virtual void OnEnable()
             {
+                if (Application.isPlaying)
+                    return;
                 if (updater != null)
                 {
                     iUpdater = updater;
                     callback = iUpdater.Register(GetType(), UpdatePriority, HybridUpdate);
                 }
                 else
+                {
                     Debug.LogWarning(string.Format("A {0} cannot update without setting a {1} reference."
                         , typeof(Behaviour).Name, typeof(HybridUpdater).Name));
+                    Destroy(this);
+                }
             }
 
             /// <summary>
@@ -150,20 +155,17 @@ namespace StephanHooft.HybridUpdate
             /// </summary>
             protected virtual void OnDisable()
             {
-                if (callback != null)
-                    iUpdater.Unregister(callback);
+                iUpdater.Unregister(callback);
             }
 
             private void FixedUpdate()
             {
-                if (callback != null)
-                    iUpdater.ReportFixedUpdateCall();
+                iUpdater.ReportFixedUpdateCall();
             }
 
             private void Update()
             {
-                if (callback != null)
-                    iUpdater.ReportUpdateCall(Time.deltaTime);
+                iUpdater.ReportUpdateCall(Time.deltaTime);
             }
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
