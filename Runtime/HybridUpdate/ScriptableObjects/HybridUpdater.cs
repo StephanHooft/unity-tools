@@ -129,43 +129,56 @@ namespace StephanHooft.HybridUpdate
             #region MonoBehaviour Implementation
 
             /// <summary>
-            /// When overriding OnEnable(), be sure to call base.OnEnable() as well as it registers the object to its
-            /// assigned <see cref="HybridUpdater"/>.
+            /// When overriding OnEnable(), be sure to call base.OnEnable() as well.
             /// </summary>
             protected virtual void OnEnable()
             {
-                if (Application.isPlaying)
-                    return;
                 if (updater != null)
                 {
                     iUpdater = updater;
                     callback = iUpdater.Register(GetType(), UpdatePriority, HybridUpdate);
                 }
-                else
+            }
+
+            /// <summary>
+            /// When overriding Start(), be sure to call base.Start() as well.
+            /// </summary>
+            protected virtual void Start()
+            {
+                if(callback == null)
                 {
-                    Debug.LogWarning(string.Format("A {0} cannot update without setting a {1} reference."
-                        , typeof(Behaviour).Name, typeof(HybridUpdater).Name));
-                    Destroy(this);
+                    if (updater != null)
+                    {
+                        iUpdater = updater;
+                        callback = iUpdater.Register(GetType(), UpdatePriority, HybridUpdate);
+                    }
+                    else
+                    {
+                        Debug.LogWarning(string.Format("A {0} cannot update without setting a {1} reference."
+                            , typeof(Behaviour).Name, typeof(HybridUpdater).Name));
+                    }
                 }
             }
 
             /// <summary>
-            /// When overriding OnDisable(), be sure to call base.OnDisable() as well as it unregisters the object from
-            /// its assigned <see cref="HybridUpdater"/>.
+            /// When overriding OnDisable(), be sure to call base.OnDisable() as well.
             /// </summary>
             protected virtual void OnDisable()
             {
-                iUpdater.Unregister(callback);
+                if (callback == null)
+                    iUpdater.Unregister(callback);
             }
 
             private void FixedUpdate()
             {
-                iUpdater.ReportFixedUpdateCall();
+                if (callback == null)
+                    iUpdater.ReportFixedUpdateCall();
             }
 
             private void Update()
             {
-                iUpdater.ReportUpdateCall(Time.deltaTime);
+                if (callback == null)
+                    iUpdater.ReportUpdateCall(Time.deltaTime);
             }
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
