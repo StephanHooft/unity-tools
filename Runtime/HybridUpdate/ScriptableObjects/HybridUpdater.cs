@@ -150,19 +150,19 @@ namespace StephanHooft.HybridUpdate
             /// </summary>
             protected virtual void OnDisable()
             {
-                if (callback == null)
+                if (callback != null)
                     iUpdater.Unregister(callback);
             }
 
             private void FixedUpdate()
             {
-                if (callback == null)
+                if (callback != null)
                     iUpdater.ReportFixedUpdateCall();
             }
 
             private void Update()
             {
-                if (callback == null)
+                if (callback != null)
                     iUpdater.ReportUpdateCall(Time.deltaTime);
             }
 
