@@ -1,61 +1,65 @@
-﻿using StephanHooft.Extensions;
+using StephanHooft.Extensions;
 using System.Collections.Generic;
 
 namespace StephanHooft.StateMachines
 {
     /// <summary>
-    /// A finite <see cref="IState"/> machine.
+    /// A finite <see cref="IState{TEnum}"/> machine.
     /// </summary>
-    public sealed class StateMachine : IStateMachine
+    /// <typeparam name="TEnum">
+    /// A <see cref="System.Enum"/> that acts as a key for the <see cref="IState{TEnum}"/>s
+    /// registered to the <see cref="StateMachine{TEnum}"/> upon instantiation.
+    /// </typeparam>
+    public sealed class StateMachine<TEnum> : IStateMachine<TEnum> where TEnum : System.Enum
     {
         #region Events
 
         /// <summary>
-        /// Invoked after the <see cref="StateMachine"/> transitions to a different <see cref="IState"/>, or enters a
-        /// <see cref="IState"/> for the first time after being instantiated.
+        /// Invoked after the <see cref="StateMachine{TEnum}"/> transitions to a different <see cref="IState{TEnum}"/>,
+        /// or enters a <see cref="IState{TEnum}"/> for the first time after being instantiated.
         /// </summary>
-        public event System.Action<IStateMachine> OnStateChange;
+        public event System.Action<IStateMachine<TEnum>> OnStateChange;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
         #region Properties
 
         /// <summary>
-        /// The name of the currently set <see cref="IState"/>.
+        /// The <typeparamref name="TEnum"/> key of the currently set <see cref="IState{TEnum}"/>.
         /// </summary>
         /// <exception cref="System.InvalidOperationException">
-        /// If no <see cref="IState"/> is set.
+        /// If no <see cref="IState{TEnum}"/> is set.
         /// </exception>
-        public string CurrentState
+        public TEnum CurrentState
             => StateSet
-            ? currentState.Name
+            ? currentState.Key
             : throw
                 new System.InvalidOperationException(NoStateSet);
 
         /// <summary>
-        /// <see cref="true"/> if the <see cref="StateMachine"/> has an <see cref="IState"/> set.
+        /// <see cref="true"/> if the <see cref="StateMachine{TEnum}"/> has an <see cref="IState{TEnum}"/> set.
         /// </summary>
         public bool StateSet => currentState != null;
 
         /// <summary>
-        /// The amount of time (in seconds) that the current <see cref="IState"/> has been active.
+        /// The amount of time (in seconds) that the current <see cref="IState{TEnum}"/> has been active.
         /// <para>This value resets to 0 every time a state transition occurs.</para>
         /// </summary>
         /// <exception cref="System.InvalidOperationException">
-        /// If no <see cref="IState"/> is set.
+        /// If no <see cref="IState{TEnum}"/> is set.
         /// </exception>
         public float TimeCurrentStateActive
             => StateSet
-                ? timeCurrentStateActive
-                : throw
-                    new System.InvalidOperationException(NoStateSet);
+            ? timeCurrentStateActive
+            : throw
+                new System.InvalidOperationException(NoStateSet);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
         #region Fields
 
-        private IState currentState;
-        private readonly List<IState> states;
+        private IState<TEnum> currentState;
+        private readonly Dictionary<TEnum, IState<TEnum>> states;
         private float timeCurrentStateActive;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,74 +67,68 @@ namespace StephanHooft.StateMachines
         #region Constructor
 
         /// <summary>
-        /// Creates a new <see cref="StateMachine"/>.
+        /// Creates a new <see cref="StateMachine{TEnum}"/>.
         /// </summary>
-        /// <param name="states">A collection of the <see cref="IState"/>s to be available to the
-        /// <see cref="StateMachine"/>.</param>
+        /// <param name="states">A collection of the <see cref="IState{TEnum}"/>s to be available to the
+        /// <see cref="StateMachine{TEnum}"/>.</param>
         /// <exception cref="System.ArgumentException">
-        /// If <paramref name="states"/> is empty, or if one of its <see cref="IState"/>s is invalid.
+        /// If <paramref name="states"/> is empty.
         /// </exception>
         /// <exception cref="System.ArgumentNullException">
-        /// If <paramref name="states"/> or any of its <see cref="IState"/>s are <see cref="null"/>.
+        /// If <paramref name="states"/> or any of its <see cref="IState{TEnum}"/>s are <see cref="null"/>.
         /// </exception>
         /// <exception cref="Exceptions.StateDuplicationException">
-        /// If one of the <see cref="IState"/>s in <paramref name="states"/> is a duplicate.
+        /// If one of the <see cref="IState{TEnum}"/>s in <paramref name="states"/> is a duplicate.
         /// </exception>
-        public StateMachine(IEnumerable<IState> states)
+        public StateMachine(IEnumerable<IState<TEnum>> states)
         {
             if (states == null)
                 throw
                     new System.ArgumentNullException("states");
             var types = new List<System.Type>();
-            var names = new List<string>();
             foreach (var state in states)
             {
                 if (state == null)
                     throw
-                        new System.ArgumentNullException(NoNullPermittedInStateCollection);
+                        new System.ArgumentNullException("states", NoNullPermittedInStateCollection);
+                var key = state.Key;
                 var type = state.GetType();
+                if (this.states.ContainsKey(key))
+                    throw
+                        new Exceptions.StateDuplicationException(key);
                 if (types.Contains(type))
                     throw
                         new Exceptions.StateDuplicationException(type);
-                var name = state.Name;
-                if (name.IsNullOrEmpty())
-                    throw
-                        new System.ArgumentException(StateNameInvalid(type));
-                if (names.Contains(name))
-                    throw
-                        new System.ArgumentException(StateNameDuplicate(name, type));
-                this.states.Add(state);
-                state.SetStateRegister(NameToState);
+                this.states.Add(state.Key, state);
+                state.SetStateRegister(EnumToState);
                 types.Add(type);
-                names.Add(name);
             }
             if (this.states.IsEmpty())
                 throw
                     new System.ArgumentException(CollectionIsEmpty, "states");
         }
-
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
-        #region IStateMachine Implementation
+        #region IStateMachine<TEnum> Implementation
 
         /// <summary>
-        /// Orders the <see cref="StateMachine"/> to transition to a certain <see cref="IState"/>. 
-        /// <para>The <see cref="StateMachine"/> will automatically call the <see cref="IState.ExitState"/> method of
-        /// its current <see cref="IState"/> (if any) and the <see cref="IState.EnterState"/> method of the target
-        /// <see cref="IState"/>.</para>
+        /// Orders the <see cref="StateMachine{TEnum}"/> to transition to a certain <see cref="IState{TEnum}"/>. 
+        /// <para>The <see cref="StateMachine{TEnum}"/> will automatically call the
+        /// <see cref="IState{TEnum}.ExitState"/> method of its current <see cref="IState{TEnum}"/> (if any) and the
+        /// <see cref="IState{TEnum}.EnterState"/> method of the target <see cref="IState{TEnum}"/>.</para>
         /// </summary>
-        /// <param name="targetStateName">
-        /// The <see cref="string"/> name of the <see cref="IState"/> to set.
+        /// <param name="targetState">
+        /// The <typeparamref name="TEnum"/> key of the <see cref="IState{TEnum}"/> to set.
         /// </param>
         /// <exception cref="Exceptions.StateUnavailableException">
-        /// If no <see cref="IState"/> with the set <see cref="string"/> name is registered to the
-        /// <see cref="StateMachine"/>.
+        /// If no <see cref="IState{TEnum}"/> with the set <typeparamref name="TEnum"/> key is registered to the
+        /// <see cref="StateMachine{TEnum}"/>.
         /// </exception>
-        public void SetState(string targetStateName)
+        public void SetState(TEnum targetState)
         {
             try
             {
-                SetState(NameToState(targetStateName));
+                SetState(EnumToState(targetState));
             }
             catch (System.Exception e)
             {
@@ -140,12 +138,12 @@ namespace StephanHooft.StateMachines
         }
 
         /// <summary>
-        /// Tells the current <see cref="IState"/> to call its <see cref="IState.UpdateState"/> member.
+        /// Tells the current <see cref="IState{TEnum}"/> to call its <see cref="IState{TEnum}.UpdateState"/> member.
         /// This may cause a state transition.
         /// </summary>
         /// <param name="deltaTime">The time difference (in seconds) since the previous update.</param>
         /// <exception cref="System.InvalidOperationException">
-        /// If no <see cref="IState"/> is set.
+        /// If no <see cref="IState{TEnum}"/> is set.
         /// </exception>
         public void UpdateCurrentState(float deltaTime)
         {
@@ -161,17 +159,7 @@ namespace StephanHooft.StateMachines
         #endregion
         #region Methods
 
-        private IState NameToState(string name)
-        {
-            var foundState = states.Find(state => state.Name == name);
-            if (foundState == null)
-                throw
-                    new Exceptions.StateUnavailableException(name);
-            return
-                foundState;
-        }
-
-        private void SetState(IState targetState)
+        private void SetState(IState<TEnum> targetState)
         {
             if (targetState != currentState)
             {
@@ -185,27 +173,30 @@ namespace StephanHooft.StateMachines
                 timeCurrentStateActive = 0f;
             }
         }
+
+        private IState<TEnum> EnumToState(TEnum state)
+        {
+            if (!states.ContainsKey(state))
+                throw
+                    new Exceptions.StateUnavailableException(state);
+            return
+                states[state];
+        }
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
         #region Error Messages
 
         private string CollectionIsEmpty
-            => string.Format("The provided IState collection is empty.");
+            => string.Format("The provided IState<{0}> collection is empty.",
+                typeof(TEnum).Name);
 
         private string NoNullPermittedInStateCollection
-            => string.Format("The provided IState collection contains null items.");
+            => string.Format("The provided IState<{0}> collection contains null items.",
+                typeof(TEnum).Name);
 
         private string NoStateSet
-            => string.Format("No IState is set to the StateMachine.");
-
-        private string StateNameDuplicate(string name, System.Type type)
-            => string.Format(
-                "The name '{0}' of IState with type '{1}' has already been registered to the StateMachine.",
-                name, type.Name);
-
-        private string StateNameInvalid(System.Type type)
-            => string.Format("The name of IState '{0}' may not be null or empty.",
-                type.Name);
+            => string.Format("No IState<{0}> is set to the StateMachine<{0}>.",
+                typeof(TEnum).Name);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
