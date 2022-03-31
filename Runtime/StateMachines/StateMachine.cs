@@ -55,7 +55,7 @@ namespace StephanHooft.StateMachines
         #region Fields
 
         private IState currentState;
-        private readonly List<IState> states;
+        private readonly List<IState> states = new List<IState>();
         private float timeCurrentStateActive;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////

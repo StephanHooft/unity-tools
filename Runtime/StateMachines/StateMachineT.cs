@@ -59,7 +59,7 @@ namespace StephanHooft.StateMachines
         #region Fields
 
         private IState<TEnum> currentState;
-        private readonly Dictionary<TEnum, IState<TEnum>> states;
+        private readonly Dictionary<TEnum, IState<TEnum>> states = new Dictionary<TEnum, IState<TEnum>>();
         private float timeCurrentStateActive;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
