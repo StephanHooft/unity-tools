@@ -1,6 +1,7 @@
 using StephanHooft.Attributes;
 using StephanHooft.Extensions;
 using StephanHooft.SortKeyDictionary;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ namespace StephanHooft.HybridUpdate
     /// remaining in sync with every call to FixedUpdate.</para>
     /// </summary>
     [CreateAssetMenu(fileName = "New HybridUpdater", menuName = "HybridUpdate/Hybrid Updater", order = 1)]
-    public class HybridUpdater : ScriptableObject, IHybridUpdater
+    public class HybridUpdater : ScriptableObject, IHybridUpdater, IEnumerable<(string, int)>
     {
         #region Fields
 
@@ -70,7 +71,28 @@ namespace StephanHooft.HybridUpdate
             if (set.IsEmpty())
                 callbackSets.Remove(callback.type);
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region IEnumerable Implementation
 
+        public IEnumerator<(string, int)> GetEnumerator()
+        {
+            var enumerator = new List<(string, int)>();
+            foreach(var key in callbackSets.Keys)
+                enumerator.Add((key.FullName, callbackSets.SortKeyOf(key)));
+            enumerator.Sort(CompareNameRankPairs);
+            return
+                enumerator.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+            => GetEnumerator();
+
+        private static int CompareNameRankPairs((string, int rank) x, (string, int rank) y)
+        {
+            return
+                x.rank.CompareTo(y.rank);
+        }
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
         #region Methods
@@ -95,7 +117,6 @@ namespace StephanHooft.HybridUpdate
                 return
                     callbackSets[type];
         }
-
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
         #region Behaviour Class
@@ -273,7 +294,6 @@ namespace StephanHooft.HybridUpdate
                             new System.NotImplementedException();
                 };
             }
-
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             #endregion
         }
@@ -323,7 +343,6 @@ namespace StephanHooft.HybridUpdate
                 fixedLast = false;
                 totalStolenTime = 0f;
             }
-
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             #endregion
         }
