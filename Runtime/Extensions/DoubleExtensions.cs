@@ -5,6 +5,13 @@ namespace StephanHooft.Extensions
     /// </summary>
     public static class DoubleExtensions
     {
+        #region Constants
+
+        private const double deg2Rad = 0.0174532924;
+        private const double rad2Deg = 57.29578;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
         #region Static Methods
 
         /// <summary>
@@ -15,6 +22,48 @@ namespace StephanHooft.Extensions
         {
             return
                 System.Math.Abs(d);
+        }
+
+        /// <summary>
+        /// Returns the angle (in either radians or degrees) whose cosine is the <see cref="double"/> value.
+        /// </summary>
+        /// <param name="returnDegrees">Set to <see cref="true"/> to return degrees instead of radians.</param>
+        /// <returns>A <see cref="double"/> angle (in either radians or degrees).</returns>
+        public static double ArcCos(this double d, bool returnDegrees = false)
+        {
+            var result = System.Math.Acos(d);
+            if (returnDegrees)
+                result *= rad2Deg;
+            return
+                result;
+        }
+
+        /// <summary>
+        /// Returns the angle (in either radians or degrees) whose sine is the <see cref="double"/> value.
+        /// </summary>
+        /// <param name="returnDegrees">Set to <see cref="true"/> to return degrees instead of radians.</param>
+        /// <returns>A <see cref="double"/> angle (in either radians or degrees).</returns>
+        public static double ArcSin(this double d, bool returnDegrees = false)
+        {
+            var result = System.Math.Asin(d);
+            if (returnDegrees)
+                result *= rad2Deg;
+            return
+                result;
+        }
+
+        /// <summary>
+        /// Returns the angle (in either radians or degrees) whose tangent is the <see cref="double"/> value.
+        /// </summary>
+        /// <param name="returnDegrees">Set to <see cref="true"/> to return degrees instead of radians.</param>
+        /// <returns>A <see cref="double"/> angle (in either radians or degrees).</returns>
+        public static double ArcTan(this double d, bool returnDegrees = false)
+        {
+            var result = System.Math.Atan(d);
+            if (returnDegrees)
+                result *= rad2Deg;
+            return
+                result;
         }
 
         /// <summary>
@@ -39,6 +88,19 @@ namespace StephanHooft.Extensions
                 d = max;
             return
                 d;
+        }
+
+        /// <summary>
+        /// Returns the cosine of the <see cref="double"/> angle.
+        /// </summary>
+        /// <param name="useDegrees">Set to <see cref="true"/> to use degrees instead of radians.</param>
+        /// <returns>The return value between -1 and 1.</returns>
+        public static double Cos(this double d, bool useDegrees = false)
+        {
+            if (useDegrees)
+                d *= deg2Rad;
+            return
+                System.Math.Cos(d);
         }
 
         /// <summary>
@@ -393,6 +455,19 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
+        /// Returns the sine of the <see cref="double"/> angle.
+        /// </summary>
+        /// <param name="useDegrees">Set to <see cref="true"/> to use degrees instead of radians.</param>
+        /// <returns>The return value between -1 and 1.</returns>
+        public static double Sin(this double d, bool useDegrees = false)
+        {
+            if (useDegrees)
+                d *= deg2Rad;
+            return
+                System.Math.Sin(d);
+        }
+
+        /// <summary>
         /// Returns the square root of the <see cref="double"/>.
         /// </summary>
         /// <returns>The <see cref="double"/>'s square root.</returns>
@@ -400,6 +475,19 @@ namespace StephanHooft.Extensions
         {
             return
                 System.Math.Sqrt(d);
+        }
+
+        /// <summary>
+        /// Returns the tangent of the <see cref="double"/> angle.
+        /// </summary>
+        /// <param name="useDegrees">Set to <see cref="true"/> to use degrees instead of radians.</param>
+        /// <returns>The tangent of the <see cref="double"/> angle.</returns>
+        public static double Tan(this double d, bool useDegrees = false)
+        {
+            if (useDegrees)
+                d *= deg2Rad;
+            return
+                System.Math.Tan(d);
         }
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion

@@ -20,6 +20,48 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
+        /// Returns the angle (in either radians or degrees) whose cosine is the <see cref="float"/> value.
+        /// </summary>
+        /// <param name="returnDegrees">Set to <see cref="true"/> to return degrees instead of radians.</param>
+        /// <returns>A <see cref="float"/> angle (in either radians or degrees).</returns>
+        public static float ArcCos(this float f, bool returnDegrees = false)
+        {
+            var result = Mathf.Acos(f);
+            if (returnDegrees)
+                result *= Mathf.Rad2Deg;
+            return
+                result;
+        }
+
+        /// <summary>
+        /// Returns the angle (in either radians or degrees) whose sine is the <see cref="float"/> value.
+        /// </summary>
+        /// <param name="returnDegrees">Set to <see cref="true"/> to return degrees instead of radians.</param>
+        /// <returns>A <see cref="float"/> angle (in either radians or degrees).</returns>
+        public static float ArcSin(this float f, bool returnDegrees = false)
+        {
+            var result = Mathf.Asin(f);
+            if (returnDegrees)
+                result *= Mathf.Rad2Deg;
+            return
+                result;
+        }
+
+        /// <summary>
+        /// Returns the angle (in either radians or degrees) whose tangent is the <see cref="float"/> value.
+        /// </summary>
+        /// <param name="returnDegrees">Set to <see cref="true"/> to return degrees instead of radians.</param>
+        /// <returns>A <see cref="float"/> angle (in either radians or degrees).</returns>
+        public static float ArcTan(this float f, bool returnDegrees = false)
+        {
+            var result = Mathf.Atan(f);
+            if (returnDegrees)
+                result *= Mathf.Rad2Deg;
+            return
+                result;
+        }
+
+        /// <summary>
         /// <para>Clamps the given <see cref="float"/> value between the given minimum <see cref="float"/> and maximum <see cref="float"/> values. 
         /// Returns the given value if it is within the <paramref name="min"/> and <paramref name="max"/> range.</para>
         /// </summary>
@@ -30,6 +72,19 @@ namespace StephanHooft.Extensions
         {
             return
                 Mathf.Clamp(f, min, max);
+        }
+
+        /// <summary>
+        /// Returns the cosine of the <see cref="float"/> angle.
+        /// </summary>
+        /// <param name="useDegrees">Set to <see cref="true"/> to use degrees instead of radians.</param>
+        /// <returns>The return value between -1 and 1.</returns>
+        public static float Cos(this float f, bool useDegrees = false)
+        {
+            if (useDegrees)
+                f *= Mathf.Deg2Rad;
+            return
+                Mathf.Cos(f);
         }
 
         /// <summary>
@@ -376,6 +431,19 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
+        /// Returns the sine of the <see cref="float"/> angle.
+        /// </summary>
+        /// <param name="useDegrees">Set to <see cref="true"/> to use degrees instead of radians.</param>
+        /// <returns>The return value between -1 and 1.</returns>
+        public static float Sin(this float f, bool useDegrees = false)
+        {
+            if (useDegrees)
+                f *= Mathf.Deg2Rad;
+            return
+                Mathf.Sin(f);
+        }
+
+        /// <summary>
         /// Returns the square root of the <see cref="float"/>.
         /// </summary>
         /// <returns>The <see cref="float"/>'s square root.</returns>
@@ -383,6 +451,19 @@ namespace StephanHooft.Extensions
         {
             return
                 Mathf.Sqrt(f);
+        }
+
+        /// <summary>
+        /// Returns the tangent of the <see cref="float"/> angle.
+        /// </summary>
+        /// <param name="useDegrees">Set to <see cref="true"/> to use degrees instead of radians.</param>
+        /// <returns>The tangent of the <see cref="float"/> angle.</returns>
+        public static float Tan(this float f, bool useDegrees = false)
+        {
+            if (useDegrees)
+                f *= Mathf.Deg2Rad;
+            return
+                Mathf.Tan(f);
         }
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
