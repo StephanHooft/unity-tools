@@ -62,8 +62,8 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// <para>Clamps the given <see cref="float"/> value between the given minimum <see cref="float"/> and maximum <see cref="float"/> values. 
-        /// Returns the given value if it is within the <paramref name="min"/> and <paramref name="max"/> range.</para>
+        /// Clamps the given <see cref="float"/> value between the given minimum <see cref="float"/> and maximum <see cref="float"/> values. 
+        /// <para>Returns the given value if it is within the <paramref name="min"/> and <paramref name="max"/> range.</para>
         /// </summary>
         /// <param name="min">The minimum value of the range to clamp to.</param>
         /// <param name="max">The maximum value of the range to clamp to.</param>
@@ -130,8 +130,8 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// <para>Re-maps a <see cref="float"/> from one range to another.</para>
-        /// <para>Does not clamp values within the range by default, because out-of-range values are sometimes intended and useful.
+        /// Re-maps a <see cref="float"/> from one range to another.
+        /// <para>Does not clamp values within the range by default, because out-of-range values are sometimes intended and useful.</para>
         /// </summary>
         /// <param name="inMin">The lower bound of the <see cref="float"/>'s current range.</param>
         /// <param name="inMax">The upper bound of the <see cref="float"/>'s current range.</param>
