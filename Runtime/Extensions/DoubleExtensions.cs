@@ -313,7 +313,7 @@ namespace StephanHooft.Extensions
         /// <returns>The original <see cref="double"/> value, assuming no exception was thrown.</returns>
         /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="double"/> is greater than or equal to
         /// <paramref name="upper"/>.</exception>
-        public static double MustBeLowerThan(this double d, double upper, string paramName)
+        public static double MustBeBelow(this double d, double upper, string paramName)
         {
             if (d < upper)
                 return
@@ -332,7 +332,7 @@ namespace StephanHooft.Extensions
         /// <returns>The original <see cref="double"/> value, assuming no exception was thrown.</returns>
         /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="double"/> is greater than
         /// <paramref name="upper"/>.</exception>
-        public static double MustBeLowerThanOrEqualTo(this double d, double upper, string paramName)
+        public static double MustBeBelowOrEqualTo(this double d, double upper, string paramName)
         {
             if (d <= upper)
                 return

@@ -220,7 +220,7 @@ namespace StephanHooft.Extensions
         /// <returns>The original <see cref="int"/> value.</returns>
         /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="int"/> is greater than or equal to
         /// <paramref name="upper"/>.</exception>
-        public static int MustBeLowerThan(this int i, int upper, string paramName)
+        public static int MustBeBelow(this int i, int upper, string paramName)
         {
             if (i < upper)
                 return
@@ -239,7 +239,7 @@ namespace StephanHooft.Extensions
         /// <returns>The original <see cref="int"/> value.</returns>
         /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="int"/> is greater than
         /// <paramref name="upper"/>.</exception>
-        public static int MustBeLowerThanOrEqualTo(this int i, int upper, string paramName)
+        public static int MustBeBelowOrEqualTo(this int i, int upper, string paramName)
         {
             if (i <= upper)
                 return

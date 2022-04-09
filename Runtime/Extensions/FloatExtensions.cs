@@ -289,7 +289,7 @@ namespace StephanHooft.Extensions
         /// <returns>The original <see cref="float"/> value, assuming no exception was thrown.</returns>
         /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="float"/> is greater than or equal to
         /// <paramref name="upper"/>.</exception>
-        public static float MustBeLowerThan(this float f, float upper, string paramName)
+        public static float MustBeBelow(this float f, float upper, string paramName)
         {
             if (f < upper)
                 return
@@ -308,7 +308,7 @@ namespace StephanHooft.Extensions
         /// <returns>The original <see cref="float"/> value, assuming no exception was thrown.</returns>
         /// <exception cref="System.ArgumentOutOfRangeException">If the <see cref="float"/> is greater than
         /// <paramref name="upper"/>.</exception>
-        public static float MustBeLowerThanOrEqualTo(this float f, float upper, string paramName)
+        public static float MustBeBelowOrEqualTo(this float f, float upper, string paramName)
         {
             if (f <= upper)
                 return
