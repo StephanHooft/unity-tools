@@ -12,8 +12,12 @@ namespace StephanHooft.Extensions
         /// <summary>
         /// Returns direction toward another <see cref="Vector2"/> destination.
         /// </summary>
-        /// <param name="destination">The <see cref="Vector2"/> destination to calculate direction to.</param>
-        /// <returns>The direction from the source <see cref="Vector2"/> to the destination <see cref="Vector2"/>.</returns>
+        /// <param name="destination">
+        /// The <see cref="Vector2"/> destination to calculate direction to.
+        /// </param>
+        /// <returns>
+        /// The direction from the source <see cref="Vector2"/> to the destination <see cref="Vector2"/>.
+        /// </returns>
         public static Vector2 DirectionTo(this Vector2 source, Vector2 destination)
         {
             return
@@ -23,8 +27,12 @@ namespace StephanHooft.Extensions
         /// <summary>
         /// Returns the distance <see cref="float"/> from this <see cref="Vector2"/> to another.
         /// </summary>
-        /// <param name="destination">The destination <see cref="Vector2"/>.</param>
-        /// <returns>The <see cref="float"/> distance from the <paramref name="source"/> to the <paramref name="destination"/>.</returns>
+        /// <param name="destination">
+        /// The destination <see cref="Vector2"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="float"/> distance from the <paramref name="source"/> to the <paramref name="destination"/>.
+        /// </returns>
         public static float DistanceTo(this Vector2 source, Vector2 destination)
         {
             return
@@ -32,9 +40,33 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
+        /// Rotates the <see cref="Vector2"/> by a certain <paramref name="rotationAmount"/> (in degrees or radians).
+        /// </summary>
+        /// <param name="rotationAmount">
+        /// The amount to rotate the <see cref="Vector2"/>.
+        /// </param>
+        /// <param name="useDegrees">
+        /// Set to <see cref="true"/> to use degrees instead of radians.
+        /// </param>
+        /// <returns>
+        /// The rotated <see cref="Vector2"/>.
+        /// </returns>
+        public static Vector2 Rotate(this Vector2 source, float rotationAmount, bool useDegrees = false)
+        {
+            var cosRotation = rotationAmount.Cos(useDegrees);
+            var sinRotation = rotationAmount.Sin(useDegrees);
+            var rotatedX = source.x * cosRotation - source.y * sinRotation;
+            var rotatedY = source.x * sinRotation + source.y * cosRotation;
+            return
+                new Vector2(rotatedX, rotatedY);
+        }
+
+        /// <summary>
         /// Converts a <see cref="Vector2"/>[] into a <see cref="Vector3"/>[].
         /// </summary>
-        /// <returns>A <see cref="Vector3"/>[].</returns>
+        /// <returns>
+        /// A <see cref="Vector3"/>[].
+        /// </returns>
         public static Vector3[] ToVector3Array(this Vector2[] array)
         {
             return
@@ -44,9 +76,15 @@ namespace StephanHooft.Extensions
         /// <summary>
         /// Returns the <see cref="Vector2"/> with one or more components set to a specific value.
         /// </summary>
-        /// <param name="x">Value for the modified X-component.</param>
-        /// <param name="y">Value for the modified Y-component.</param>
-        /// <returns>A <see cref="Vector2"/> with the modified component values.</returns>
+        /// <param name="x">
+        /// Value for the modified X-component.
+        /// </param>
+        /// <param name="y">
+        /// Value for the modified Y-component.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Vector2"/> with the modified component values.
+        /// </returns>
         public static Vector2 With(this Vector2 source, float? x = null, float? y = null)
         {
             return
@@ -56,8 +94,12 @@ namespace StephanHooft.Extensions
         /// <summary>
         /// Returns the <see cref="Vector2"/> with a specific magnitude.
         /// </summary>
-        /// <param name="magnitude">The modified <see cref="float"/> magnitude.</param>
-        /// <returns>A <see cref="Vector2"/> with the specified magnitude.</returns>
+        /// <param name="magnitude">
+        /// The modified <see cref="float"/> magnitude.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Vector2"/> with the specified magnitude.
+        /// </returns>
         public static Vector2 WithMagnitude(this Vector2 source, float magnitude)
         {
             return
