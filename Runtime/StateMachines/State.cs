@@ -14,6 +14,24 @@ namespace StephanHooft.StateMachines
         /// </summary>
         public string Name => name;
 
+        /// <summary>
+        /// A delegate that the <see cref="State"/> can use to obtain a reference to other
+        /// <see cref="State}"/>s from the same <see cref="IStateMachine"/>.
+        /// </summary>
+        System.Func<string, IState> IState.StateRegister
+        {
+            get
+                => stateRegister ?? throw
+                    new System.InvalidOperationException(NoStateRegisterSet);
+            set
+            {
+                if (stateRegister != null)
+                    throw
+                        new System.InvalidOperationException(StateRegisterAlreadySet);
+                stateRegister = value;
+            }
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
         #region Fields
@@ -26,10 +44,10 @@ namespace StephanHooft.StateMachines
         #region Constructor
 
         /// <summary>
-        /// 
+        /// Creates a new <see cref="State"/>.
         /// </summary>
         /// <param name="name">
-        /// 
+        /// The <see cref="string"/> name to assign to the <see cref="State"/>.
         /// </param>
         public State(string name)
         {
@@ -42,48 +60,15 @@ namespace StephanHooft.StateMachines
         /// <summary>
         /// Perform set-up behaviour for the <see cref="State"/> upon being entered.
         /// </summary>
-        public abstract void EnterState();
+        /// <param name="deltaTime">
+        /// The amount of time (in seconds) that has passed since the prior update.
+        /// </param>
+        public abstract void Enter(float deltaTime);
 
         /// <summary>
         /// Perform clean-up behaviour for the <see cref="State"/> upon being exited.
         /// </summary>
-        public abstract void ExitState();
-
-        /// <summary>
-        /// Retrieve a <see cref="IState"/> reference from the <see cref="State"/>'s set state register.
-        /// </summary>
-        /// <param name="stateName">
-        /// The <see cref="string"/> name of the <see cref="IState"/> to retrieve.
-        /// </param>
-        /// <returns>
-        /// A <see cref="IState"/>.
-        /// </returns>
-        /// <exception cref="System.InvalidOperationException">
-        /// If no state register delegate has been set to the <see cref="State"/>.
-        /// </exception>
-        IState IState.RetrieveStateFromRegister(string stateName)
-            => stateRegister != null ?
-            stateRegister.Invoke(stateName)
-            : throw
-                new System.InvalidOperationException(NoStateRegisterSet);
-
-        /// <summary>
-        /// Register a delegate that the <see cref="IState"/> can use to obtain a reference to other
-        /// <see cref="IState"/>s from the same <see cref="IStateMachine"/>.
-        /// </summary>
-        /// <param name="stateRegister">
-        /// The delegate to set.
-        /// </param>
-        /// <exception cref="System.InvalidOperationException">
-        /// If a state register delegate has already been set to the <see cref="State"/>.
-        /// </exception>
-        void IState.SetStateRegister(System.Func<string, IState> stateRegister)
-        {
-            if (this.stateRegister != null)
-                throw
-                    new System.InvalidOperationException(StateRegisterAlreadySet);
-            this.stateRegister = stateRegister;
-        }
+        public abstract void Exit();
 
         /// <summary>
         /// Perform the update behaviour for the <see cref="State"/>.
@@ -95,15 +80,14 @@ namespace StephanHooft.StateMachines
         /// A <see cref="IState"/> if a transition to said <see cref="IState"/> is required.
         /// <see cref="null"/> if no <see cref="IState"/> transition is required.
         /// </returns>
-        public abstract IState UpdateState(float deltaTime);
+        public abstract IState Update(float deltaTime);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
         #region Methods
 
         /// <summary>
-        /// A method that <see cref="State"/>-inheriting classes can use to obtain references to other
-        /// <see cref="IState"/>s used by the same <see cref="IStateMachine"/>.
+        /// Obtains a reference to another <see cref="IState"/>s used by the same <see cref="IStateMachine"/>.
         /// </summary>
         /// <param name="stateName">
         /// The <see cref="string"/> name of the <see cref="IState"/> to obtain.
@@ -112,7 +96,7 @@ namespace StephanHooft.StateMachines
         /// A <see cref="IState"/>.
         /// </returns>
         protected IState GetState(string stateName)
-            => ((IState)this).RetrieveStateFromRegister(stateName);
+            => ((IState)this).StateRegister.Invoke(stateName);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion

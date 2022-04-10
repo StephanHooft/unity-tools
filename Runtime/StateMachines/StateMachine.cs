@@ -100,7 +100,7 @@ namespace StephanHooft.StateMachines
                     throw
                         new System.ArgumentException(StateNameDuplicate(name, type));
                 this.states.Add(state);
-                state.SetStateRegister(NameToState);
+                state.StateRegister = NameToState;
                 types.Add(type);
                 names.Add(name);
             }
@@ -153,9 +153,9 @@ namespace StephanHooft.StateMachines
                 throw
                     new System.InvalidOperationException(NoStateSet);
             timeCurrentStateActive += deltaTime;
-            var nextState = currentState.UpdateState(deltaTime);
+            var nextState = currentState.Update(deltaTime);
             if (nextState != null)
-                SetState(nextState);
+                SetState(nextState, deltaTime);
         }
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
@@ -171,16 +171,16 @@ namespace StephanHooft.StateMachines
                 foundState;
         }
 
-        private void SetState(IState targetState)
+        private void SetState(IState targetState, float deltaTime = 0f)
         {
             if (targetState != currentState)
             {
                 if (currentState != null)
                 {
-                    currentState.ExitState();
+                    currentState.Exit();
                     OnStateChange?.Invoke(this);
                 }
-                targetState.EnterState();
+                targetState.Enter(deltaTime);
                 currentState = targetState;
                 timeCurrentStateActive = 0f;
             }

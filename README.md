@@ -9,6 +9,7 @@ This repository is a Unity package for C# code to reuse across projects. It cont
 - A "Progress" class to help various tasks to generically track their progress.
 - A "SortKeyDictionary" class.
 - A "StateMachines" framework for setting up (finite) state machines.
+- A "VariableRanges" suite of structs to set and store paired range values.
 - A "TypeReferences" system to serialize Type references.
 - Custom attributes.
 - Extension methods for various standard C#/Unity classes, as well as some classes from this package.
