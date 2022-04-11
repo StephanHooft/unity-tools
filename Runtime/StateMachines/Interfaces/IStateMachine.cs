@@ -38,24 +38,24 @@ namespace StephanHooft.StateMachines
         #region Interface Methods
 
         /// <summary>
-        /// Order the <see cref="IStateMachine"/> to transition to a certain <see cref="IState"/>. 
-        /// <para>The <see cref="IStateMachine"/> should call the <see cref="IState.ExitState"/> method of its current
-        /// <see cref="IState"/> (if any) and the <see cref="IState.EnterState"/> method of the target
+        /// Order the <see cref="IStateMachine"/> to enter a certain <see cref="IState"/>. 
+        /// <para>The <see cref="IStateMachine"/> should call the <see cref="IState.Exit"/> method of its current
+        /// <see cref="IState"/> (if any) and the <see cref="IState.Enter"/> method of the target
         /// <see cref="IState"/>.</para>
         /// </summary>
         /// <param name="targetStateName">
         /// The <see cref="string"/> name of the <see cref="IState"/> to set.
         /// </param>
-        void SetState(string targetStateName);
+        void Enter(string targetStateName);
 
         /// <summary>
-        /// Tell the current <see cref="IState"/> to call its <see cref="IState.UpdateState"/> member.
+        /// Tell the current <see cref="IState"/> to call its <see cref="IState.Update"/> member.
         /// Enact a state transition if required.
         /// </summary>
         /// <param name="deltaTime">
         /// The time difference (in seconds) since the previous update.
         /// </param>
-        void UpdateCurrentState(float deltaTime);
+        void Update(float deltaTime);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion

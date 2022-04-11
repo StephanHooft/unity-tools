@@ -174,10 +174,10 @@ namespace StephanHooft.VariableRanges
         /// The <see cref="double"/> value to test.
         /// </param>
         /// <returns>
-        /// <see cref="true"/> if the <see cref="DoubleRange"/> contains the <see cref="double"/>
+        /// <see cref="true"/> if the <see cref="DoubleRange"/> includes the <see cref="double"/>
         /// <paramref name="value"/>.
         /// </returns>
-        public bool Contains(double value)
+        public bool Includes(double value)
             => this & value;
 
         /// <summary>
@@ -224,6 +224,39 @@ namespace StephanHooft.VariableRanges
         public double Map(double value, DoubleRange inRange, bool clamp = false)
             => value.Map(inRange.lower, inRange.upper, lower, upper, clamp);
 
+        /// <summary>
+        /// Returns a different <typeparamref name="T"/> depending on whether a <see cref="double"/>
+        /// <paramref name="value"/> is below, on, or above the <see cref="DoubleRange"/>.
+        /// </summary>
+        /// <typeparam name="T">
+        /// A shared return type.
+        /// </typeparam>
+        /// <param name="value">
+        /// The <see cref="double"/> value to test.
+        /// </param>
+        /// <param name="under">
+        /// The <typeparamref name="T"/> to return if <paramref name="value"/> is below the <see cref="DoubleRange"/>.
+        /// </param>
+        /// <param name="on">
+        /// The <typeparamref name="T"/> to return if <paramref name="value"/> is on the <see cref="DoubleRange"/>.
+        /// </param>
+        /// <param name="over">
+        /// The <typeparamref name="T"/> to return if <paramref name="value"/> is above the <see cref="DoubleRange"/>.
+        /// </param>
+        /// <returns>
+        /// Either <paramref name="under"/>, <paramref name="on"/>, or <paramref name="over"/>.
+        /// </returns>
+        public T UnderOnOver<T>(double value, T under, T on, T over)
+        {
+            if (value < lower)
+                return
+                    under;
+            if (value > upper)
+                return
+                    over;
+            return
+                on;
+        }
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
     }

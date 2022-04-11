@@ -114,9 +114,9 @@ namespace StephanHooft.StateMachines
         #region IStateMachine Implementation
 
         /// <summary>
-        /// Orders the <see cref="StateMachine"/> to transition to a certain <see cref="IState"/>. 
-        /// <para>The <see cref="StateMachine"/> will automatically call the <see cref="IState.ExitState"/> method of
-        /// its current <see cref="IState"/> (if any) and the <see cref="IState.EnterState"/> method of the target
+        /// Orders the <see cref="StateMachine"/> to enter a certain <see cref="IState"/>. 
+        /// <para>The <see cref="StateMachine"/> will automatically call the <see cref="IState.Exit"/> method of
+        /// its current <see cref="IState"/> (if any) and the <see cref="IState.Enter"/> method of the target
         /// <see cref="IState"/>.</para>
         /// </summary>
         /// <param name="targetStateName">
@@ -126,7 +126,7 @@ namespace StephanHooft.StateMachines
         /// If no <see cref="IState"/> with the set <see cref="string"/> name is registered to the
         /// <see cref="StateMachine"/>.
         /// </exception>
-        public void SetState(string targetStateName)
+        public void Enter(string targetStateName)
         {
             try
             {
@@ -140,14 +140,14 @@ namespace StephanHooft.StateMachines
         }
 
         /// <summary>
-        /// Tells the current <see cref="IState"/> to call its <see cref="IState.UpdateState"/> member.
+        /// Tells the current <see cref="IState"/> to call its <see cref="IState.Update"/> member.
         /// This may cause a state transition.
         /// </summary>
         /// <param name="deltaTime">The time difference (in seconds) since the previous update.</param>
         /// <exception cref="System.InvalidOperationException">
         /// If no <see cref="IState"/> is set.
         /// </exception>
-        public void UpdateCurrentState(float deltaTime)
+        public void Update(float deltaTime)
         {
             if (currentState == null)
                 throw

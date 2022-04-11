@@ -42,24 +42,24 @@ namespace StephanHooft.StateMachines
         #region Interface Methods
 
         /// <summary>
-        /// Order the <see cref="IStateMachine{TEnum}"/> to transition to a certain <see cref="IState{TEnum}"/>. 
+        /// Order the <see cref="IStateMachine{TEnum}"/> to enter a certain <see cref="IState{TEnum}"/>. 
         /// <para>The <see cref="IStateMachine{TEnum}"/> should call the
-        /// <see cref="IState{TEnum}.ExitState"/> method of its current <see cref="IState{TEnum}"/> (if any) and the
-        /// <see cref="IState{TEnum}.EnterState"/> method of the target <see cref="IState"/>.</para>
+        /// <see cref="IState{TEnum}.Exit"/> method of its current <see cref="IState{TEnum}"/> (if any) and the
+        /// <see cref="IState{TEnum}.Enter"/> method of the target <see cref="IState"/>.</para>
         /// </summary>
         /// <param name="targetState">
         /// The <typeparamref name="TEnum"/> key of the <see cref="IState{TEnum}"/> to set.
         /// </param>
-        void SetState(TEnum targetState);
+        void Enter(TEnum targetState);
 
         /// <summary>
-        /// Tell the current <see cref="IState{TEnum}"/> to call its <see cref="IState{TEnum}.UpdateState"/> member.
+        /// Tell the current <see cref="IState{TEnum}"/> to call its <see cref="IState{TEnum}.Update"/> member.
         /// Enact a state transition if required.
         /// </summary>
         /// <param name="deltaTime">
         /// The time difference (in seconds) since the previous update.
         /// </param>
-        void UpdateCurrentState(float deltaTime);
+        void Update(float deltaTime);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion

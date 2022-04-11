@@ -112,10 +112,10 @@ namespace StephanHooft.StateMachines
         #region IStateMachine<TEnum> Implementation
 
         /// <summary>
-        /// Orders the <see cref="StateMachine{TEnum}"/> to transition to a certain <see cref="IState{TEnum}"/>. 
+        /// Orders the <see cref="StateMachine{TEnum}"/> to wnter a certain <see cref="IState{TEnum}"/>. 
         /// <para>The <see cref="StateMachine{TEnum}"/> will automatically call the
-        /// <see cref="IState{TEnum}.ExitState"/> method of its current <see cref="IState{TEnum}"/> (if any) and the
-        /// <see cref="IState{TEnum}.EnterState"/> method of the target <see cref="IState{TEnum}"/>.</para>
+        /// <see cref="IState{TEnum}.Exit"/> method of its current <see cref="IState{TEnum}"/> (if any) and the
+        /// <see cref="IState{TEnum}.Enter"/> method of the target <see cref="IState{TEnum}"/>.</para>
         /// </summary>
         /// <param name="targetState">
         /// The <typeparamref name="TEnum"/> key of the <see cref="IState{TEnum}"/> to set.
@@ -124,7 +124,7 @@ namespace StephanHooft.StateMachines
         /// If no <see cref="IState{TEnum}"/> with the set <typeparamref name="TEnum"/> key is registered to the
         /// <see cref="StateMachine{TEnum}"/>.
         /// </exception>
-        public void SetState(TEnum targetState)
+        public void Enter(TEnum targetState)
         {
             try
             {
@@ -138,14 +138,14 @@ namespace StephanHooft.StateMachines
         }
 
         /// <summary>
-        /// Tells the current <see cref="IState{TEnum}"/> to call its <see cref="IState{TEnum}.UpdateState"/> member.
+        /// Tells the current <see cref="IState{TEnum}"/> to call its <see cref="IState{TEnum}.Update"/> member.
         /// This may cause a state transition.
         /// </summary>
         /// <param name="deltaTime">The time difference (in seconds) since the previous update.</param>
         /// <exception cref="System.InvalidOperationException">
         /// If no <see cref="IState{TEnum}"/> is set.
         /// </exception>
-        public void UpdateCurrentState(float deltaTime)
+        public void Update(float deltaTime)
         {
             if (currentState == null)
                 throw
