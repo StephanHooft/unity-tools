@@ -24,7 +24,7 @@ namespace StephanHooft.TypeReferences
 		private System.Type type;
 
 		[SerializeField]
-		private readonly string typeRef;
+		private string typeRef;
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		#endregion

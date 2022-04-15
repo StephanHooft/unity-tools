@@ -7,7 +7,7 @@ namespace StephanHooft.VariableRanges
     /// A pair of lower and upper <see cref="int"/> values that encapsulate a certain range.
     /// </summary>
     [System.Serializable]
-    public readonly struct IntRange
+    public struct IntRange
     {
         #region Properties
 
@@ -17,21 +17,24 @@ namespace StephanHooft.VariableRanges
         public int Length
             => upper - lower;
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        #endregion
-        #region Fields
-
         /// <summary>
         /// The lower <see cref="int"/> value of the <see cref="IntRange"/>.
         /// </summary>
-        [SerializeField]
-        public readonly int lower;
+        public int Lower => lower;
 
         /// <summary>
         /// The upper <see cref="int"/> value of the <see cref="IntRange"/>.
         /// </summary>
+        public int Upper => upper;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Fields
+
         [SerializeField]
-        public readonly int upper;
+        private int
+            lower,
+            upper;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
