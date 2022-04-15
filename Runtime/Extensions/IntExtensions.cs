@@ -108,7 +108,6 @@ namespace StephanHooft.Extensions
         /// <returns><see cref="true"/> if the <see cref="int"/> value is smaller than 0.</returns>
         public static bool IsNegative(this int i)
         {
-            if (i < 0)
             return
                 i < 0;
         }
