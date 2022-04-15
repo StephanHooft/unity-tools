@@ -24,7 +24,7 @@ namespace StephanHooft.TypeReferences
 		private System.Type type;
 
 		[SerializeField]
-		private string typeRef;
+		private readonly string typeRef;
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		#endregion
@@ -73,13 +73,13 @@ namespace StephanHooft.TypeReferences
 			typeReference.typeRef;
 
 		public static implicit operator System.Type(ClassTypeReference typeReference) =>
-			typeReference.Type;
+			typeReference.type;
 		
 		public static implicit operator ClassTypeReference(System.Type type) =>
-			new ClassTypeReference(type);
+			new(type);
 		
 		public override string ToString() =>
-			Type != null ? Type.FullName : "(None)";
+			type != null ? type.FullName : "(None)";
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		#endregion

@@ -5,12 +5,11 @@ This repository is a Unity package for C# code to reuse across projects. It cont
 - A "LineRendererUpdate" system to manage the updating of a LineRenderer's positions on every Update.
 - A "ManagedObjects" set of matching interfaces, for implementing pairs of objects and their managing entities.
 - A "ManagedRayCasts" suite of structs to start (and encapsulate the results of) various kinds of raycasts.
-- A "MultiKeyDictionary" class.
 - A "Progress" class to help various tasks to generically track their progress.
-- A "SortKeyDictionary" class.
 - A "StateMachines" framework for setting up (finite) state machines.
 - A "VariableRanges" suite of structs to set and store paired range values.
 - A "TypeReferences" system to serialize Type references.
-- Custom attributes.
+- Custom attributes: HideWhilePlaying, InspectorLabel, and TagSelector.
+- Custom collections: MultiKeyDictionary and SortKeyDictionary.
 - Extension methods for various standard C#/Unity classes, as well as some classes from this package.
 - Tools for drawing and following (segmented) lines in 2D space.

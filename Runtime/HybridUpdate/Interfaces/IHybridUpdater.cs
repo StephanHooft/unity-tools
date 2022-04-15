@@ -21,19 +21,19 @@ namespace StephanHooft.HybridUpdate
         /// <see cref="HybridUpdateCallback"/> in return. The object must hang on to this reference so it can
         /// unregister itself at a later point.
         /// </summary>
-        /// <param name="callbackAction">The "HybridUpdate" method that the <see cref="IHybridUpdater"/> will call
+        /// <param name="callback">The "HybridUpdate" method that the <see cref="IHybridUpdater"/> will call
         /// whenever it pushes the object to update.</param>
         /// <param name="type">The <see cref="System.Type"/> of the registering object.</param>
         /// <param name="priority">The relative priority of the registering object type.</param>
         /// <returns>A <see cref="HybridUpdateCallback"/> that must be used to report Update and FixedUpdate calls.
         /// </returns>
-        HybridUpdateCallback Register(System.Type type, int priority, System.Action<float> callbackAction);
+        HybridUpdateCallback Register(System.Type type, int priority, System.Action<float> callback);
 
         /// <summary>
         /// Unregisters an object from the <see cref="IHybridUpdater"/>, preventing further callbacks to it.
         /// </summary>
-        /// <param name="callback"></param>
-        void Unregister(HybridUpdateCallback callback);
+        /// <param name="callback">The "HybridUpdate" method to unregister.</param>
+        void Unregister(HybridUpdateCallback? callback);
 
         /// <summary>
         /// Reports an Update call to the <see cref="IHybridUpdater"/>.

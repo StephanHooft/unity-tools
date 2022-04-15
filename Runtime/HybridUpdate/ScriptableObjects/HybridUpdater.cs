@@ -1,6 +1,6 @@
 using StephanHooft.Attributes;
+using StephanHooft.Collections;
 using StephanHooft.Extensions;
-using StephanHooft.SortKeyDictionary;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,10 +18,9 @@ namespace StephanHooft.HybridUpdate
     {
         #region Fields
 
-        private readonly Clock clock = new Clock();
-        private readonly CallbackCounter counter = new CallbackCounter();
-        private readonly SortKeyDictionary<System.Type, int, List<HybridUpdateCallback>> callbackSets =
-            new SortKeyDictionary<System.Type, int, List<HybridUpdateCallback>>();
+        private readonly Clock clock = new();
+        private readonly CallbackCounter counter = new();
+        private readonly SortKeyDictionary<System.Type, int, List<HybridUpdateCallback?>> callbackSets = new();
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
@@ -47,7 +46,7 @@ namespace StephanHooft.HybridUpdate
         }
 
         HybridUpdateCallback IHybridUpdater.Register
-            (System.Type type, int priority, System.Action<float> callbackAction)
+            (System.Type type, int priority, System.Action<float> callback)
         {
             if (callbackSets.IsEmpty())
             {
@@ -55,21 +54,21 @@ namespace StephanHooft.HybridUpdate
                 counter.Reset();
             }
             var list = GetOrAddSet(type, priority);
-            var callback = new HybridUpdateCallback(callbackAction, type);
-            list.Add(callback);
+            var newCallback = new HybridUpdateCallback(callback, type);
+            list.Add(newCallback);
             counter.Add();
             return
-                callback;
+                newCallback;
         }
 
-        void IHybridUpdater.Unregister(HybridUpdateCallback callback)
+        void IHybridUpdater.Unregister(HybridUpdateCallback? callback)
         {
-            var type = callback.type;
+            var type = callback?.MustNotBeNull("callback").type;
             var set = callbackSets[type];
             set.Remove(callback);
             counter.Subtract();
             if (set.IsEmpty())
-                callbackSets.Remove(callback.type);
+                callbackSets.Remove(callback?.type);
         }
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
@@ -101,14 +100,14 @@ namespace StephanHooft.HybridUpdate
         {
             foreach (var list in callbackSets)
                 foreach (var callback in list)
-                    callback.action.Invoke(deltaTime);
+                    callback?.action.Invoke(deltaTime);
         }
 
-        private List<HybridUpdateCallback> GetOrAddSet(System.Type type, int priority)
+        private List<HybridUpdateCallback?> GetOrAddSet(System.Type type, int priority)
         {
             if (!callbackSets.ContainsKey(type))
             {
-                var set = new List<HybridUpdateCallback>();
+                var set = new List<HybridUpdateCallback?>();
                 callbackSets.Add(type, priority, set);
                 return
                     set;
@@ -143,7 +142,7 @@ namespace StephanHooft.HybridUpdate
             private HybridUpdater updater;
 
             private IHybridUpdater iUpdater;
-            private HybridUpdateCallback callback;
+            private HybridUpdateCallback? callback;
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             #endregion

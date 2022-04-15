@@ -6,9 +6,9 @@ namespace StephanHooft.HybridUpdate
     /// A data structure that a <see cref="HybridUpdater"/> uses to keep track of all
     /// <see cref="HybridUpdater.Behaviour"/>s that rely on it for "HybridUpdate" calls.
     /// </summary>
-    public class HybridUpdateCallback
+    public readonly struct HybridUpdateCallback
     {
-        #region Properties
+        #region Fields
 
         /// <summary>
         /// The "HybridUpdate" callback method that the <see cref="HybridUpdater"/> calls whenever it updates.
@@ -35,6 +35,37 @@ namespace StephanHooft.HybridUpdate
             this.action = action.MustNotBeNull("callback");
             this.type = type.MustNotBeNull("type");
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Operators
+
+        /// <summary>
+        /// Returns <see cref="true"/> if the <see cref="HybridUpdateCallback"/>s are equal.
+        /// </summary>
+        /// <returns>
+        /// <see cref="true"/> if the <see cref="HybridUpdateCallback"/>s are equal.
+        /// </returns>
+        public static bool operator ==(HybridUpdateCallback a, HybridUpdateCallback b)
+            => a.action == b.action
+            && a.type == b.type;
+
+        /// <summary>
+        /// Returns <see cref="true"/> if the <see cref="HybridUpdateCallback"/>s are unequal.
+        /// </summary>
+        /// <returns>
+        /// <see cref="true"/> if the <see cref="HybridUpdateCallback"/>s are unequal.
+        /// </returns>
+        public static bool operator !=(HybridUpdateCallback a, HybridUpdateCallback b)
+            => a.action != b.action
+            || a.type != b.type;
+
+        public override bool Equals(object obj)
+            => obj is HybridUpdateCallback other
+            && other.action == action
+            && other.type == type;
+
+        public override int GetHashCode()
+            => (action, type).GetHashCode();
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion

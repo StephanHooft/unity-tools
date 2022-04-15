@@ -16,7 +16,7 @@ namespace StephanHooft.StateMachines
 
         /// <summary>
         /// A delegate that the <see cref="State"/> can use to obtain a reference to other
-        /// <see cref="State}"/>s from the same <see cref="IStateMachine"/>.
+        /// <see cref="IState}"/>s from the same <see cref="IStateMachine"/>.
         /// </summary>
         System.Func<string, IState> IState.StateRegister
         {
@@ -31,7 +31,6 @@ namespace StephanHooft.StateMachines
                 stateRegister = value;
             }
         }
-
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
         #region Fields
@@ -53,35 +52,6 @@ namespace StephanHooft.StateMachines
         {
             this.name = name.MustNotBeNull();
         }
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        #endregion
-        #region IState Implementation
-
-        /// <summary>
-        /// Perform set-up behaviour for the <see cref="State"/> upon being entered.
-        /// </summary>
-        /// <param name="deltaTime">
-        /// The amount of time (in seconds) that has passed since the prior update.
-        /// </param>
-        public abstract void Enter(float deltaTime);
-
-        /// <summary>
-        /// Perform clean-up behaviour for the <see cref="State"/> upon being exited.
-        /// </summary>
-        public abstract void Exit();
-
-        /// <summary>
-        /// Perform the update behaviour for the <see cref="State"/>.
-        /// </summary>
-        /// <param name="deltaTime">
-        /// The amount of time (in seconds) that has passed since the prior update.
-        /// </param>
-        /// <returns>
-        /// A <see cref="IState"/> if a transition to said <see cref="IState"/> is required.
-        /// <see cref="null"/> if no <see cref="IState"/> transition is required.
-        /// </returns>
-        public abstract IState Update(float deltaTime);
-
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
         #region Methods

@@ -1,4 +1,4 @@
-using StephanHooft.MultiKeyDictionary;
+using StephanHooft.Collections;
 
 namespace StephanHooft.Extensions
 {

@@ -7,19 +7,9 @@ namespace StephanHooft.ManagedRayCasts
     /// A helper struct to start (and encapsulate the results of) a 
     /// <see cref="Collider2D.Cast(Vector2, ContactFilter2D, RaycastHit2D[], float)"/> call.
     /// </summary>
-    public struct ColliderCast2D
+    public readonly struct ColliderCast2D
     {
         #region Properties
-
-        /// <summary>
-        /// The <see cref="ColliderCast2D"/>'s direction.
-        /// </summary>
-        public Vector2 Direction => direction;
-
-        /// <summary>
-        /// The <see cref="ColliderCast2D"/>'s distance.
-        /// </summary>
-        public float Distance => distance;
 
         /// <summary>
         /// Whether or not the <see cref="ColliderCast2D"/> hit a collider.
@@ -38,8 +28,16 @@ namespace StephanHooft.ManagedRayCasts
         #endregion
         #region Fields
 
-        private Vector2 direction;
-        private readonly float distance;
+        /// <summary>
+        /// The <see cref="ColliderCast2D"/>'s direction.
+        /// </summary>
+        public readonly Vector2 direction;
+
+        /// <summary>
+        /// The <see cref="ColliderCast2D"/>'s distance.
+        /// </summary>
+        public readonly float distance;
+
         private readonly RaycastHit2D[] raycastHitBuffer;
         private readonly int nearestHitIndex;
 

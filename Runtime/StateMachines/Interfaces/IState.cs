@@ -28,12 +28,12 @@
         /// <param name="deltaTime">
         /// The amount of time (in seconds) that has passed since the prior update.
         /// </param>
-        void Enter(float deltaTime);
+        void Enter(float deltaTime) { }
 
         /// <summary>
         /// Perform clean-up behaviour for the <see cref="IState"/> upon being exited.
         /// </summary>
-        void Exit();
+        void Exit() { }
 
         /// <summary>
         /// Perform the update behaviour for the <see cref="IState"/>.
@@ -45,7 +45,8 @@
         /// A <see cref="IState"/> if a transition to said <see cref="IState"/> is required.
         /// <see cref="null"/> if no <see cref="IState"/> transition is required.
         /// </returns>
-        IState Update(float deltaTime);
+        IState Update(float deltaTime)
+            => null;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion

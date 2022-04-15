@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 
-namespace StephanHooft.MultiKeyDictionary
+namespace StephanHooft.Collections
 {
 	/// <summary>
 	/// A Dictionary that has both a primary <typeparamref name="TPrimaryKey"/> and a secondary <typeparamref name="TSubKey"/>
@@ -156,10 +156,10 @@ namespace StephanHooft.MultiKeyDictionary
 		#endregion
 		#region Fields
 
-		internal readonly Dictionary<TPrimaryKey, TValue> baseDictionary = new Dictionary<TPrimaryKey, TValue>();
-		internal readonly Dictionary<TSubKey, TPrimaryKey> subDictionary = new Dictionary<TSubKey, TPrimaryKey>();
-		internal readonly Dictionary<TPrimaryKey, TSubKey> primaryToSubkeyMapping = new Dictionary<TPrimaryKey, TSubKey>();
-		readonly ReaderWriterLockSlim readerWriterLock = new ReaderWriterLockSlim();
+		private readonly Dictionary<TPrimaryKey, TValue> baseDictionary = new();
+		private readonly Dictionary<TSubKey, TPrimaryKey> subDictionary = new();
+		private readonly Dictionary<TPrimaryKey, TSubKey> primaryToSubkeyMapping = new();
+		private readonly ReaderWriterLockSlim readerWriterLock = new();
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		#endregion
@@ -168,11 +168,9 @@ namespace StephanHooft.MultiKeyDictionary
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MultiKeyDictionary{K, L, V}"/> class.
 		/// </summary>
-		public MultiKeyDictionary()
-		{ }
+		public MultiKeyDictionary() { }
 
-        ~MultiKeyDictionary()
-		{ }
+        ~MultiKeyDictionary() { }
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		#endregion

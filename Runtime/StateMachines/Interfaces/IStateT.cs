@@ -32,12 +32,12 @@ namespace StephanHooft.StateMachines
         /// <param name="deltaTime">
         /// The amount of time (in seconds) that has passed since the prior update.
         /// </param>
-        void Enter(float deltaTime);
+        void Enter(float deltaTime) { }
 
         /// <summary>
         /// Perform clean-up behaviour for the <see cref="IState{IState}"/> upon being exited.
         /// </summary>
-        void Exit();
+        void Exit() { }
 
         /// <summary>
         /// Perform the update behaviour for the <see cref="IState{TEnum}"/>.
@@ -49,7 +49,8 @@ namespace StephanHooft.StateMachines
         /// A <see cref="IState{TEnum}"/> if a transition to said <see cref="IState{TEnum}"/> is required.
         /// <see cref="null"/> if no <see cref="IState{TEnum}"/> transition is required.
         /// </returns>
-        IState<TEnum> Update(float deltaTime);
+        IState<TEnum> Update(float deltaTime)
+            => null;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion

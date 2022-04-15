@@ -1,4 +1,4 @@
-using StephanHooft.SortKeyDictionary;
+using StephanHooft.Collections;
 
 namespace StephanHooft.Extensions
 {

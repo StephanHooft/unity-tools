@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace StephanHooft.SortKeyDictionary
+namespace StephanHooft.Collections
 {
     /// <summary>
     /// A <typeparamref name="TKey"/>-keyed Dictionary that sorts its <typeparamref name="TValue"/>s based on
@@ -164,14 +164,13 @@ namespace StephanHooft.SortKeyDictionary
                 }
             }
         }
-
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
         #region Fields
 
-        private readonly Dictionary<TKey, TValue> dictionary = new Dictionary<TKey, TValue>();
-        private readonly SortedList<TSortKey, TValue> sortedList = new SortedList<TSortKey, TValue>();
-        private readonly ReaderWriterLockSlim readerWriterLock = new ReaderWriterLockSlim();
+        private readonly Dictionary<TKey, TValue> dictionary = new();
+        private readonly SortedList<TSortKey, TValue> sortedList = new();
+        private readonly ReaderWriterLockSlim readerWriterLock = new();
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
@@ -220,7 +219,6 @@ namespace StephanHooft.SortKeyDictionary
             }
 
         }
-
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
         #region Methods
@@ -553,8 +551,6 @@ namespace StephanHooft.SortKeyDictionary
                 readerWriterLock.ExitReadLock();
             }
         }
-
-
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
     }

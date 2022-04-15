@@ -6,7 +6,7 @@ namespace StephanHooft.ManagedRayCasts
     /// A helper struct to start (and encapsulate the results of) an opposite pair of 
     /// <see cref="Physics2D.Linecast(Vector2, Vector2, ContactFilter2D, RaycastHit2D[])"/> calls between a start- and an endpoint.
     /// </summary>
-    public struct TwinLineCast2D
+    public readonly struct TwinLineCast2D
     {
         #region Properties
 
@@ -14,11 +14,6 @@ namespace StephanHooft.ManagedRayCasts
         /// The <see cref="TwinLineCast2D"/>'s distance.
         /// </summary>
         public float Distance => (end - start).magnitude;
-
-        /// <summary>
-        /// The <see cref="TwinLineCast2D"/>'s end point.
-        /// </summary>
-        public Vector2 End => end;
 
         /// <summary>
         /// The <see cref="TwinLineCast2D"/>'s forward direction (from start to end).
@@ -59,11 +54,6 @@ namespace StephanHooft.ManagedRayCasts
         public Vector2 ReverseDirection => (start - end).normalized;
 
         /// <summary>
-        /// The <see cref="TwinLineCast2D"/>'s starting point.
-        /// </summary>
-        public Vector2 Start => start;
-
-        /// <summary>
         /// The length of the distance along the <see cref="TwinLineCast2D"/> that is not obscured by colliders, (if any).
         /// </summary>
         public float UnobscuredDistance => HitSomething
@@ -74,8 +64,16 @@ namespace StephanHooft.ManagedRayCasts
         #endregion
         #region Fields
 
-        private readonly Vector2 start;
-        private readonly Vector2 end;
+        /// <summary>
+        /// The <see cref="TwinLineCast2D"/>'s end point.
+        /// </summary>
+        public readonly Vector2 end;
+
+        /// <summary>
+        /// The <see cref="TwinLineCast2D"/>'s starting point.
+        /// </summary>
+        public readonly Vector2 start;
+
         private readonly RaycastHit2D[][] raycastHitBuffer;
         private readonly int[] nearestHitIndex;
 
