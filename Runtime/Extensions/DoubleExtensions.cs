@@ -104,17 +104,71 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// Checks if the <see cref="double"/> has a positive value.
+        /// Checks if the <see cref="double"/> is above a certain <paramref name="lower"/> value.
         /// </summary>
-        /// <returns>True if the <see cref="double"/> value is greater than 0.</returns>
-        public static bool IsPositive(this double d)
+        /// <param name="lower">The <see cref="double"/> value to check against.</param>
+        /// <returns><see cref="true"/> if the <see cref="double"/> is greater than <paramref name="lower"/>.</returns>
+        public static bool IsAbove(this double d, double lower)
         {
-            if (d > 0)
-                return
-                    true;
-            else
-                return
-                    false;
+            return
+                d > lower;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="double"/> is above or equal to a certain <paramref name="lower"/> value.
+        /// </summary>
+        /// <param name="lower">The <see cref="double"/> value to check against.</param>
+        /// <returns><see cref="true"/> if the <see cref="double"/> is greater than or equal to
+        /// <paramref name="lower"/>.</returns>
+        public static bool IsAboveOrEqualTo(this double d, double lower)
+        {
+            return
+                d >= lower;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="double"/> is below a certain <paramref name="upper"/> value.
+        /// </summary>
+        /// <param name="upper">The <see cref="double"/> value to check against.</param>
+        /// <returns><see cref="true"/> if the <see cref="double"/> is smaller than <paramref name="upper"/>.</returns>
+        public static bool IsBelow(this double d, double upper)
+        {
+            return
+                d < upper;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="double"/> is below or equal to a certain <paramref name="upper"/> value.
+        /// </summary>
+        /// <param name="upper">The <see cref="double"/> value to check against.</param>
+        /// <returns><see cref="true"/> if the <see cref="double"/> is smaller than or equal to
+        /// <paramref name="upper"/>.</returns>
+        public static bool IsBelowOrEqualTo(this double d, double upper)
+        {
+            return
+                d <= upper;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="double"/> is equal to a certain <paramref name="value"/>.
+        /// </summary>
+        /// <param name="value">The <see cref="double"/> value to compare with.</param>
+        /// <returns><see cref="true"/> if the <see cref="double"/> is equal to <paramref name="value"/>.</returns>
+        public static bool IsEqualTo(this double d, double value)
+        {
+            return
+                d == value;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="double"/> is unequal to a certain <paramref name="value"/>.
+        /// </summary>
+        /// <param name="value">The <see cref="double"/> value to compare with.</param>
+        /// <returns><see cref="true"/> if the <see cref="double"/> is not equal to <paramref name="value"/>.</returns>
+        public static bool IsNotEqualTo(this double d, double value)
+        {
+            return
+                d != value;
         }
 
         /// <summary>
@@ -123,12 +177,30 @@ namespace StephanHooft.Extensions
         /// <returns>True if the <see cref="double"/> value is smaller than 0.</returns>
         public static bool IsNegative(this double d)
         {
-            if (d < 0)
-                return
-                    true;
-            else
-                return
-                    false;
+            return
+                d < 0d;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="double"/> has a positive value.
+        /// </summary>
+        /// <returns>True if the <see cref="double"/> value is greater than 0.</returns>
+        public static bool IsPositive(this double d)
+        {
+            return
+                d > 0d;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="double"/> is within a certain range.
+        /// </summary>
+        /// <param name="lower">The lower bound of the <see cref="double"/> range to check against.</param>
+        /// <param name="upper">The upper bound of the <see cref="double"/> range to check against.</param>
+        /// <returns><see cref="true"/> if the <see cref="double"/> value is within the specified values</returns>
+        public static bool IsWithinRange(this double d, double lower, double upper)
+        {
+            return
+                d >= lower && d <= upper;
         }
 
         /// <summary>
@@ -137,12 +209,8 @@ namespace StephanHooft.Extensions
         /// <returns>True if the <see cref="double"/> value is 0.</returns>
         public static bool IsZero(this double d)
         {
-            if (d == 0)
-                return
-                    true;
-            else
-                return
-                    false;
+            return
+                d == 0d;
         }
 
         /// <summary>
@@ -418,7 +486,7 @@ namespace StephanHooft.Extensions
         /// </summary>
         /// <param name="p">The power to raise the <see cref="double"/> to.</param>
         /// <returns>The <see cref="double"/> raised to power <paramref name="p"/>.</returns>
-        public static double Pow(this double d, float p)
+        public static double Pow(this double d, double p)
         {
             return
                 System.Math.Pow(d, p);

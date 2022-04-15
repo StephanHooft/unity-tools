@@ -88,23 +88,77 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// Checks if the <see cref="float"/> has a positive value.
+        /// Checks if the <see cref="float"/> is above a certain <paramref name="lower"/> value.
         /// </summary>
-        /// <returns>True if the <see cref="float"/> value is greater than 0.</returns>
-        public static bool IsPositive(this float f)
+        /// <param name="lower">The <see cref="float"/> value to check against.</param>
+        /// <returns><see cref="true"/> if the <see cref="float"/> is greater than <paramref name="lower"/>.</returns>
+        public static bool IsAbove(this float f, float lower)
         {
-            if (f > 0)
-                return
-                    true;
-            else
-                return
-                    false;
+            return
+                f > lower;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="float"/> is above or equal to a certain <paramref name="lower"/> value.
+        /// </summary>
+        /// <param name="lower">The <see cref="float"/> value to check against.</param>
+        /// <returns><see cref="true"/> if the <see cref="float"/> is greater than or equal to
+        /// <paramref name="lower"/>.</returns>
+        public static bool IsAboveOrEqualTo(this float f, float lower)
+        {
+            return
+                f >= lower;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="float"/> is below a certain <paramref name="upper"/> value.
+        /// </summary>
+        /// <param name="upper">The <see cref="float"/> value to check against.</param>
+        /// <returns><see cref="true"/> if the <see cref="float"/> is smaller than <paramref name="upper"/>.</returns>
+        public static bool IsBelow(this float f, float upper)
+        {
+            return
+                f < upper;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="float"/> is below or equal to a certain <paramref name="upper"/> value.
+        /// </summary>
+        /// <param name="upper">The <see cref="float"/> value to check against.</param>
+        /// <returns><see cref="true"/> if the <see cref="float"/> is smaller than or equal to
+        /// <paramref name="upper"/>.</returns>
+        public static bool IsBelowOrEqualTo(this float f, float upper)
+        {
+            return
+                f <= upper;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="float"/> is equal to a certain <paramref name="value"/>.
+        /// </summary>
+        /// <param name="value">The <see cref="float"/> value to compare with.</param>
+        /// <returns><see cref="true"/> if the <see cref="float"/> is equal to <paramref name="value"/>.</returns>
+        public static bool IsEqualTo(this float f, float value)
+        {
+            return
+                f == value;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="float"/> is unequal to a certain <paramref name="value"/>.
+        /// </summary>
+        /// <param name="value">The <see cref="float"/> value to compare with.</param>
+        /// <returns><see cref="true"/> if the <see cref="float"/> is not equal to <paramref name="value"/>.</returns>
+        public static bool IsNotEqualTo(this float f, float value)
+        {
+            return
+                f != value;
         }
 
         /// <summary>
         /// Checks if the <see cref="float"/> has a negative value.
         /// </summary>
-        /// <returns>True if the <see cref="float"/> value is smaller than 0.</returns>
+        /// <returns><see cref="true"/> if the <see cref="float"/> value is smaller than 0.</returns>
         public static bool IsNegative(this float f)
         {
             if (f < 0)
@@ -116,17 +170,39 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// Checks if the <see cref="float"/> has a value of 0.
+        /// Checks if the <see cref="float"/> has a positive value.
         /// </summary>
-        /// <returns>True if the <see cref="float"/> value is 0.</returns>
-        public static bool IsZero(this float f)
+        /// <returns><see cref="true"/> if the <see cref="float"/> value is greater than 0.</returns>
+        public static bool IsPositive(this float f)
         {
-            if (f == 0)
+            if (f > 0)
                 return
                     true;
             else
                 return
                     false;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="float"/> is within a certain range.
+        /// </summary>
+        /// <param name="lower">The lower bound of the <see cref="float"/> range to check against.</param>
+        /// <param name="upper">The upper bound of the <see cref="float"/> range to check against.</param>
+        /// <returns><see cref="true"/> if the <see cref="float"/> value is within the specified values</returns>
+        public static bool IsWithinRange(this float f, float lower, float upper)
+        {
+            return
+                f >= lower && f <= upper;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="float"/> has a value of 0.
+        /// </summary>
+        /// <returns>True if the <see cref="float"/> value is 0.</returns>
+        public static bool IsZero(this float f)
+        {
+            return
+                f == 0;
         }
 
         /// <summary>

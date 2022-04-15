@@ -35,17 +35,71 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// Checks if the <see cref="int"/> has a positive value.
+        /// Checks if the <see cref="int"/> is above a certain <paramref name="lower"/> value.
         /// </summary>
-        /// <returns><see cref="true"/> if the <see cref="int"/> value is greater than 0.</returns>
-        public static bool IsPositive(this int i)
+        /// <param name="lower">The <see cref="int"/> value to check against.</param>
+        /// <returns><see cref="true"/> if the <see cref="int"/> is greater than <paramref name="lower"/>.</returns>
+        public static bool IsAbove(this int i, int lower)
         {
-            if (i > 0)
-                return
-                    true;
-            else
-                return
-                    false;
+            return
+                i > lower;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="int"/> is above or equal to a certain <paramref name="lower"/> value.
+        /// </summary>
+        /// <param name="lower">The <see cref="int"/> value to check against.</param>
+        /// <returns><see cref="true"/> if the <see cref="int"/> is greater than or equal to
+        /// <paramref name="lower"/>.</returns>
+        public static bool IsAboveOrEqualTo(this int i, int lower)
+        {
+            return
+                i >= lower;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="int"/> is below a certain <paramref name="upper"/> value.
+        /// </summary>
+        /// <param name="upper">The <see cref="int"/> value to check against.</param>
+        /// <returns><see cref="true"/> if the <see cref="int"/> is smaller than <paramref name="upper"/>.</returns>
+        public static bool IsBelow(this int i, int upper)
+        {
+            return
+                i < upper;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="int"/> is below or equal to a certain <paramref name="upper"/> value.
+        /// </summary>
+        /// <param name="upper">The <see cref="int"/> value to check against.</param>
+        /// <returns><see cref="true"/> if the <see cref="int"/> is smaller than or equal to
+        /// <paramref name="upper"/>.</returns>
+        public static bool IsBelowOrEqualTo(this int i, int upper)
+        {
+            return
+                i <= upper;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="int"/> is equal to a certain <paramref name="value"/>.
+        /// </summary>
+        /// <param name="value">The <see cref="int"/> value to compare with.</param>
+        /// <returns><see cref="true"/> if the <see cref="int"/> is equal to <paramref name="value"/>.</returns>
+        public static bool IsEqualTo(this int i, int value)
+        {
+            return
+                i == value;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="int"/> is unequal to a certain <paramref name="value"/>.
+        /// </summary>
+        /// <param name="value">The <see cref="int"/> value to compare with.</param>
+        /// <returns><see cref="true"/> if the <see cref="int"/> is not equal to <paramref name="value"/>.</returns>
+        public static bool IsNotEqualTo(this int i, int value)
+        {
+            return
+                i != value;
         }
 
         /// <summary>
@@ -55,11 +109,30 @@ namespace StephanHooft.Extensions
         public static bool IsNegative(this int i)
         {
             if (i < 0)
-                return
-                    true;
-            else
-                return
-                    false;
+            return
+                i < 0;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="int"/> has a positive value.
+        /// </summary>
+        /// <returns><see cref="true"/> if the <see cref="int"/> value is greater than 0.</returns>
+        public static bool IsPositive(this int i)
+        {
+            return
+                i > 0;
+        }
+
+        /// <summary>
+        /// Checks if the <see cref="int"/> is within a certain range.
+        /// </summary>
+        /// <param name="lower">The lower bound of the <see cref="int"/> range to check against.</param>
+        /// <param name="upper">The upper bound of the <see cref="int"/> range to check against.</param>
+        /// <returns><see cref="true"/> if the <see cref="int"/> value is within the specified values</returns>
+        public static bool IsWithinRange(this int i, int lower, int upper)
+        {
+            return
+                i >= lower && i <= upper;
         }
 
         /// <summary>
@@ -68,12 +141,8 @@ namespace StephanHooft.Extensions
         /// <returns><see cref="true"/> if the <see cref="int"/> value is 0.</returns>
         public static bool IsZero(this int i)
         {
-            if (i == 0)
-                return
-                    true;
-            else
-                return
-                    false;
+            return
+                i == 0;
         }
 
         /// <summary>
