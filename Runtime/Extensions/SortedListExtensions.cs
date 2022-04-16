@@ -58,11 +58,11 @@ namespace StephanHooft.Extensions
             => l.Count == 0 || l == null;
 
         /// <summary>
-        /// Returns te highest-indexed item of a <see cref="SortedList{TKey, TValue}"/>.
+        /// Returns the highest-indexed item of a <see cref="SortedList{TKey, TValue}"/>.
         /// </summary>
         /// <returns>The last <typeparamref name="TValue"/> in the <see cref="SortedList{TKey, TValue}"/>.</returns>
         public static TValue Last<TKey, TValue>(this SortedList<TKey, TValue> l)
-            => l.Values[l.Count - 1];
+            => l.Values[^1];
 
         /// <summary>
         /// Returns the highest index of a <see cref="SortedList{TKey, TValue}"/>.

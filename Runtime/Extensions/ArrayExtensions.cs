@@ -50,7 +50,7 @@ namespace StephanHooft.Extensions
         /// </summary>
         /// <returns>The last <typeparamref name="T"/> in the array.</returns>
         public static T Last<T>(this T[] a)
-            => a[a.Length - 1];
+            => a[^1];
 
         /// <summary>
         /// Returns the highest index of the array.
@@ -102,7 +102,7 @@ namespace StephanHooft.Extensions
         /// <returns>A <see cref="List{T}"/>.</returns>
         public static List<T> ToList<T>(this T[] a)
         {
-            List<T> output = new List<T>();
+            List<T> output = new();
             output.AddRange(a);
             return
                 output;

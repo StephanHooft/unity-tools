@@ -52,7 +52,7 @@ namespace StephanHooft.Extensions
         /// </summary>
         /// <returns>The last <typeparamref name="T"/> in the <see cref="List{T}"/>.</returns>
         public static T Last<T>(this List<T> l)
-            => l[l.Count - 1];
+            => l[^1];
 
         /// <summary>
         /// Returns the highest index of a <see cref="List{T}"/>.

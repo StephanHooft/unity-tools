@@ -86,7 +86,7 @@ namespace StephanHooft.Extensions
             if (end >= s.Length)
                 end = s.Length - 1;
             return
-                s.Substring(start, end - start);
+                s[start..end];
         }
 
         /// <summary>
@@ -96,7 +96,9 @@ namespace StephanHooft.Extensions
         public static string ToStringPretty<T>(this IEnumerable<T> source)
         {
             return
-                (source == null) ? string.Empty : ToStringPretty(source, string.Empty, ",", string.Empty);
+                (source == null)
+                ? string.Empty
+                : ToStringPretty(source, string.Empty, ",", string.Empty);
         }
 
         /// <summary>
