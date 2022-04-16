@@ -5,7 +5,7 @@ namespace StephanHooft.Attributes
     /// <summary>
     /// Class to override the inspector label of a field.
     /// </summary>
-    public class InspectorLabel : PropertyAttribute
+    public class InspectorLabelAttribute : PropertyAttribute
     {
         #region Fields
 
@@ -16,7 +16,6 @@ namespace StephanHooft.Attributes
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
-
         #region Constructor
 
         /// <summary>
@@ -24,7 +23,7 @@ namespace StephanHooft.Attributes
         /// <para>Doesn't work on arrays, lists and other collections.</para>
         /// </summary>
         /// <param name="label">The label <see cref="string"/> to show in the inspector.</param>
-        public InspectorLabel(string label)
+        public InspectorLabelAttribute(string label)
         {
             if (string.IsNullOrEmpty(label))
                 throw
@@ -34,6 +33,5 @@ namespace StephanHooft.Attributes
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
-
     }
 }

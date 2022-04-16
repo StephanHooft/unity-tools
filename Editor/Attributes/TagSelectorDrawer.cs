@@ -6,7 +6,7 @@ using UnityEditorInternal;
 namespace StephanHooft.Attributes.EditorScripts
 {
     /// <summary>
-    /// A <see cref="CustomPropertyDrawer"/> for the <see cref="TagSelectorAttribute"/>.
+    /// A custom <see cref="PropertyDrawer"/> for the <see cref="TagSelectorAttribute"/>.
     /// <remarks><para>Borrowed from: https://github.com/WSWhitehouse/Unity-Tag-Selector .</para></remarks>
     /// </summary>
     [CustomPropertyDrawer(typeof(TagSelectorAttribute))]
@@ -24,7 +24,7 @@ namespace StephanHooft.Attributes.EditorScripts
                     property.stringValue = EditorGUI.TagField(position, label, property.stringValue);
                 else
                 {
-                    List<string> tagList = new List<string> { "No Tag" };
+                    List<string> tagList = new() { "No Tag" };
                     tagList.AddRange(InternalEditorUtility.tags);
                     string propertyString = property.stringValue;
                     int index = -1;

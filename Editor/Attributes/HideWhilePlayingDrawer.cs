@@ -4,7 +4,7 @@ using UnityEngine;
 namespace StephanHooft.Attributes.EditorScripts
 {
     /// <summary>
-    /// A custom property drawer for <see cref="HideWhilePlayingAttribute"/>.
+    /// A custom <see cref="PropertyDrawer"/> for the <see cref="HideWhilePlayingAttribute"/>.
     /// </summary>
     [CustomPropertyDrawer(typeof(HideWhilePlayingAttribute))]
     public class HideWhilePlayingAttributeDrawer : PropertyDrawer
