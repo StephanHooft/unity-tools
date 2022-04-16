@@ -21,6 +21,7 @@ namespace StephanHooft.Extensions
         /// <returns>True if the <see cref="Queue{T}"/> is null or empty.</returns>
         public static bool IsNullOrEmpty<T>(this Queue<T> queue)
             => queue.Count == 0 || queue == null;
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
     }

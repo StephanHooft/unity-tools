@@ -141,9 +141,6 @@ namespace StephanHooft.Extensions
                     value, typeof(TPrimaryKey), typeof(TSubKey), typeof(TValue), dictionaryName));
         }
 
-        ///////////////////////////////////////////////////////////////////////////
-
-
         /// <summary>
         /// Ensures that the <see cref="MultiKeyDictionary{TPrimaryKey, TSubKey, TValue}"/> does not contain a set 
         /// <typeparamref name="TPrimaryKey"/>.
