@@ -59,7 +59,7 @@ namespace StephanHooft.StateMachines
         #region Fields
 
         private IState<TEnum> currentState;
-        private readonly Dictionary<TEnum, IState<TEnum>> states = new Dictionary<TEnum, IState<TEnum>>();
+        private readonly Dictionary<TEnum, IState<TEnum>> states = new();
         private float timeCurrentStateActive;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,15 +126,17 @@ namespace StephanHooft.StateMachines
         /// </exception>
         public void Enter(TEnum targetState)
         {
+            IState<TEnum> state;
             try
             {
-                SetState(EnumToState(targetState));
+                state = EnumToState(targetState);
             }
-            catch (System.Exception e)
+            catch (Exceptions.StateUnavailableException e)
             {
                 throw
                     e;
             }
+            SetState(state);
         }
 
         /// <summary>

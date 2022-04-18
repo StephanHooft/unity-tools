@@ -55,7 +55,7 @@ namespace StephanHooft.StateMachines
         #region Fields
 
         private IState currentState;
-        private readonly List<IState> states = new List<IState>();
+        private readonly List<IState> states = new();
         private float timeCurrentStateActive;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,15 +128,17 @@ namespace StephanHooft.StateMachines
         /// </exception>
         public void Enter(string targetStateName)
         {
+            IState state;
             try
             {
-                SetState(NameToState(targetStateName));
+                state = NameToState(targetStateName);
             }
-            catch (System.Exception e)
+            catch (Exceptions.StateUnavailableException e)
             {
                 throw
                     e;
             }
+            SetState(state);
         }
 
         /// <summary>
