@@ -16,6 +16,17 @@ namespace StephanHooft.Attributes.EditorScripts
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
         #region PropertyDrawer Implementation
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            var attribute = (ExposedScriptableObjectAttribute[])
+                fieldInfo.GetCustomAttributes(typeof(ExposedScriptableObjectAttribute), true);
+            if (!Application.isPlaying || !attribute[0].HideWhilePlaying)
+                return
+                    base.GetPropertyHeight(property, label);
+            else
+                return
+                    -EditorGUIUtility.standardVerticalSpacing;
+        }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
