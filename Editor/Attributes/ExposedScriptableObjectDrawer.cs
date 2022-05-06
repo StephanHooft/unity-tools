@@ -9,25 +9,33 @@ namespace StephanHooft.Attributes.EditorScripts
     [CustomPropertyDrawer(typeof(ExposedScriptableObjectAttribute))]
     public class ExposedScriptableObjectDrawer : PropertyDrawer
     {
+        #region Fields
+
         private Editor editor = null;
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
         #region PropertyDrawer Implementation
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            EditorGUI.PropertyField(position, property, label, true);
-            if (property.objectReferenceValue != null)
-                property.isExpanded = EditorGUI.Foldout(position, property.isExpanded, GUIContent.none);
-            if (property.isExpanded)
+            var attribute = (ExposedScriptableObjectAttribute[])
+                fieldInfo.GetCustomAttributes(typeof(ExposedScriptableObjectAttribute), true);
+            if (!Application.isPlaying || !attribute[0].HideWhilePlaying)
             {
-                EditorGUI.indentLevel++;
-                if (!editor)
-                    Editor.CreateCachedEditor(property.objectReferenceValue, null, ref editor);
-                editor.OnInspectorGUI();
-                EditorGUI.indentLevel--;
+                EditorGUI.PropertyField(position, property, label, true);
+                if (property.objectReferenceValue != null)
+                    property.isExpanded = EditorGUI.Foldout(position, property.isExpanded, GUIContent.none);
+                if (property.isExpanded)
+                {
+                    EditorGUI.indentLevel++;
+                    if (!editor)
+                        Editor.CreateCachedEditor(property.objectReferenceValue, null, ref editor);
+                    editor.OnInspectorGUI();
+                    EditorGUI.indentLevel--;
+                }
             }
         }
-
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
     }
