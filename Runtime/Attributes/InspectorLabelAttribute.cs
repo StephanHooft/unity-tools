@@ -7,7 +7,7 @@ namespace StephanHooft.Attributes
     /// </summary>
     public class InspectorLabelAttribute : PropertyAttribute
     {
-        #region Fields
+        #region Properties
 
         /// <summary>
         /// The label <see cref="string"/> to show in the inspector.
@@ -30,7 +30,6 @@ namespace StephanHooft.Attributes
                     new System.ArgumentException("label");
             Label = label;
         }
-
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
     }
