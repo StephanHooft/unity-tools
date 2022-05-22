@@ -32,7 +32,7 @@ namespace StephanHooft.VariableRanges
         #region Fields
 
         [SerializeField]
-        public float
+        private float
             lower,
             upper;
 
@@ -57,6 +57,33 @@ namespace StephanHooft.VariableRanges
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
         #region Operators
+
+        /// <summary>
+        /// Returns a <see cref="FloatRange"/> with values all multiplied by one <see cref="float"/> value.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="FloatRange"/>.
+        /// </returns>
+        public static FloatRange operator *(FloatRange a, float b)
+            => new(a.lower * b, a.upper * b);
+
+        /// <summary>
+        /// Returns a <see cref="FloatRange"/> with values all multiplied by one <see cref="float"/> value.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="FloatRange"/>.
+        /// </returns>
+        public static FloatRange operator *(float a, FloatRange b)
+            => new(b.lower * a, b.upper * a);
+
+        /// <summary>
+        /// Returns a <see cref="FloatRange"/> with values all divided by one <see cref="float"/> value.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="FloatRange"/>.
+        /// </returns>
+        public static FloatRange operator /(FloatRange a, float b)
+            => new(a.lower / b, a.upper / b);
 
         /// <summary>
         /// Returns <see cref="true"/> if the <see cref="FloatRange"/>s are equal.

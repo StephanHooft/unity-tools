@@ -59,6 +59,33 @@ namespace StephanHooft.VariableRanges
         #region Operators
 
         /// <summary>
+        /// Returns a <see cref="IntRange"/> with values all multiplied by one <see cref="int"/> value.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="IntRange"/>.
+        /// </returns>
+        public static IntRange operator *(IntRange a, int b)
+            => new(a.lower * b, a.upper * b);
+
+        /// <summary>
+        /// Returns a <see cref="IntRange"/> with values all multiplied by one <see cref="int"/> value.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="IntRange"/>.
+        /// </returns>
+        public static IntRange operator *(int a, IntRange b)
+            => new(b.lower * a, b.upper * a);
+
+        /// <summary>
+        /// Returns a <see cref="IntRange"/> with values all divided by one <see cref="int"/> value.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="IntRange"/>.
+        /// </returns>
+        public static IntRange operator /(IntRange a, int b)
+            => new(a.lower / b, a.upper / b);
+
+        /// <summary>
         /// Returns <see cref="true"/> if the <see cref="IntRange"/>s are equal.
         /// </summary>
         /// <returns>

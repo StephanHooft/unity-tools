@@ -59,6 +59,33 @@ namespace StephanHooft.VariableRanges
         #region Operators
 
         /// <summary>
+        /// Returns a <see cref="DoubleRange"/> with values all multiplied by one <see cref="double"/> value.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="DoubleRange"/>.
+        /// </returns>
+        public static DoubleRange operator *(DoubleRange a, double b)
+            => new(a.lower * b, a.upper * b);
+
+        /// <summary>
+        /// Returns a <see cref="DoubleRange"/> with values all multiplied by one <see cref="double"/> value.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="DoubleRange"/>.
+        /// </returns>
+        public static DoubleRange operator *(double a, DoubleRange b)
+            => new(b.lower * a, b.upper * a);
+
+        /// <summary>
+        /// Returns a <see cref="DoubleRange"/> with values all divided by one <see cref="double"/> value.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="DoubleRange"/>.
+        /// </returns>
+        public static DoubleRange operator /(DoubleRange a, double b)
+            => new(a.lower / b, a.upper / b);
+
+        /// <summary>
         /// Returns <see cref="true"/> if the <see cref="DoubleRange"/>s are equal.
         /// </summary>
         /// <returns>
