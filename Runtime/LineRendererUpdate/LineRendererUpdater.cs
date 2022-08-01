@@ -5,6 +5,7 @@ namespace StephanHooft.LineRendererUpdate
     /// <summary>
     /// A helper class to force a <see cref="LineRenderer"/>'s positions to update on every frame.
     /// </summary>
+    [ExecuteAlways, RequireComponent(typeof(LineRenderer))]
     public class LineRendererUpdater : MonoBehaviour
     {
         #region Properties
