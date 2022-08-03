@@ -31,13 +31,70 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// Return the <see cref="Vector3"/> with its Y-component to 0.
+        /// Return the <see cref="Vector3"/> with its Y-component at 0.
         /// </summary>
         /// <returns>A modified <see cref="Vector3"/> with y component set to 0.</returns>
         public static Vector3 Flat(this Vector3 source)
         {
             return
                 new Vector3(source.x, 0, source.z);
+        }
+
+        /// <summary>
+        /// Returns the <see cref="Vector3"/> with a set <paramref name="x"/> component, and Y- and Z-components
+        /// scaled to match while retaining the X,Y,Z proportions of the source <see cref="Vector3"/>.
+        /// </summary>
+        /// <param name="x">
+        /// A X-component value for the scaled <see cref="Vector3"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Vector3"/>.
+        /// </returns>
+        public static Vector3 ScaledToX(this Vector3 source, float x)
+        {
+            var factor = x / source.x;
+            var y = source.y * factor;
+            var z = source.z * factor;
+            return
+                new(x, y, z);
+        }
+
+        /// <summary>
+        /// Returns the <see cref="Vector3"/> with a set <paramref name="y"/> component, and X- and Z-components
+        /// scaled to match while retaining the X,Y,Z proportions of the source <see cref="Vector3"/>.
+        /// </summary>
+        /// <param name="y">
+        /// A Y-component value for the scaled <see cref="Vector3"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Vector3"/>.
+        /// </returns>
+        public static Vector3 ScaledToY(this Vector3 source, float y)
+        {
+            var factor = y / source.y;
+            var x = source.x * factor;
+            var z = source.z * factor;
+            return
+                new(x, y, z);
+        }
+
+        /// <summary>
+        /// Returns the <see cref="Vector3"/> with a set <paramref name="z"/> component, and X- and Y-components
+        /// scaled to match while retaining the X,Y,Z proportions of the source <see cref="Vector3"/>.
+        /// </summary>
+        /// <param name="z">
+        /// A Z-component value for the scaled <see cref="Vector3"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Vector3"/>.
+        /// </returns>
+        public static Vector3 ScaledToZ(this Vector3 source, float z)
+        {
+            var factor = z / source.z;
+            var x = source.x * factor;
+            var y = source.y * factor;
+            return
+                new(x, y, z);
         }
 
         /// <summary>

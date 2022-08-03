@@ -62,6 +62,42 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
+        /// Returns the <see cref="Vector2"/> with a set <paramref name="x"/> component, and Y-component
+        /// scaled to match while retaining the X,Y proportions of the source <see cref="Vector2"/>.
+        /// </summary>
+        /// <param name="x">
+        /// A X-component value for the scaled <see cref="Vector2"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Vector2"/>.
+        /// </returns>
+        public static Vector2 ScaledToX(this Vector2 source, float x)
+        {
+            var factor = x / source.x;
+            var y = source.y * factor;
+            return
+                new(x, y);
+        }
+
+        /// <summary>
+        /// Returns the <see cref="Vector2"/> with a set <paramref name="y"/> component, and X-component
+        /// scaled to match while retaining the X,Y proportions of the source <see cref="Vector2"/>.
+        /// </summary>
+        /// <param name="y">
+        /// A Y-component value for the scaled <see cref="Vector2"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Vector2"/>.
+        /// </returns>
+        public static Vector2 ScaledToY(this Vector2 source, float y)
+        {
+            var factor = y / source.y;
+            var x = source.x * factor;
+            return
+                new(x, y);
+        }
+
+        /// <summary>
         /// Converts a <see cref="Vector2"/>[] into a <see cref="Vector3"/>[].
         /// </summary>
         /// <returns>
