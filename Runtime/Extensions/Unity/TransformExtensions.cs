@@ -135,6 +135,28 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
+        /// Offsetfs the <see cref="Transform"/>'s position by the values of a <see cref="Vector2"/>.
+        /// </summary>
+        /// <param name="offset">
+        /// The <see cref="Vector2"/> to offset the transform by.
+        /// </param>
+        public static void OffsetPosition(this Transform transform, Vector2 offset)
+        {
+            transform.position += (Vector3)offset;
+        }
+
+        /// <summary>
+        /// Offsetfs the <see cref="Transform"/>'s position by the values of a <see cref="Vector3"/>.
+        /// </summary>
+        /// <param name="offset">
+        /// The <see cref="Vector3"/> to offset the transform by.
+        /// </param>
+        public static void OffsetPosition(this Transform transform, Vector3 offset)
+        {
+            transform.position += offset;
+        }
+
+        /// <summary>
         /// Sets the local position and rotation of the <see cref="Transform"/> component.
         /// </summary>
         /// <param name="position">The target <see cref="Vector3"/> position.</param>
