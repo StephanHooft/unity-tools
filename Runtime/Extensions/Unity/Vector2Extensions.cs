@@ -40,6 +40,30 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
+        /// Rotates the <see cref="Vector2"/> clockwise by 90 degrees.
+        /// </summary>
+        /// <returns>
+        /// The rotated <see cref="Vector2"/>.
+        /// </returns>
+        public static Vector2 Rotate90DegreesClockwise(this Vector2 source)
+        {
+            return
+                new(source.y, -source.x);
+        }
+
+        /// <summary>
+        /// Rotates the <see cref="Vector2"/> counter-clockwise by 90 degrees.
+        /// </summary>
+        /// <returns>
+        /// The rotated <see cref="Vector2"/>.
+        /// </returns>
+        public static Vector2 Rotate90DegreesCounterClockwise(this Vector2 source)
+        {
+            return
+                new(-source.y, source.x);
+        }
+
+        /// <summary>
         /// Rotates the <see cref="Vector2"/> by a certain <paramref name="rotationAmount"/> (in degrees or radians).
         /// </summary>
         /// <param name="rotationAmount">
