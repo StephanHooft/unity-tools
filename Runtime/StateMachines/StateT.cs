@@ -59,7 +59,7 @@ namespace StephanHooft.StateMachines
         #region Methods
 
         /// <summary>
-        /// Obtains a reference to another <see cref="IState{TEnum}"/>s used by the same
+        /// Obtains a reference to another <see cref="IState{TEnum}"/> used by the same
         /// <see cref="IStateMachine{TEnum}"/>.
         /// </summary>
         /// <param name="stateKey">

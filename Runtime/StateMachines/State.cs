@@ -57,7 +57,7 @@ namespace StephanHooft.StateMachines
         #region Methods
 
         /// <summary>
-        /// Obtains a reference to another <see cref="IState"/>s used by the same <see cref="IStateMachine"/>.
+        /// Obtains a reference to another <see cref="IState"/> used by the same <see cref="IStateMachine"/>.
         /// </summary>
         /// <param name="stateName">
         /// The <see cref="string"/> name of the <see cref="IState"/> to obtain.
