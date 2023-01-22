@@ -100,7 +100,6 @@ namespace StephanHooft.StateMachines
                     throw
                         new Exceptions.StateDuplicationException(type);
                 this.states.Add(state.Key, state);
-                state.StateRegister = EnumToState;
                 types.Add(type);
             }
             if (this.states.IsEmpty())
@@ -142,20 +141,31 @@ namespace StephanHooft.StateMachines
         /// <summary>
         /// Tells the current <see cref="IState{TEnum}"/> to call its <see cref="IState{TEnum}.Update"/> member.
         /// This may cause a state transition.
+        /// <para><see cref="Enter(TEnum)"/> must be called at least once before calling this method.</para>
         /// </summary>
         /// <param name="deltaTime">The time difference (in seconds) since the previous update.</param>
         /// <exception cref="System.InvalidOperationException">
-        /// If no <see cref="IState{TEnum}"/> is set.
+        /// If no <see cref="IState{TEnum}"/> has been set.
+        /// </exception>
+        /// <exception cref="Exceptions.StateUnavailableException">
+        /// If the current <see cref="IState{TEnum}"/> returns a <typeparamref name="TEnum"/> key for which no
+        /// <see cref="IState{TEnum}"/> was registered to the <see cref="StateMachine{TEnum}"/>.
         /// </exception>
         public void Update(float deltaTime)
         {
-            if (currentState == null)
-                throw
-                    new System.InvalidOperationException(NoStateSet);
-            timeCurrentStateActive += deltaTime;
-            var nextState = currentState.Update(deltaTime);
-            if (nextState != null)
-                SetState(nextState, deltaTime);
+            if (currentState is not null)
+            {
+                timeCurrentStateActive += deltaTime;
+                var nextState = currentState.Update(deltaTime);
+                if (!nextState.Equals(default(TEnum)))
+                {
+                    var state = EnumToState(nextState);
+                    SetState(state, deltaTime);
+                }
+                return;
+            }
+            throw
+                new System.InvalidOperationException(NoStateSet);
         }
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion

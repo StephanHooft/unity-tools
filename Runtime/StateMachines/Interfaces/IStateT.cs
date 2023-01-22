@@ -16,12 +16,6 @@ namespace StephanHooft.StateMachines
         /// </summary>
         TEnum Key { get; }
 
-        /// <summary>
-        /// A delegate that the <see cref="IState{TEnum}"/> can use to obtain a reference to other
-        /// <see cref="IState{TEnum}"/>s from the same <see cref="IStateMachine{TEnum}"/>.
-        /// </summary>
-        System.Func<TEnum, IState<TEnum>> StateRegister { get; set; }
-
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
         #region Interface Methods
@@ -46,11 +40,11 @@ namespace StephanHooft.StateMachines
         /// The amount of time (in seconds) that has passed since the prior update.
         /// </param>
         /// <returns>
-        /// A <see cref="IState{TEnum}"/> if a transition to said <see cref="IState{TEnum}"/> is required.
+        /// A <typeparamref name="TEnum"/> if a transition to a matching <see cref="IState{TEnum}"/> is required.
         /// <see cref="null"/> if no <see cref="IState{TEnum}"/> transition is required.
         /// </returns>
-        IState<TEnum> Update(float deltaTime)
-            => null;
+        TEnum Update(float deltaTime)
+            => default;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
