@@ -10,6 +10,24 @@ namespace StephanHooft.Extensions
         #region Static Methods
 
         /// <summary>
+        /// Returns the angle in radians whose <see cref="Mathf.Tan(float)"/> is y/x.
+        /// </summary>
+        /// <param name="useDegrees">
+        /// Set to true to return the angle in degrees. Radians are returned by default.
+        /// </param>
+        /// <returns>
+        /// The angle between the x-axis and a <see cref="Vector2"/> starting at zero and terminating at (x,y).
+        /// </returns>
+        public static float Atan2(this Vector2 source, bool useDegrees = false)
+        {
+            var angle = Mathf.Atan2(source.y, source.x);
+            if (useDegrees)
+                angle *= Mathf.Rad2Deg;
+            return
+                angle;
+        }
+
+        /// <summary>
         /// Returns direction toward another <see cref="Vector2"/> destination.
         /// </summary>
         /// <param name="destination">
