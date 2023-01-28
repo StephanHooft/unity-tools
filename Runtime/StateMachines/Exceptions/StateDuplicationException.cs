@@ -1,9 +1,9 @@
 namespace StephanHooft.StateMachines.Exceptions
 {
     [System.Serializable]
-    public class StateDuplicationException : System.Exception
+    public class StateDuplicationException<TEnum> : System.Exception where TEnum : System.Enum
     {
-        public StateDuplicationException(System.Enum key)
+        public StateDuplicationException(TEnum key)
             : base(string.Format("A state with key '{0}' already exists.", key)) { }
 
         public StateDuplicationException(System.Type type)

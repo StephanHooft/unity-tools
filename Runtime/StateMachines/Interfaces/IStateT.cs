@@ -43,8 +43,7 @@ namespace StephanHooft.StateMachines
         /// A <typeparamref name="TEnum"/> if a transition to a matching <see cref="IState{TEnum}"/> is required.
         /// <see cref="null"/> if no <see cref="IState{TEnum}"/> transition is required.
         /// </returns>
-        TEnum Update(float deltaTime)
-            => default;
+        TEnum Update(float deltaTime);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion

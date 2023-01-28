@@ -93,12 +93,18 @@ namespace StephanHooft.StateMachines
                         new System.ArgumentNullException("states", NoNullPermittedInStateCollection);
                 var key = state.Key;
                 var type = state.GetType();
+                if (key.Equals(default(TEnum)))
+                    throw
+                        new Exceptions.EnumDefaultException<TEnum>(key);
+                if (!System.Enum.IsDefined(typeof(TEnum), key))
+                    throw
+                        new Exceptions.EnumValueUndefinedException<TEnum>(key);
                 if (this.states.ContainsKey(key))
                     throw
-                        new Exceptions.StateDuplicationException(key);
+                        new Exceptions.StateDuplicationException<TEnum>(key);
                 if (types.Contains(type))
                     throw
-                        new Exceptions.StateDuplicationException(type);
+                        new Exceptions.StateDuplicationException<TEnum>(type);
                 this.states.Add(state.Key, state);
                 types.Add(type);
             }
@@ -119,7 +125,7 @@ namespace StephanHooft.StateMachines
         /// <param name="targetState">
         /// The <typeparamref name="TEnum"/> key of the <see cref="IState{TEnum}"/> to set.
         /// </param>
-        /// <exception cref="Exceptions.StateUnavailableException">
+        /// <exception cref="Exceptions.StateRetrievalException">
         /// If no <see cref="IState{TEnum}"/> with the set <typeparamref name="TEnum"/> key is registered to the
         /// <see cref="StateMachine{TEnum}"/>.
         /// </exception>
@@ -130,7 +136,7 @@ namespace StephanHooft.StateMachines
             {
                 state = EnumToState(targetState);
             }
-            catch (Exceptions.StateUnavailableException e)
+            catch (Exceptions.StateRetrievalException<TEnum> e)
             {
                 throw
                     e;
@@ -147,7 +153,7 @@ namespace StephanHooft.StateMachines
         /// <exception cref="System.InvalidOperationException">
         /// If no <see cref="IState{TEnum}"/> has been set.
         /// </exception>
-        /// <exception cref="Exceptions.StateUnavailableException">
+        /// <exception cref="Exceptions.StateRetrievalException">
         /// If the current <see cref="IState{TEnum}"/> returns a <typeparamref name="TEnum"/> key for which no
         /// <see cref="IState{TEnum}"/> was registered to the <see cref="StateMachine{TEnum}"/>.
         /// </exception>
@@ -157,6 +163,9 @@ namespace StephanHooft.StateMachines
             {
                 timeCurrentStateActive += deltaTime;
                 var nextState = currentState.Update(deltaTime);
+                if (nextState.Equals(currentState.Key))
+                    throw
+                        new System.InvalidOperationException(StateMustNotReturnOwnKey(nextState));
                 if (!nextState.Equals(default(TEnum)))
                 {
                     var state = EnumToState(nextState);
@@ -186,13 +195,18 @@ namespace StephanHooft.StateMachines
             }
         }
 
-        private IState<TEnum> EnumToState(TEnum state)
+        private IState<TEnum> EnumToState(TEnum stateKey)
         {
-            if (!states.ContainsKey(state))
+            if (!states.ContainsKey(stateKey))
                 throw
-                    new Exceptions.StateUnavailableException(state);
+                    new Exceptions.StateRetrievalException<TEnum>(stateKey);
+            var result = states[stateKey];
+            var resultKey = result.Key;
+            if (!resultKey.Equals(stateKey))
+                throw
+                    new Exceptions.StateRetrievalException<TEnum>(resultKey, stateKey);
             return
-                states[state];
+                result;
         }
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
@@ -209,6 +223,9 @@ namespace StephanHooft.StateMachines
         private string NoStateSet
             => string.Format("No IState<{0}> is set to the StateMachine<{0}>.",
                 typeof(TEnum).Name);
+
+        private string StateMustNotReturnOwnKey(TEnum key)
+            => string.Format("IState must not return its own key ({0}).", key);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
