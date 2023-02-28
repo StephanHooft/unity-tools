@@ -6,7 +6,7 @@ namespace StephanHooft.Lines
     /// A control node for a <see cref="BezierSpline2D"/> with one main position and two control points.
     /// </summary>
     [System.Serializable]
-    public class BezierControlPoint2D
+    public struct BezierControlPoint2D
     {
         #region Properties
 

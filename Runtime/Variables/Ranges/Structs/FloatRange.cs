@@ -7,7 +7,7 @@ namespace StephanHooft.Variables.Ranges
     /// A pair of lower and upper <see cref="float"/> values that encapsulate a certain range.
     /// </summary>
     [System.Serializable]
-    public readonly struct FloatRange
+    public struct FloatRange
     {
         #region Properties
 
@@ -17,19 +17,24 @@ namespace StephanHooft.Variables.Ranges
         public float Length
             => upper - lower;
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        #endregion
-        #region Fields
-
         /// <summary>
         /// The lower <see cref="float"/> value of the <see cref="FloatRange"/>.
         /// </summary>
-        public readonly float lower;
+        public float Lower => lower;
 
         /// <summary>
         /// The upper <see cref="float"/> value of the <see cref="FloatRange"/>.
         /// </summary>
-        public readonly float upper;
+        public float Upper => upper;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+        #region Fields
+
+        [SerializeField]
+        private float
+            lower,
+            upper;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
