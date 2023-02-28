@@ -7,7 +7,7 @@ namespace StephanHooft.Variables.Ranges
     /// A pair of lower and upper <see cref="double"/> values that encapsulate a certain range.
     /// </summary>
     [System.Serializable]
-    public struct DoubleRange
+    public readonly struct DoubleRange
     {
         #region Properties
 
@@ -17,24 +17,19 @@ namespace StephanHooft.Variables.Ranges
         public double Length
             => upper - lower;
 
-        /// <summary>
-        /// The lower <see cref="double"/> value of the <see cref="DoubleRange"/>.
-        /// </summary>
-        public double Lower => lower;
-
-        /// <summary>
-        /// The upper <see cref="double"/> value of the <see cref="DoubleRange"/>.
-        /// </summary>
-        public double Upper => upper;
-
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
         #region Fields
 
-        [SerializeField]
-        private double
-            lower,
-            upper;
+        /// <summary>
+        /// The lower <see cref="double"/> value of the <see cref="DoubleRange"/>.
+        /// </summary>
+        public readonly double lower;
+
+        /// <summary>
+        /// The upper <see cref="double"/> value of the <see cref="DoubleRange"/>.
+        /// </summary>
+        public readonly double upper;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
