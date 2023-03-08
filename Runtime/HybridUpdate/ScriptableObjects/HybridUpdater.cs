@@ -16,11 +16,33 @@ namespace StephanHooft.HybridUpdate
     [CreateAssetMenu(fileName = "New HybridUpdater", menuName = "HybridUpdate/Hybrid Updater", order = 1)]
     public class HybridUpdater : ScriptableObject, IHybridUpdater, IEnumerable<(string, int)>
     {
+        #region Properties
+
+        /// <summary>
+        /// Whether the <see cref="HybridUpdater"/> is paused or not.
+        /// </summary>
+        public bool Paused
+            => paused;
+        
+        /// <summary>
+        /// The <see cref="HybridUpdater"/>'s time speed. 1.0f is its default value.
+        /// </summary>
+        public float TimeSpeed
+            => timeSpeed;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
         #region Fields
 
         private readonly Clock clock = new();
         private readonly CallbackCounter counter = new();
         private readonly SortKeyDictionary<System.Type, int, List<HybridUpdateCallback?>> callbackSets = new();
+
+        [SerializeField]
+        private bool paused = false;
+
+        [SerializeField]
+        private float timeSpeed = 1.0f;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
@@ -96,11 +118,36 @@ namespace StephanHooft.HybridUpdate
         #endregion
         #region Methods
 
+        /// <summary>
+        /// Can be used to pause the <see cref="HybridUpdater"/>, "freezing" all objects that are relying on it.
+        /// </summary>
+        /// <param name="pause">
+        /// Whether or not the <see cref="HybridUpdater"/> should pause.
+        /// </param>
+        public void Pause(bool pause)
+        {
+            paused = pause;
+        }
+
+        /// <summary>
+        /// Set the rate at which the <see cref="HybridUpdater"/>'s time advances.
+        /// </summary>
+        /// <param name="timeSpeed">
+        /// The time speed to set. 1.0f is the default speed value.
+        /// </param>
+        public void SetTimeSpeed(float timeSpeed)
+        {
+            this.timeSpeed = timeSpeed;
+        }
+
         private void InvokeCallbacks(float deltaTime)
         {
-            foreach (var list in callbackSets)
-                foreach (var callback in list)
-                    callback?.action.Invoke(deltaTime);
+            if (!paused)
+            {
+                foreach (var list in callbackSets)
+                    foreach (var callback in list)
+                        callback?.action.Invoke(deltaTime * timeSpeed);
+            }
         }
 
         private List<HybridUpdateCallback?> GetOrAddSet(System.Type type, int priority)

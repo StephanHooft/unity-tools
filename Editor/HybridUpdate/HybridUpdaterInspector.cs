@@ -10,10 +10,26 @@ namespace StephanHooft.HybridUpdate.EditorScripts
     [CustomEditor(typeof(HybridUpdater))]
     public class HybridUpdaterInspector : Editor
     {
+        #region Fields
+
+        private SerializedProperty paused;
+        private SerializedProperty timeSpeed;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
         #region Editor Implementation
+
+        private void OnEnable()
+        {
+            paused = serializedObject.FindProperty("paused");
+            timeSpeed = serializedObject.FindProperty("timeSpeed");
+        }
 
         public override void OnInspectorGUI()
         {
+            EditorGUILayout.PropertyField(paused);
+            EditorGUILayout.PropertyField(timeSpeed);
+            EditorGUILayout.Space(10f);
             if (Application.isPlaying)
             {
                 if (AtLeastOneType())
