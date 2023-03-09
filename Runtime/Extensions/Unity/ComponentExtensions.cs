@@ -239,9 +239,11 @@ namespace StephanHooft.Extensions
                 if (Application.isPlaying)
                     throw
                         new System.InvalidOperationException(errorMessage);
+#if UNITY_EDITOR
                 else
                     UnityEditor.EditorUtility.DisplayDialog("Invalid operation.", errorMessage, "Ok");
                 EditModeSafe.Destroy(component);
+#endif
             }
             return
                 component;
