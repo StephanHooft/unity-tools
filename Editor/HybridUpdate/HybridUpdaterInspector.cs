@@ -27,8 +27,12 @@ namespace StephanHooft.HybridUpdate.EditorScripts
 
         public override void OnInspectorGUI()
         {
+            serializedObject.Update();
+            EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(paused);
             EditorGUILayout.PropertyField(timeSpeed);
+            if (EditorGUI.EndChangeCheck())
+                serializedObject.ApplyModifiedProperties();
             EditorGUILayout.Space(10f);
             if (Application.isPlaying)
             {
