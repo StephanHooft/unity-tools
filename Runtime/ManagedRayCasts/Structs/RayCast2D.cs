@@ -47,7 +47,7 @@ namespace StephanHooft.ManagedRayCasts
         #endregion
         #region Fields
 
-        private readonly Vector2 origin;
+        public readonly Vector2 origin;
 
         /// <summary>
         /// The <see cref="RayCast2D"/>'s direction.
