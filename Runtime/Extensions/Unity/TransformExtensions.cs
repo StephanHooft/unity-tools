@@ -135,7 +135,7 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// Offsetfs the <see cref="Transform"/>'s position by the values of a <see cref="Vector2"/>.
+        /// Offsets the <see cref="Transform"/>'s position by the values of a <see cref="Vector2"/>.
         /// </summary>
         /// <param name="offset">
         /// The <see cref="Vector2"/> to offset the transform by.
@@ -146,7 +146,7 @@ namespace StephanHooft.Extensions
         }
 
         /// <summary>
-        /// Offsetfs the <see cref="Transform"/>'s position by the values of a <see cref="Vector3"/>.
+        /// Offsets the <see cref="Transform"/>'s position by the values of a <see cref="Vector3"/>.
         /// </summary>
         /// <param name="offset">
         /// The <see cref="Vector3"/> to offset the transform by.
