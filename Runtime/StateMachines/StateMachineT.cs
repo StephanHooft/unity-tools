@@ -117,7 +117,7 @@ namespace StephanHooft.StateMachines
         #region IStateMachine<TEnum> Implementation
 
         /// <summary>
-        /// Orders the <see cref="StateMachine{TEnum}"/> to wnter a certain <see cref="IState{TEnum}"/>. 
+        /// Orders the <see cref="StateMachine{TEnum}"/> to enter a certain <see cref="IState{TEnum}"/>. 
         /// <para>The <see cref="StateMachine{TEnum}"/> will automatically call the
         /// <see cref="IState{TEnum}.Exit"/> method of its current <see cref="IState{TEnum}"/> (if any) and the
         /// <see cref="IState{TEnum}.Enter"/> method of the target <see cref="IState{TEnum}"/>.</para>
