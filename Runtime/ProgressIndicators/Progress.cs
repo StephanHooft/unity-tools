@@ -56,11 +56,11 @@ namespace StephanHooft.ProgressIndicators
         #region Fields
 
         private static Progress Instance => lazy.Value;
-        private static readonly Lazy<Progress> lazy = new Lazy<Progress>(() => new Progress());
+        private static readonly Lazy<Progress> lazy = new(() => new Progress());
         private event Action<Indicator> AddedInstance;
         private event Action<Indicator> RemovedInstance;
         private event Action<Indicator> UpdatedInstance;
-        private readonly Dictionary<int, Indicator> indicators = new Dictionary<int, Indicator>();
+        private readonly Dictionary<int, Indicator> indicators = new();
         private static string IndicatorClass => typeof(Indicator).ToString();
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,9 +75,7 @@ namespace StephanHooft.ProgressIndicators
         { }
 
         ~Progress()
-        {
-
-        }
+        { }
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         #endregion
         #region Static Methods
@@ -724,7 +722,7 @@ namespace StephanHooft.ProgressIndicators
                         new InvalidOperationException(NotStarted);
                 if (!Exists)
                     throw
-                        new InvalidOperationException(NoLongerExists);
+                        new InvalidOperationException(DoesNotExist);
                 if (Progress < 1f)
                 {
                     if (StepBased)
@@ -753,7 +751,7 @@ namespace StephanHooft.ProgressIndicators
             {
                 if (!Exists)
                     throw
-                        new InvalidOperationException(NoLongerExists);
+                        new InvalidOperationException(DoesNotExist);
                 FinishCallback = callback ??
                     throw
                         new ArgumentNullException("callback");
@@ -768,7 +766,7 @@ namespace StephanHooft.ProgressIndicators
             {
                 if (!Exists)
                     throw
-                        new InvalidOperationException(NoLongerExists);
+                        new InvalidOperationException(DoesNotExist);
                 if (!Running)
                     throw
                         new InvalidOperationException(NotRunning);
@@ -806,10 +804,7 @@ namespace StephanHooft.ProgressIndicators
             {
                 if (!Exists)
                     throw
-                        new InvalidOperationException(NoLongerExists);
-                if (!Running)
-                    throw
-                        new InvalidOperationException(NotRunning);
+                        new InvalidOperationException(DoesNotExist);
                 if (HasChildren)
                     throw
                         new InvalidOperationException(CannotReportOnParent);
@@ -844,7 +839,7 @@ namespace StephanHooft.ProgressIndicators
             {
                 if (!Exists)
                     throw
-                        new InvalidOperationException(NoLongerExists);
+                        new InvalidOperationException(DoesNotExist);
                 if (string.IsNullOrEmpty(stepLabel))
                     StepLabel = "";
                 else
@@ -860,7 +855,7 @@ namespace StephanHooft.ProgressIndicators
             {
                 if (!Exists)
                     throw
-                        new InvalidOperationException(NoLongerExists);
+                        new InvalidOperationException(DoesNotExist);
                 return
                     StepBased ?
                     string.Format("[ {0} | {1} | {2} | Progress: {3}% ({4}/{5} {6}) | Weight: {7} ]",
@@ -876,7 +871,7 @@ namespace StephanHooft.ProgressIndicators
             {
                 if (!Exists)
                     throw
-                        new InvalidOperationException(NoLongerExists);
+                        new InvalidOperationException(DoesNotExist);
                 FinishCallback = null;
             }
 
@@ -942,9 +937,6 @@ namespace StephanHooft.ProgressIndicators
 
             void IIndicator.Start(int id, string name, int weight)
             {
-                if (Started)
-                    throw
-                        new InvalidOperationException(AlreadyStarted);
                 if (id < 0)
                     throw
                         new ArgumentOutOfRangeException("id");
@@ -969,9 +961,6 @@ namespace StephanHooft.ProgressIndicators
 
             void IIndicator.Start(int id, int totalSteps, string name, string stepLabel, int weight)
             {
-                if (Started)
-                    throw
-                        new InvalidOperationException(AlreadyStarted);
                 if (id < 0)
                     throw
                         new ArgumentOutOfRangeException("id");
@@ -1000,12 +989,11 @@ namespace StephanHooft.ProgressIndicators
             #endregion
             #region Exception Messages
 
-            private string AlreadyStarted => string.Format("{0} has already been started.", IndicatorClass);
             private string AlreadyExists(int id) => 
                 string.Format("A {0} with ID {1} already exists.", IndicatorClass, id);
             private string CannotReportOnParent =>
                 string.Format("Cannot report progress on a {0} that has one or more child {0}s.", IndicatorClass);
-            private string NoLongerExists => string.Format("{0} no longer exists.", IndicatorClass);
+            private string DoesNotExist => string.Format("{0} does not exist.", IndicatorClass);
             private string NotRunning =>
                 string.Format("Cannot report progress on a {0} that isn't running.", IndicatorClass);
             private string NotStarted => string.Format("{0} was not started.", IndicatorClass);
